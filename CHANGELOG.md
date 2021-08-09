@@ -110,6 +110,7 @@ The type NSURL has been replaced by the type URL everywhere, that is in:
 - LightstreamerClient.addCookies
 - LightstreamerClient.getCookiesForURL
 
+
  **In general enumeration types have been used in place of unrestricted strings.** Therefore the signatures of the following methods have been changed. 
 
 - The enumeration TransportSelection has replaced the type String in the property ConnectionOptions.forcedTransport.
