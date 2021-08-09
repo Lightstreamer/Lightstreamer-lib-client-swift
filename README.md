@@ -1,10 +1,10 @@
-# Lightstreamer Client SDK
+# Lightstreamer Swift Client SDK
 
 [![Swift](https://img.shields.io/badge/Swift-5.1_5.2_5.3_5.4-orange?style=flat-square)](https://img.shields.io/badge/Swift-5.1_5.2_5.3_5.4-Orange?style=flat-square)
 [![Platforms](https://img.shields.io/badge/Platforms-macOS_iOS_tvOS_watchOS_Linux_Windows-yellowgreen?style=flat-square)](https://img.shields.io/badge/Platforms-macOS_iOS_tvOS_watchOS_Linux_Windows-Green?style=flat-square)
 [![Swift Package Manager](https://img.shields.io/badge/Swift_Package_Manager-compatible-orange?style=flat-square)](https://img.shields.io/badge/Swift_Package_Manager-compatible-orange?style=flat-square)
 
-Lightstreamer Client SDK enables any Swift application to communicate bidirectionally with a **Lightstreamer Server**. The API allows to subscribe to real-time data pushed by the server and to send any message to the server.
+Lightstreamer Swift Client SDK enables any Swift application to communicate bidirectionally with a **Lightstreamer Server**. The API allows to subscribe to real-time data pushed by the server and to send any message to the server.
 
 The library offers automatic recovery from connection failures, automatic selection of the best available transport, and full decoupling of subscription and connection operations. It is responsible of forwarding the subscriptions to the Server and re-forwarding all the subscriptions whenever the connection is broken and then reopened.
 
@@ -22,7 +22,7 @@ The library also offers support for mobile push notifications (MPN). While real-
 
 The [Swift Package Manager](https://swift.org/package-manager/) is a tool for automating the distribution of Swift code and is integrated into the `swift` compiler.
 
-Once you have your Swift package set up, adding Lightstreamer Client SDK as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
+Once you have your Swift package set up, adding Lightstreamer Swift Client SDK as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
 
 ```swift
 dependencies: [
@@ -32,7 +32,7 @@ dependencies: [
 
 ### Manually
 
-If you prefer not to use any of the aforementioned dependency managers, you can integrate Lightstreamer Client SDK into your project manually.
+If you prefer not to use any of the aforementioned dependency managers, you can integrate Lightstreamer Swift Client SDK into your project manually.
 
 - Open up Terminal, `cd` into your top-level project directory, and run the following command "if" your project is not initialized as a git repository:
 
@@ -40,7 +40,7 @@ If you prefer not to use any of the aforementioned dependency managers, you can 
   $ git init
   ```
 
-- Add Lightstreamer Client SDK as a git [submodule](https://git-scm.com/docs/git-submodule) by running the following command:
+- Add Lightstreamer Swift Client SDK as a git [submodule](https://git-scm.com/docs/git-submodule) by running the following command:
 
   ```bash
   $ git submodule add https://github.com/Lightstreamer/Lightstreamer-lib-client-swift.git

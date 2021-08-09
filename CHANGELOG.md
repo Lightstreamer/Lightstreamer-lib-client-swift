@@ -1,11 +1,12 @@
 # SDK for Swift Clients CHANGELOG
 
-## XXXXX build XXXXX
+## 5.0.0 beta 1
 
 _Compatible with Lightstreamer Server since 7.2.0._
 _Not compatible with code developed for Objective-C Clients._
 _Released on XXXXX._
 
+The Swift Client SDK is meant to replace the Objective-C Client SDK for all the Apple platforms (iOS, macOS, tvOS and watchOS).
 In order to make the API more Swift-friendly the Client API has undergone several changes, listed below, with respect to the Objective-C Client.
 
 The prefix LS has been removed from the names of the following public types:
