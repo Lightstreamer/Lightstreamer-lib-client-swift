@@ -141,9 +141,9 @@ In general, enumeration types have been used in place of unrestricted strings. T
 
 ### Alignment with the other Lightstreamer Client SDKs
 
-The connectTimeout and currentConnectTimeout properties of the ConnectionOptions bean, which were deprecated, have been removed.
+The connectTimeout and currentConnectTimeout properties of the ConnectionOptions class, which were deprecated, have been removed.
 
-The maxConcurrentSessionsPerServer and maxConcurrentSessionsPerServerExceededPolicy properties of the ConnectionOptions bean, have been removed.
+The maxConcurrentSessionsPerServer and maxConcurrentSessionsPerServerExceededPolicy properties of the ConnectionOptions class, have been removed.
 It is now an application responsibility to prevent the opening of too many sessions in case the client environment is not able to keep too many TCP connections concurrently open.
 Note that as long as the system limit is exceeded some TCP connection may become mute.
 
@@ -181,7 +181,7 @@ This should significantly reduce the average session establishment time in most 
 The possible cases of wrong diagnosis of websocket unavailability and unnecessary resort to http streaming should also be reduced.
 A noticeable consequence of the change is that, when a Load Balancer is in place and a "control link address" is configured on the Server, most of the streaming activity will now be expected on sockets opened towards the balancer endpoint, whereas, before, the whole streaming activity flowed on sockets opened towards the control link address.
 
-As a consequence of the new Stream-Sense algorithm, the "earlyWSOpenEnabled" property of the ConnectionOptions bean has been removed.
+As a consequence of the new Stream-Sense algorithm, the "earlyWSOpenEnabled" property of the ConnectionOptions class has been removed.
 
 ### Other API changes
 
