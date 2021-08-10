@@ -22,7 +22,7 @@ With respect to the Objective-C Client, the Client API has undergone several cha
 
 ### Changes to make the API more Swift-friendly
 
-The prefix LS has been removed from the names of all the  public types, that is from:
+The prefix LS has been removed from the names of all the public types, that is from:
 
 - LSClientDelegate
 - LSClientMessageDelegate
@@ -41,9 +41,9 @@ The prefix LS has been removed from the names of all the  public types, that is 
 - LSSubscriptionDelegate
 
 > **NB**  
-> The classes LSLogger and LSLoggerProvider have kept their names to avoid name clashes with Foundation classes concerning the logging subsystem. 
+> Only the classes LSLogger and LSLoggerProvider have kept their names, to avoid name clashes with Foundation classes concerning the logging subsystem. 
 
-The following methods/property setters that used to raise exceptions to validate their arguments are now guarded by preconditions:
+All methods and property setters that used to raise exceptions to validate their arguments are now guarded by preconditions. To resume, this applies to:
 
 - ConnectionDetails.serverAddress
 - ConnectionOptions.contentLength
@@ -106,6 +106,9 @@ The following methods/property setters that used to raise exceptions to validate
 - Subscription.valueWithItemPos
 - Subscription.valueWithItemName
 
+Now exceptions are no longer thrown by library code.
+As a consequence, the LightstreamerClient.limitExceptionsUse method has been removed.
+
 The type NSHTTPCookie has been replaced by the type HTTPCookie everywhere, that is in:
 
 - LightstreamerClient.addCookies
@@ -139,10 +142,8 @@ In general, enumeration types have been used in place of unrestricted strings. T
 
 The following methods have been removed:
 
-- LightstreamerClient.limitExceptionsUse
 - ConnectionOptions.connectTimeout
 - ConnectionOptions.currentConnectTimeout
-- ConnectionOptions.earlyWSOpenEnabled
 - ConnectionOptions.maxConcurrentSessionsPerServer
 - ConnectionOptions.maxConcurrentSessionsPerServerExceededPolicy
 - ClientDelegate.client(\_:willSendRequestForAuthenticationChallenge:)
@@ -163,7 +164,7 @@ The type NSTimeInterval has been replaced by the type Millis everywhere, that is
 > **⚠ WARNING**  
 > An important consequence of this change is that arguments that represent a time interval are now expressed in milliseconds instead of seconds.
 
-The type NSDate has been replaced by the type Int64, representing a timestamp, everywhere, that is in:
+The type NSDate has been replaced by the type Int64, representing a server-side timestamp, everywhere, that is in:
 
 - MPNDevice.statusTimestamp
 - MPNDeviceDelegate.mpnDevice(\_:didChangeStatus:timestamp)
@@ -177,7 +178,7 @@ This should significantly reduce the average session establishment time in most 
 The possible cases of wrong diagnosis of websocket unavailability and unnecessary resort to http streaming should also be reduced.
 A noticeable consequence of the change is that, when a Load Balancer is in place and a "control link address" is configured on the Server, most of the streaming activity will now be expected on sockets opened towards the balancer endpoint, whereas, before, the whole streaming activity flowed on sockets opened towards the control link address.
 
-As a consequence of the new Stream-Sense algorithm, the "EarlyWSOpenEnabled" property of the ConnectionOptions bean has been removed. This affects its getter and setter and also the invocations of onPropertyChange on the ClientListener.
+As a consequence of the new Stream-Sense algorithm, the "earlyWSOpenEnabled" property of the ConnectionOptions bean has been removed.
 
 ### Other API changes
 
