@@ -3,10 +3,16 @@
 ## 5.0.0 beta 1
 
 _Compatible with Lightstreamer Server since 7.2.0._<br/>
-_Not compatible with code developed for Objective-C Clients._<br/>
+_Not compatible with code developed for the previous versions (i.e. iOS, macOS, tvOS, and watchOS SDKs); see the full list of interface changes below._<br/>
 _Released on XXXXX._
 
-The Swift Client SDK is meant to replace the Objective-C Client SDK for all the Apple platforms (iOS, macOS, tvOS and watchOS).
+The Swift Client SDK is meant to replace the Objective-C Client SDKs for all the Apple platforms (iOS, macOS, tvOS and watchOS).
+The library is now open source, available on GitHub at the following address:
+
+[https://github.com/Lightstreamer/Lightstreamer-lib-client-swift](https://github.com/Lightstreamer/Lightstreamer-lib-client-swift).
+
+The binaries for the various platforms are no longer provided directly, but should be built from the source code.
+See the README for details.
 
 With respect to the Objective-C Client, the Client API has undergone several changes belonging to the following categories:
 
@@ -172,8 +178,6 @@ The possible cases of wrong diagnosis of websocket unavailability and unnecessar
 A noticeable consequence of the change is that, when a Load Balancer is in place and a "control link address" is configured on the Server, most of the streaming activity will now be expected on sockets opened towards the balancer endpoint, whereas, before, the whole streaming activity flowed on sockets opened towards the control link address.
 
 As a consequence of the new Stream-Sense algorithm, the "EarlyWSOpenEnabled" property of the ConnectionOptions bean has been removed. This affects its getter and setter and also the invocations of onPropertyChange on the ClientListener.
-
-**COMPATIBILITY NOTE**: Custom code using "EarlyWSOpenEnabled" in any of the mentioned forms has to be modified by removing all references.
 
 ### Other API changes
 
