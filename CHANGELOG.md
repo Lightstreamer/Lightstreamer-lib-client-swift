@@ -110,40 +110,24 @@ The type NSURL has been replaced by the type URL everywhere, that is in:
 - LightstreamerClient.addCookies
 - LightstreamerClient.getCookiesForURL
 
+In general, enumeration types have been used in place of unrestricted strings. The following are the enumeration types introduced and the related signature changes:
 
- **In general enumeration types have been used in place of unrestricted strings.** Therefore the signatures of the following methods have been changed. 
-
-- The enumeration TransportSelection has replaced the type String in the property ConnectionOptions.forcedTransport.
-
-- The enumeration RequestedMaxBandwidth has replaced the type String in the property ConnectionOptions.requestedMaxBandwidth.
-
-- The enumeration RealMaxBandwidth has replaced the type String in the property ConnectionOptions.realMaxBandwidth.
-
-- The enumeration ConsoleLogLevel has replaced the constants LSConsoleLogLevelDebug, LSConsoleLogLevelInfo, LSConsoleLogLevelWarn, LSConsoleLogLevelError and LSConsoleLogLevelFatal.
-
-- The enumeration LightstreamerClient.Status has replaced the type String in the property LightstreamerClient.status and in the method ClientDelegate.client(\_:didChangeStatus).
-
-- The enumeration MPNSubscriptionStatus has replaced the type String in the methods LightstreamerClient.unsubscribeMultipleMPN and LightstreamerClient.filterMPNSubscriptions.
-
-- The enumeration MPNDevice.Status has replaced the type String in the property MPNDevice.status and in the method MPNDeviceDelegate.mpnDevice(\_:didChangeStatus:timestamp:).
-
-- The enumeration MPNSubscription.Mode has replaced the type String in the property MPNSubscription.mode and in the constructor of MPNSubscription.
-
-- The enumeration MPNSubscription.RequestedBufferSize has replaced the type String in the property MPNSubscription.requestedBufferSize.
-
-- The enumeration MPNSubscription.RequestedMaxFrequency has replaced the type String in the property MPNSubscription.requestedMaxFrequency.
-
-- The enumeration MPNSubscription.Status has replaced the type String in the property MPNSubscription.status and in the method MPNSubscriptionDelegate.mpnSubscription(\_:didChangeStatus:timestamp).
-
-- The enumeration Subscription.Mode has replaced the type String in the property Subscription.mode and in the constructor of Subscription.
-
-- The enumeration Subscription.RequestedBufferSize has replaced the type String in the property Subscription.requestedBufferSize.
-
-- The enumeration Subscription.RequestedMaxFrequency has replaced the type String in the property Subscription.requestedMaxFrequency.
-
-- The enumeration Subscription.RequestedSnapshot has replaced the type String in the property Subscription.requestedSnapshot.
-
-- The enumeration RealMaxFrequency has replaced the type String in the method SubscriptionDelegate.subscription(\_:didReceiveRealFrequency:).
+- TransportSelection is now used for property ConnectionOptions.forcedTransport.
+- RequestedMaxBandwidth is now used for property ConnectionOptions.requestedMaxBandwidth.
+- RealMaxBandwidth is now used for property ConnectionOptions.realMaxBandwidth.
+- ConsoleLogLevel is now used for constants LSConsoleLogLevelDebug, LSConsoleLogLevelInfo, LSConsoleLogLevelWarn, LSConsoleLogLevelError and LSConsoleLogLevelFatal.
+- LightstreamerClient.Status is now used for property LightstreamerClient.status and for method ClientDelegate.client(\_:didChangeStatus).
+- MPNSubscriptionStatus is now used for methods LightstreamerClient.unsubscribeMultipleMPN and LightstreamerClient.filterMPNSubscriptions.
+- MPNDevice.Status is now used for property MPNDevice.status and for method MPNDeviceDelegate.mpnDevice(\_:didChangeStatus:timestamp:).
+- MPNSubscription.Mode is now used for property MPNSubscription.mode and for constructor of MPNSubscription.
+- MPNSubscription.RequestedBufferSize is now used for property MPNSubscription.requestedBufferSize.
+- MPNSubscription.RequestedMaxFrequency is now used for property MPNSubscription.requestedMaxFrequency.
+- MPNSubscription.Status is now used for property MPNSubscription.status and for method MPNSubscriptionDelegate.mpnSubscription(\_:didChangeStatus:timestamp).
+- Subscription.Mode is now used for in the property Subscription.mode and for constructor of Subscription.
+- Subscription.RequestedBufferSize is now used for property Subscription.requestedBufferSize.
+- Subscription.RequestedMaxFrequency is now used for property Subscription.requestedMaxFrequency.
+- Subscription.RequestedSnapshot is now used for property Subscription.requestedSnapshot.
+- RealMaxFrequency is now used for method SubscriptionDelegate.subscription(\_:didReceiveRealFrequency:).
 
 ### Alignment with the other Lightstreamer Client SDKs
 
