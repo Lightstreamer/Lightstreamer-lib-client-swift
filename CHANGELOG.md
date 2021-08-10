@@ -140,13 +140,15 @@ In general, enumeration types have been used in place of unrestricted strings. T
 
 ### Alignment with the other Lightstreamer Client SDKs
 
-The following methods have been removed:
+The connectTimeout and currentConnectTimeout properties of the ConnectionOptions bean, which were deprecated, have been removed.
 
-- ConnectionOptions.connectTimeout
-- ConnectionOptions.currentConnectTimeout
-- ConnectionOptions.maxConcurrentSessionsPerServer
-- ConnectionOptions.maxConcurrentSessionsPerServerExceededPolicy
-- ClientDelegate.client(\_:willSendRequestForAuthenticationChallenge:)
+The maxConcurrentSessionsPerServer and maxConcurrentSessionsPerServerExceededPolicy properties of the ConnectionOptions bean, have been removed.
+It is now an application responsibility to prevent the opening of too many sessions in case the client environment is not able to keep too many TCP connections concurrently open.
+Note that as long as the system limit is exceeded some TCP connection may become mute.
+
+The client(\_:willSendRequestForAuthenticationChallenge:) callback in ClientDelegate has been removed.
+It was available to accept self-signed certificates upon TLS connections, for testing purpose.
+Currently, this facility is not provided.
 
 The type NSTimeInterval has been replaced by the type Millis everywhere, that is in:
 
