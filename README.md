@@ -10,6 +10,8 @@ The library offers automatic recovery from connection failures, automatic select
 
 The library also offers support for mobile push notifications (MPN). While real-time subscriptions deliver their updates via the client connection, MPN subscriptions deliver their updates via push notifications, even when the application is offline. They are handled by a special module of the Server, the MPN Module, that keeps them active at all times and continues pushing with no need for a client connection.
 
+This SDK is also meant to replace and evolve all the Client SDKs targeted to the Apple platforms (i.e. iOS, macOS, tvOS, and watchOS Client SDKs).
+
 ## Requirements
 
 | Platform | Minimum Swift Version | Installation | Status |

@@ -3,18 +3,19 @@
 ## 5.0.0 beta 1
 
 _Compatible with Lightstreamer Server since 7.2.0._<br/>
-_Not compatible with code developed for the previous versions (i.e. iOS, macOS, tvOS, and watchOS SDKs); see the full list of interface changes below._<br/>
+_Not compatible with code developed for the previous versions (i.e. iOS, macOS, tvOS, and watchOS SDKs); see the full list of changes below._<br/>
 _Released on XXXXX._
 
-The Swift Client SDK is meant to replace the Objective-C Client SDKs for all the Apple platforms (iOS, macOS, tvOS and watchOS).
+The Swift Client SDK is meant to replace the existing Client SDKs for all the Apple platforms (iOS, macOS, tvOS and watchOS).
 The library is now open source, available on GitHub at the following address:
 
 [https://github.com/Lightstreamer/Lightstreamer-lib-client-swift](https://github.com/Lightstreamer/Lightstreamer-lib-client-swift).
 
 The binaries for the various platforms are no longer provided directly, but should be built from the source code.
 See the README for details.
+Note that the generated binaries may no longer be interoperable with client applications written in Objective-C.
 
-With respect to the Objective-C Client, the Client API has undergone several changes belonging to the following categories:
+With respect to the replaced Client SDKs, which were written in Objective-C, the Client API has undergone several changes belonging to the following categories:
 
 1. changes to make the API more Swift-friendly
 2. changes to align the API with the other Lightstreamer Client SDKs
