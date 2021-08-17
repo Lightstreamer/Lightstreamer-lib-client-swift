@@ -622,8 +622,8 @@ final class BatchTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
 
-        let sub1 = Subscription(.MERGE, item: "itm1", fields: ["f1"])
-        let sub2 = Subscription(.DISTINCT, item: "itm2", fields: ["f2"])
+        let sub1 = Subscription(subscriptionMode: .MERGE, item: "itm1", fields: ["f1"])
+        let sub2 = Subscription(subscriptionMode: .DISTINCT, item: "itm2", fields: ["f2"])
         client.subscribe(sub1)
         client.subscribe(sub2)
         
@@ -665,8 +665,8 @@ final class BatchTests: BaseTestCase {
         ws.onText("WSOK")
         ws.onText("CONOK,sid,70000,5000,*")
         ws.onText("LOOP,0")
-        let sub1 = Subscription(.MERGE, item: "itm1", fields: ["f1"])
-        let sub2 = Subscription(.DISTINCT, item: "itm2", fields: ["f2"])
+        let sub1 = Subscription(subscriptionMode: .MERGE, item: "itm1", fields: ["f1"])
+        let sub2 = Subscription(subscriptionMode: .DISTINCT, item: "itm2", fields: ["f2"])
         client.subscribe(sub1)
         client.subscribe(sub2)
         
@@ -719,8 +719,8 @@ final class BatchTests: BaseTestCase {
 
         http.onText("CONOK,sid,70000,5000,*")
         http.onText("LOOP,0")
-        let sub1 = Subscription(.MERGE, item: "itm1", fields: ["f1"])
-        let sub2 = Subscription(.DISTINCT, item: "itm2", fields: ["f2"])
+        let sub1 = Subscription(subscriptionMode: .MERGE, item: "itm1", fields: ["f1"])
+        let sub2 = Subscription(subscriptionMode: .DISTINCT, item: "itm2", fields: ["f2"])
         client.subscribe(sub1)
         client.subscribe(sub2)
         ws.onOpen()
@@ -771,8 +771,8 @@ final class BatchTests: BaseTestCase {
         http.onText("LOOP,0")
         http.onText("CONOK,sid,70000,5000,*")
         client.connectionOptions.requestedMaxBandwidth = .limited(12.5)
-        let sub1 = Subscription(.MERGE, item: "itm1", fields: ["f1"])
-        let sub2 = Subscription(.DISTINCT, item: "itm2", fields: ["f2"])
+        let sub1 = Subscription(subscriptionMode: .MERGE, item: "itm1", fields: ["f1"])
+        let sub2 = Subscription(subscriptionMode: .DISTINCT, item: "itm2", fields: ["f2"])
         client.subscribe(sub1)
         client.subscribe(sub2)
         ctrl.onText("REQOK,1")
@@ -826,8 +826,8 @@ final class BatchTests: BaseTestCase {
         http.onText("LOOP,0")
         http.onText("CONOK,sid,70000,5000,*")
         client.connectionOptions.requestedMaxBandwidth = .limited(12.5)
-        let sub1 = Subscription(.MERGE, item: "itm1", fields: ["f1"])
-        let sub2 = Subscription(.DISTINCT, item: "itm2", fields: ["f2"])
+        let sub1 = Subscription(subscriptionMode: .MERGE, item: "itm1", fields: ["f1"])
+        let sub2 = Subscription(subscriptionMode: .DISTINCT, item: "itm2", fields: ["f2"])
         client.subscribe(sub1)
         client.subscribe(sub2)
         ctrl.onText("REQOK,1")
@@ -874,10 +874,10 @@ final class BatchTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
 
-        let sub = Subscription(.MERGE, item: "itm1", fields: ["f1"])
+        let sub = Subscription(subscriptionMode: .MERGE, item: "itm1", fields: ["f1"])
         client.subscribe(sub)
-        let dev = MPNDevice("tok")
-        client.registerForMPN(dev)
+        let dev = MPNDevice(deviceToken: "tok")
+        client.register(forMPN: dev)
         
         ws.onOpen()
         ws.onText("WSOK")
@@ -914,10 +914,10 @@ final class BatchTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
 
-        let sub = Subscription(.MERGE, item: "itm1", fields: ["f1"])
+        let sub = Subscription(subscriptionMode: .MERGE, item: "itm1", fields: ["f1"])
         client.subscribe(sub)
-        let dev = MPNDevice("tok")
-        client.registerForMPN(dev)
+        let dev = MPNDevice(deviceToken: "tok")
+        client.register(forMPN: dev)
         
         ws.onOpen()
         ws.onText("WSOK")
@@ -929,9 +929,9 @@ final class BatchTests: BaseTestCase {
         ws.onText("REQOK,4")
         ws.onText("LOOP,0")
        
-        let sub1 = MPNSubscription(sub)
+        let sub1 = MPNSubscription(subscription: sub)
         sub1.notificationFormat = "fmt1"
-        let sub2 = MPNSubscription(sub)
+        let sub2 = MPNSubscription(subscription: sub)
         sub2.notificationFormat = "fmt2"
         client.subscribeMPN(sub1, coalescing: false)
         client.subscribeMPN(sub2, coalescing: false)
@@ -1021,10 +1021,10 @@ final class BatchTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
 
-        let sub = Subscription(.MERGE, item: "itm1", fields: ["f1"])
+        let sub = Subscription(subscriptionMode: .MERGE, item: "itm1", fields: ["f1"])
         client.subscribe(sub)
-        let dev = MPNDevice("tok")
-        client.registerForMPN(dev)
+        let dev = MPNDevice(deviceToken: "tok")
+        client.register(forMPN: dev)
         
         http.onText("CONOK,sid,70000,5000,*")
         http.onText("LOOP,0")
@@ -1070,10 +1070,10 @@ final class BatchTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
 
-        let sub = Subscription(.MERGE, item: "itm1", fields: ["f1"])
+        let sub = Subscription(subscriptionMode: .MERGE, item: "itm1", fields: ["f1"])
         client.subscribe(sub)
-        let dev = MPNDevice("tok")
-        client.registerForMPN(dev)
+        let dev = MPNDevice(deviceToken: "tok")
+        client.register(forMPN: dev)
         
         http.onText("CONOK,sid,70000,5000,*")
         http.onText("LOOP,0")
@@ -1083,9 +1083,9 @@ final class BatchTests: BaseTestCase {
         ctrl.onText("REQOK,1")
         ctrl.onText("REQOK,2")
        
-        let sub1 = MPNSubscription(sub)
+        let sub1 = MPNSubscription(subscription: sub)
         sub1.notificationFormat = "fmt1"
-        let sub2 = MPNSubscription(sub)
+        let sub2 = MPNSubscription(subscription: sub)
         sub2.notificationFormat = "fmt2"
         client.subscribeMPN(sub1, coalescing: false)
         client.subscribeMPN(sub2, coalescing: false)
@@ -1158,10 +1158,10 @@ final class BatchTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
 
-        let sub = Subscription(.MERGE, item: "itm1", fields: ["f1"])
+        let sub = Subscription(subscriptionMode: .MERGE, item: "itm1", fields: ["f1"])
         client.subscribe(sub)
-        let dev = MPNDevice("tok")
-        client.registerForMPN(dev)
+        let dev = MPNDevice(deviceToken: "tok")
+        client.register(forMPN: dev)
         
         http.onText("CONOK,sid,70000,5000,*")
         http.onText("LOOP,0")
@@ -1171,9 +1171,9 @@ final class BatchTests: BaseTestCase {
         ctrl.onText("REQOK,1")
         ctrl.onText("REQOK,2")
        
-        let sub1 = MPNSubscription(sub)
+        let sub1 = MPNSubscription(subscription: sub)
         sub1.notificationFormat = "fmt1"
-        let sub2 = MPNSubscription(sub)
+        let sub2 = MPNSubscription(subscription: sub)
         sub2.notificationFormat = "fmt2"
         client.subscribeMPN(sub1, coalescing: false)
         client.subscribeMPN(sub2, coalescing: false)

@@ -18,7 +18,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
         http.onText("CONOK,sid,70000,5000,*")
         http.onText("LOOP,0")
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         
@@ -53,7 +53,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
         http.onText("CONOK,sid,70000,5000,*")
         http.onText("LOOP,0")
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -91,7 +91,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
         http.onText("CONOK,sid,70000,5000,*")
         http.onText("LOOP,0")
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -135,7 +135,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
         http.onText("CONOK,sid,70000,5000,*")
         http.onText("LOOP,0")
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -180,7 +180,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
         http.onText("CONOK,sid,70000,5000,*")
         http.onText("LOOP,0")
         
-        let sub = Subscription(.COMMAND, item: "item", fields: ["key", "command"])
+        let sub = Subscription(subscriptionMode: .COMMAND, item: "item", fields: ["key", "command"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -225,7 +225,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
         http.onText("CONOK,sid,70000,5000,*")
         http.onText("LOOP,0")
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -273,7 +273,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
         http.onText("CONOK,sid,70000,5000,*")
         http.onText("LOOP,0")
         
-        let sub = Subscription(.DISTINCT, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -321,7 +321,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
         http.onText("CONOK,sid,70000,5000,*")
         http.onText("LOOP,0")
         
-        let sub = Subscription(.DISTINCT, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -372,7 +372,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
         http.onText("CONOK,sid,70000,5000,*")
         http.onText("LOOP,0")
         
-        let sub = Subscription(.DISTINCT, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -426,7 +426,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
         http.onText("CONOK,sid,70000,5000,*")
         http.onText("LOOP,0")
         
-        let sub = Subscription(.DISTINCT, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -480,7 +480,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
         http.onText("CONOK,sid,70000,5000,*")
         http.onText("LOOP,0")
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -530,7 +530,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
         http.onText("CONOK,sid,70000,5000,*")
         http.onText("LOOP,0")
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -578,7 +578,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
         http.onText("CONOK,sid,70000,5000,*")
         http.onText("LOOP,0")
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -627,7 +627,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
         http.onText("CONOK,sid,70000,5000,*")
         http.onText("LOOP,0")
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -678,7 +678,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
         http.onText("CONOK,sid,70000,5000,*")
         http.onText("LOOP,0")
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -731,7 +731,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
         http.onText("CONOK,sid,70000,5000,*")
         http.onText("LOOP,0")
         
-        let sub = Subscription(.MERGE, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .MERGE, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         

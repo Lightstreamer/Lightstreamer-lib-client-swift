@@ -17,12 +17,12 @@ final class MpnBuilderTests: XCTestCase {
         XCTAssertEqual("""
             {"aps":{"badge":10}}
             """, MPNBuilder()
-                .badgeWithInt(10)
+                .badge(with: 10)
                 .build())
         XCTAssertEqual("""
             {"aps":{"badge":"BADGE"}}
             """, MPNBuilder()
-                .badgeWithString("BADGE")
+                .badge(with: "BADGE")
                 .build())
         XCTAssertEqual("""
             {"aps":{"alert":{"body":"BODY"}}}
@@ -47,22 +47,22 @@ final class MpnBuilderTests: XCTestCase {
         XCTAssertEqual("""
             {"aps":{"content-available":20}}
             """, MPNBuilder()
-                .contentAvailableWithInt(20)
+                .contentAvailable(with: 20)
                 .build())
         XCTAssertEqual("""
             {"aps":{"content-available":"CAV"}}
             """, MPNBuilder()
-                .contentAvailableWithString("CAV")
+                .contentAvailable(with: "CAV")
                 .build())
         XCTAssertEqual("""
             {"aps":{"mutable-content":30}}
             """, MPNBuilder()
-                .mutableContentWithInt(30)
+                .mutableContent(with: 30)
                 .build())
         XCTAssertEqual("""
             {"aps":{"mutable-content":"MC"}}
             """, MPNBuilder()
-                .mutableContentWithString("MC")
+                .mutableContent(with: "MC")
                 .build())
         XCTAssertEqual("""
             {"aps":{"alert":{"launch-image":"IMG"}}}
@@ -120,14 +120,14 @@ final class MpnBuilderTests: XCTestCase {
         XCTAssertEqual("""
             {"aps":{}}
             """, MPNBuilder()
-                .badgeWithInt(10)
-                .badgeWithString(nil)
+                .badge(with: 10)
+                .badge(with: nil)
                 .build())
         XCTAssertEqual("""
             {"aps":{}}
             """, MPNBuilder()
-                .badgeWithString("BADGE")
-                .badgeWithString(nil)
+                .badge(with: "BADGE")
+                .badge(with: nil)
                 .build())
         XCTAssertEqual("""
             {"aps":{"alert":{}}}
@@ -156,26 +156,26 @@ final class MpnBuilderTests: XCTestCase {
         XCTAssertEqual("""
             {"aps":{}}
             """, MPNBuilder()
-                .contentAvailableWithInt(20)
-                .contentAvailableWithString(nil)
+                .contentAvailable(with: 20)
+                .contentAvailable(with: nil)
                 .build())
         XCTAssertEqual("""
             {"aps":{}}
             """, MPNBuilder()
-                .contentAvailableWithString("CAV")
-                .contentAvailableWithString(nil)
+                .contentAvailable(with: "CAV")
+                .contentAvailable(with: nil)
                 .build())
         XCTAssertEqual("""
             {"aps":{}}
             """, MPNBuilder()
-                .mutableContentWithInt(30)
-                .mutableContentWithString(nil)
+                .mutableContent(with: 30)
+                .mutableContent(with: nil)
                 .build())
         XCTAssertEqual("""
             {"aps":{}}
             """, MPNBuilder()
-                .mutableContentWithString("MC")
-                .mutableContentWithString(nil)
+                .mutableContent(with: "MC")
+                .mutableContent(with: nil)
                 .build())
         XCTAssertEqual("""
             {"aps":{}}
@@ -312,7 +312,7 @@ final class MpnBuilderTests: XCTestCase {
               "messageID" : "ABCDEFGHIJ"
             }
             """, MPNBuilder()
-                .badgeWithInt(9)
+                .badge(with: 9)
                 .sound("bingbong.aiff")
                 .customData(["messageID":"ABCDEFGHIJ"])
                 .buildTest())

@@ -20,12 +20,12 @@ class TestMpnSubDelegate: MPNSubscriptionDelegate {
         addTrace("mpn.onUnsubscription")
     }
     
-    func mpnSubscription(_ subscription: MPNSubscription, didFailSubscriptionWithErrorCode code: Int, message: String) {
-        addTrace("mpn.onSubscriptionError \(code) \(message)")
+    func mpnSubscription(_ subscription: MPNSubscription, didFailSubscriptionWithErrorCode code: Int, message: String?) {
+        addTrace("mpn.onSubscriptionError \(code) \(message ?? "")")
     }
     
-    func mpnSubscription(_ subscription: MPNSubscription, didFailUnsubscriptionWithErrorCode code: Int, message: String) {
-        addTrace("mpn.onUnsubscriptionError \(code) \(message)")
+    func mpnSubscription(_ subscription: MPNSubscription, didFailUnsubscriptionWithErrorCode code: Int, message: String?) {
+        addTrace("mpn.onUnsubscriptionError \(code) \(message ?? "")")
     }
     
     func mpnSubscriptionDidTrigger(_ subscription: MPNSubscription) {
@@ -40,8 +40,8 @@ class TestMpnSubDelegate: MPNSubscriptionDelegate {
         addTrace("mpn.onPropertyChange \(property)")
     }
     
-    func mpnSubscription(_ subscription: MPNSubscription, didFailModificationWithErrorCode code: Int, message: String, property: String) {
-        addTrace("mpn.onModificationError \(code) \(message) \(property)")
+    func mpnSubscription(_ subscription: MPNSubscription, didFailModificationWithErrorCode code: Int, message: String?, property: String) {
+        addTrace("mpn.onModificationError \(code) \(message ?? "") \(property)")
     }
 }
 
@@ -68,9 +68,9 @@ final class MpnSubscriptionTests: BaseTestCase {
         ws.onText("WSOK")
         ws.onText("CONOK,sid,70000,5000,*")
         
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
     }
     
@@ -83,11 +83,11 @@ final class MpnSubscriptionTests: BaseTestCase {
         client = newClient("http://server")
         client.addDelegate(delegate)
         
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -130,11 +130,11 @@ final class MpnSubscriptionTests: BaseTestCase {
         client = newClient("http://server")
         client.addDelegate(delegate)
         
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -171,11 +171,11 @@ final class MpnSubscriptionTests: BaseTestCase {
         client = newClient("http://server")
         client.addDelegate(delegate)
         
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -215,7 +215,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -241,7 +241,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -271,7 +271,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -301,7 +301,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -334,7 +334,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -365,7 +365,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         XCTAssertEqual(.UNKNOWN, sub.status)
@@ -430,7 +430,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.triggerExpression = "trg"
         sub.addDelegate(mpnSubDelegate)
@@ -501,7 +501,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.triggerExpression = "trg"
         sub.addDelegate(mpnSubDelegate)
@@ -576,7 +576,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.triggerExpression = "trg"
         sub.addDelegate(mpnSubDelegate)
@@ -657,7 +657,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.triggerExpression = "trg"
         sub.addDelegate(mpnSubDelegate)
@@ -729,7 +729,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.triggerExpression = "trg"
         sub.addDelegate(mpnSubDelegate)
@@ -801,7 +801,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -852,7 +852,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -905,7 +905,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -956,7 +956,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -1009,7 +1009,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -1056,7 +1056,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -1107,7 +1107,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -1169,7 +1169,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -1232,7 +1232,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -1301,7 +1301,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -1368,7 +1368,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         XCTAssertEqual("fmt", sub.notificationFormat)
@@ -1406,7 +1406,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         XCTAssertEqual("fmt", sub.notificationFormat)
@@ -1446,7 +1446,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         XCTAssertEqual("fmt", sub.notificationFormat)
@@ -1487,7 +1487,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         XCTAssertEqual("fmt", sub.notificationFormat)
@@ -1532,7 +1532,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         XCTAssertEqual("fmt", sub.notificationFormat)
@@ -1578,7 +1578,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         XCTAssertEqual("fmt", sub.notificationFormat)
@@ -1619,7 +1619,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.triggerExpression = "trg"
         sub.addDelegate(mpnSubDelegate)
@@ -1658,7 +1658,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.triggerExpression = "trg"
         sub.addDelegate(mpnSubDelegate)
@@ -1697,7 +1697,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.triggerExpression = "trg"
         sub.addDelegate(mpnSubDelegate)
@@ -1738,7 +1738,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.triggerExpression = "trg"
         sub.addDelegate(mpnSubDelegate)
@@ -1780,7 +1780,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.triggerExpression = "trg"
         sub.addDelegate(mpnSubDelegate)
@@ -1826,7 +1826,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.triggerExpression = "trg"
         sub.addDelegate(mpnSubDelegate)
@@ -1873,7 +1873,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.triggerExpression = "trg"
         sub.addDelegate(mpnSubDelegate)
@@ -1916,12 +1916,12 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         simulateCreation()
         let mpnSubDelegate1 = TestMpnSubDelegate()
-        let sub1 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub1 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub1.notificationFormat = "fmt"
         sub1.addDelegate(mpnSubDelegate1)
         client.subscribeMPN(sub1, coalescing: false)
         let mpnSubDelegate2 = TestMpnSubDelegate()
-        let sub2 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub2 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub2.notificationFormat = "fmt"
         sub2.addDelegate(mpnSubDelegate2)
         client.subscribeMPN(sub2, coalescing: false)
@@ -1992,12 +1992,12 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         simulateCreation()
         let mpnSubDelegate1 = TestMpnSubDelegate()
-        let sub1 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub1 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub1.notificationFormat = "fmt"
         sub1.addDelegate(mpnSubDelegate1)
         client.subscribeMPN(sub1, coalescing: false)
         let mpnSubDelegate2 = TestMpnSubDelegate()
-        let sub2 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub2 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub2.notificationFormat = "fmt"
         sub2.addDelegate(mpnSubDelegate2)
         client.subscribeMPN(sub2, coalescing: true)
@@ -2060,12 +2060,12 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         simulateCreation()
         let mpnSubDelegate1 = TestMpnSubDelegate()
-        let sub1 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub1 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub1.notificationFormat = "fmt"
         sub1.addDelegate(mpnSubDelegate1)
         client.subscribeMPN(sub1, coalescing: false)
         let mpnSubDelegate2 = TestMpnSubDelegate()
-        let sub2 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub2 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub2.notificationFormat = "fmt"
         sub2.addDelegate(mpnSubDelegate2)
         client.subscribeMPN(sub2, coalescing: true)
@@ -2125,12 +2125,12 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         simulateCreation()
         let mpnSubDelegate1 = TestMpnSubDelegate()
-        let sub1 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub1 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub1.notificationFormat = "fmt"
         sub1.addDelegate(mpnSubDelegate1)
         client.subscribeMPN(sub1, coalescing: false)
         let mpnSubDelegate2 = TestMpnSubDelegate()
-        let sub2 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub2 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub2.notificationFormat = "fmt"
         sub2.addDelegate(mpnSubDelegate2)
         client.subscribeMPN(sub2, coalescing: false)
@@ -2207,12 +2207,12 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         simulateCreation()
         let mpnSubDelegate1 = TestMpnSubDelegate()
-        let sub1 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub1 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub1.notificationFormat = "fmt"
         sub1.addDelegate(mpnSubDelegate1)
         client.subscribeMPN(sub1, coalescing: false)
         let mpnSubDelegate2 = TestMpnSubDelegate()
-        let sub2 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub2 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub2.notificationFormat = "fmt"
         sub2.addDelegate(mpnSubDelegate2)
         client.subscribeMPN(sub2, coalescing: false)
@@ -2289,12 +2289,12 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         simulateCreation()
         let mpnSubDelegate1 = TestMpnSubDelegate()
-        let sub1 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub1 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub1.notificationFormat = "fmt"
         sub1.addDelegate(mpnSubDelegate1)
         client.subscribeMPN(sub1, coalescing: false)
         let mpnSubDelegate2 = TestMpnSubDelegate()
-        let sub2 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub2 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub2.notificationFormat = "fmt"
         sub2.addDelegate(mpnSubDelegate2)
         client.subscribeMPN(sub2, coalescing: false)
@@ -2371,12 +2371,12 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         simulateCreation()
         let mpnSubDelegate1 = TestMpnSubDelegate()
-        let sub1 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub1 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub1.notificationFormat = "fmt"
         sub1.addDelegate(mpnSubDelegate1)
         client.subscribeMPN(sub1, coalescing: false)
         let mpnSubDelegate2 = TestMpnSubDelegate()
-        let sub2 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub2 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub2.notificationFormat = "fmt"
         sub2.addDelegate(mpnSubDelegate2)
         client.subscribeMPN(sub2, coalescing: false)
@@ -2453,12 +2453,12 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         simulateCreation()
         let mpnSubDelegate1 = TestMpnSubDelegate()
-        let sub1 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub1 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub1.notificationFormat = "fmt"
         sub1.addDelegate(mpnSubDelegate1)
         client.subscribeMPN(sub1, coalescing: false)
         let mpnSubDelegate2 = TestMpnSubDelegate()
-        let sub2 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub2 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub2.notificationFormat = "fmt"
         sub2.addDelegate(mpnSubDelegate2)
         client.subscribeMPN(sub2, coalescing: false)
@@ -2535,12 +2535,12 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         simulateCreation()
         let mpnSubDelegate1 = TestMpnSubDelegate()
-        let sub1 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub1 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub1.notificationFormat = "fmt"
         sub1.addDelegate(mpnSubDelegate1)
         client.subscribeMPN(sub1, coalescing: false)
         let mpnSubDelegate2 = TestMpnSubDelegate()
-        let sub2 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub2 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub2.notificationFormat = "fmt"
         sub2.addDelegate(mpnSubDelegate2)
         client.subscribeMPN(sub2, coalescing: false)
@@ -3090,7 +3090,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -3191,12 +3191,12 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         simulateCreation()
         let mpnSubDelegate1 = TestMpnSubDelegate()
-        let sub1 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub1 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub1.notificationFormat = "fmt"
         sub1.addDelegate(mpnSubDelegate1)
         client.subscribeMPN(sub1, coalescing: false)
         let mpnSubDelegate2 = TestMpnSubDelegate()
-        let sub2 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub2 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub2.notificationFormat = "fmt"
         sub2.addDelegate(mpnSubDelegate2)
         client.subscribeMPN(sub2, coalescing: false)

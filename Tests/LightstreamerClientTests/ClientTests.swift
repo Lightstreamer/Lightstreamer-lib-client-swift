@@ -7,7 +7,7 @@ final class ClientTests: BaseTestCase, ClientDelegate {
     var actualEvents = ""
 
     func testAddDelegate() {
-        let client = LightstreamerClient("http://host")
+        let client = LightstreamerClient(serverAddress: "http://host")
         client.addDelegate(self)
         
         wait(for: [expectation], timeout: 1)
@@ -21,7 +21,7 @@ final class ClientTests: BaseTestCase, ClientDelegate {
     func testRemoveDelegate() {
         expectation.expectedFulfillmentCount = 2
         
-        let client = LightstreamerClient("http://host")
+        let client = LightstreamerClient(serverAddress: "http://host")
         client.addDelegate(self)
         client.removeDelegate(self)
         
@@ -35,7 +35,7 @@ final class ClientTests: BaseTestCase, ClientDelegate {
     func testPropertyChange1() {
         expectation.expectedFulfillmentCount = 9
         
-        let client = LightstreamerClient("http://host")
+        let client = LightstreamerClient(serverAddress: "http://host")
         client.addDelegate(self)
         client.connectionDetails.serverAddress = "http://server"
         client.connectionDetails.adapterSet = "adapter"
@@ -70,7 +70,7 @@ final class ClientTests: BaseTestCase, ClientDelegate {
     func testPropertyChange2() {
         expectation.expectedFulfillmentCount = 18
         
-        let client = LightstreamerClient("http://host")
+        let client = LightstreamerClient(serverAddress: "http://host")
         client.addDelegate(self)
         client.connectionOptions.contentLength = 10
         client.connectionOptions.firstRetryMaxDelay = 20

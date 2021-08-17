@@ -15,7 +15,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         
@@ -42,7 +42,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -72,7 +72,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -111,7 +111,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -156,7 +156,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.COMMAND, item: "item", fields: ["key", "command"])
+        let sub = Subscription(subscriptionMode: .COMMAND, item: "item", fields: ["key", "command"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -201,7 +201,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -249,7 +249,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.DISTINCT, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -297,7 +297,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.DISTINCT, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -348,7 +348,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.DISTINCT, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -402,7 +402,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.DISTINCT, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -456,7 +456,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -504,7 +504,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -552,7 +552,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -601,7 +601,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -644,7 +644,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -686,7 +686,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -737,7 +737,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -790,7 +790,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -843,7 +843,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -895,7 +895,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.MERGE, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .MERGE, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         

@@ -43,9 +43,9 @@ class MpnWsPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
@@ -63,9 +63,9 @@ class MpnWsPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         
         asyncAssert {
@@ -91,9 +91,9 @@ class MpnWsPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onText("SUBOK,1,1,2")
         ws.onText("U,1,1,ACTIVE|100")
@@ -123,13 +123,13 @@ class MpnWsPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
-        let dev2 = MPNDevice("tok2")
+        let dev2 = MPNDevice(deviceToken: "tok2")
         dev2.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev2)
+        client.register(forMPN: dev2)
         ws.onText("MPNREG,devid,adapter")
         
         asyncAssert {
@@ -159,9 +159,9 @@ class MpnWsPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onError()
         scheduler.fireRetryTimeout()
@@ -216,9 +216,9 @@ class MpnWsPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onText("SUBOK,1,1,2")
         ws.onText("U,1,1,ACTIVE|100")
@@ -251,11 +251,11 @@ class MpnWsPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -288,11 +288,11 @@ class MpnWsPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -350,11 +350,11 @@ class MpnWsPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         XCTAssertEqual("fmt", sub.notificationFormat)
@@ -399,11 +399,11 @@ class MpnWsPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.triggerExpression = "trg"
         sub.addDelegate(mpnSubDelegate)
@@ -449,17 +449,17 @@ class MpnWsPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         let mpnSubDelegate1 = TestMpnSubDelegate()
-        let sub1 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub1 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub1.notificationFormat = "fmt"
         sub1.addDelegate(mpnSubDelegate1)
         client.subscribeMPN(sub1, coalescing: false)
         let mpnSubDelegate2 = TestMpnSubDelegate()
-        let sub2 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub2 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub2.notificationFormat = "fmt"
         sub2.addDelegate(mpnSubDelegate2)
         client.subscribeMPN(sub2, coalescing: false)

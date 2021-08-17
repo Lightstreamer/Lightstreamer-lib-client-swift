@@ -1189,7 +1189,7 @@ cancel recovery.timeout
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.DISTINCT, item: "itm", fields: ["fld"])
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "itm", fields: ["fld"])
         sub.addDelegate(subDelegate)
         
         ws.onOpen()
@@ -1246,7 +1246,7 @@ cancel recovery.timeout
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.DISTINCT, item: "itm", fields: ["fld"])
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "itm", fields: ["fld"])
         sub.addDelegate(subDelegate)
         
         ws.onOpen()
@@ -1313,7 +1313,7 @@ cancel recovery.timeout
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.DISTINCT, item: "itm", fields: ["fld"])
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "itm", fields: ["fld"])
         sub.addDelegate(subDelegate)
         
         ws.onOpen()
@@ -1396,7 +1396,7 @@ cancel recovery.timeout
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.COMMAND, item: "itm", fields: ["key", "command"])
+        let sub = Subscription(subscriptionMode: .COMMAND, item: "itm", fields: ["key", "command"])
         sub.addDelegate(subDelegate)
         
         ws.onOpen()
@@ -1453,7 +1453,7 @@ cancel recovery.timeout
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.COMMAND, item: "itm", fields: ["key", "command"])
+        let sub = Subscription(subscriptionMode: .COMMAND, item: "itm", fields: ["key", "command"])
         sub.addDelegate(subDelegate)
         
         ws.onOpen()
@@ -1520,7 +1520,7 @@ cancel recovery.timeout
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.COMMAND, item: "itm", fields: ["key", "command"])
+        let sub = Subscription(subscriptionMode: .COMMAND, item: "itm", fields: ["key", "command"])
         sub.addDelegate(subDelegate)
         
         ws.onOpen()
@@ -1660,16 +1660,16 @@ cancel recovery.timeout
         
         let devDelegate = TestMpnDeviceDelegate()
         let subDelegate = TestMpnSubDelegate()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(devDelegate)
-        let sub = MPNSubscription(.DISTINCT, item: "itm", fields: ["fld"])
+        let sub = MPNSubscription(subscriptionMode: .DISTINCT, item: "itm", fields: ["fld"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(subDelegate)
         
         ws.onOpen()
         ws.onText("WSOK")
         ws.onText("CONOK,sid,70000,5000,*")
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         client.subscribeMPN(sub, coalescing: false)
         ws.onText("MPNREG,devid,adapter")
         ws.onText("MPNOK,1,sub1")
@@ -1730,16 +1730,16 @@ cancel recovery.timeout
         
         let devDelegate = TestMpnDeviceDelegate()
         let subDelegate = TestMpnSubDelegate()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(devDelegate)
-        let sub = MPNSubscription(.DISTINCT, item: "itm", fields: ["fld"])
+        let sub = MPNSubscription(subscriptionMode: .DISTINCT, item: "itm", fields: ["fld"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(subDelegate)
         
         ws.onOpen()
         ws.onText("WSOK")
         ws.onText("CONOK,sid,70000,5000,*")
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         client.subscribeMPN(sub, coalescing: false)
         ws.onError()
         scheduler.fireRecoveryTimeout()
@@ -1804,16 +1804,16 @@ cancel recovery.timeout
         
         let devDelegate = TestMpnDeviceDelegate()
         let subDelegate = TestMpnSubDelegate()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(devDelegate)
-        let sub = MPNSubscription(.DISTINCT, item: "itm", fields: ["fld"])
+        let sub = MPNSubscription(subscriptionMode: .DISTINCT, item: "itm", fields: ["fld"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(subDelegate)
         
         ws.onOpen()
         ws.onText("WSOK")
         ws.onText("CONOK,sid,70000,5000,*")
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         client.subscribeMPN(sub, coalescing: false)
         ws.onText("MPNREG,devid,adapter")
         ws.onText("MPNOK,1,sub1")

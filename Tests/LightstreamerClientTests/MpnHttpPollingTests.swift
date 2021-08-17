@@ -39,9 +39,9 @@ class MpnHttpPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
@@ -59,9 +59,9 @@ class MpnHttpPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ctrl.onText("REQOK,1")
         ctrl.onDone()
         http.onText("MPNREG,devid,adapter")
@@ -95,9 +95,9 @@ class MpnHttpPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ctrl.onText("REQOK,1")
         ctrl.onDone()
         http.onText("MPNREG,devid,adapter")
@@ -135,9 +135,9 @@ class MpnHttpPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ctrl.onText("REQOK,1")
         ctrl.onDone()
         http.onText("MPNREG,devid,adapter")
@@ -145,9 +145,9 @@ class MpnHttpPollingTests: BaseTestCase {
         ctrl.onDone()
         ctrl.onText("REQOK,3")
         ctrl.onDone()
-        let dev2 = MPNDevice("tok2")
+        let dev2 = MPNDevice(deviceToken: "tok2")
         dev2.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev2)
+        client.register(forMPN: dev2)
         ctrl.onText("REQOK,4")
         ctrl.onDone()
         http.onText("MPNREG,devid,adapter")
@@ -187,9 +187,9 @@ class MpnHttpPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         http.onText("MPNREG,devid,adapter")
         http.onError()
         scheduler.fireRetryTimeout()
@@ -232,9 +232,9 @@ class MpnHttpPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         
         ctrl.onText("REQOK,1")
         ctrl.onDone()
@@ -284,9 +284,9 @@ class MpnHttpPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ctrl.onText("REQOK,1")
         ctrl.onDone()
         http.onText("MPNREG,devid,adapter")
@@ -294,7 +294,7 @@ class MpnHttpPollingTests: BaseTestCase {
         ctrl.onDone()
         ctrl.onText("REQOK,3")
         ctrl.onDone()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -333,9 +333,9 @@ class MpnHttpPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ctrl.onText("REQOK,1")
         ctrl.onDone()
         http.onText("MPNREG,devid,adapter")
@@ -343,7 +343,7 @@ class MpnHttpPollingTests: BaseTestCase {
         ctrl.onDone()
         ctrl.onText("REQOK,3")
         ctrl.onDone()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         client.subscribeMPN(sub, coalescing: false)
@@ -413,9 +413,9 @@ class MpnHttpPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ctrl.onText("REQOK,1")
         ctrl.onDone()
         http.onText("MPNREG,devid,adapter")
@@ -423,7 +423,7 @@ class MpnHttpPollingTests: BaseTestCase {
         ctrl.onDone()
         ctrl.onText("REQOK,3")
         ctrl.onDone()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.addDelegate(mpnSubDelegate)
         XCTAssertEqual("fmt", sub.notificationFormat)
@@ -478,9 +478,9 @@ class MpnHttpPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ctrl.onText("REQOK,1")
         ctrl.onDone()
         http.onText("MPNREG,devid,adapter")
@@ -488,7 +488,7 @@ class MpnHttpPollingTests: BaseTestCase {
         ctrl.onDone()
         ctrl.onText("REQOK,3")
         ctrl.onDone()
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         sub.triggerExpression = "trg"
         sub.addDelegate(mpnSubDelegate)
@@ -544,9 +544,9 @@ class MpnHttpPollingTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ctrl.onText("REQOK,1")
         ctrl.onDone()
         http.onText("MPNREG,devid,adapter")
@@ -555,12 +555,12 @@ class MpnHttpPollingTests: BaseTestCase {
         ctrl.onText("REQOK,3")
         ctrl.onDone()
         let mpnSubDelegate1 = TestMpnSubDelegate()
-        let sub1 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub1 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub1.notificationFormat = "fmt"
         sub1.addDelegate(mpnSubDelegate1)
         client.subscribeMPN(sub1, coalescing: false)
         let mpnSubDelegate2 = TestMpnSubDelegate()
-        let sub2 = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub2 = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub2.notificationFormat = "fmt"
         sub2.addDelegate(mpnSubDelegate2)
         client.subscribeMPN(sub2, coalescing: false)

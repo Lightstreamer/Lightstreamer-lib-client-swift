@@ -25,8 +25,8 @@ class TestMpnDeviceDelegate: MPNDeviceDelegate {
         addTrace("dev.onResume")
     }
     
-    func mpnDevice(_ device: MPNDevice, didFailRegistrationWithErrorCode code: Int, message: String) {
-        addTrace("dev.onError \(code) \(message)")
+    func mpnDevice(_ device: MPNDevice, didFailRegistrationWithErrorCode code: Int, message: String?) {
+        addTrace("dev.onError \(code) \(message ?? "")")
     }
     
     func mpnDevice(_ device: MPNDevice, didChangeStatus status: MPNDevice.Status, timestamp: Int64) {
@@ -41,8 +41,8 @@ class TestMpnDeviceDelegate: MPNDeviceDelegate {
         addTrace("dev.onResetBadge")
     }
     
-    func mpnDevice(_ device: MPNDevice, didFailBadgeResetWithErrorCode code: Int, message: String) {
-        addTrace("dev.onResetBadgerError \(code) \(message)")
+    func mpnDevice(_ device: MPNDevice, didFailBadgeResetWithErrorCode code: Int, message: String?) {
+        addTrace("dev.onResetBadgerError \(code) \(message ?? "")")
     }
 }
 
@@ -74,9 +74,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
@@ -94,9 +94,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         
         ws.onText("REQERR,1,-5,error")
         XCTAssertEqual(.s401, client.s_mpn.m)
@@ -120,9 +120,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         
         ws.onText("REQOK,1")
         
@@ -144,9 +144,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         
         ws.onError()
         XCTAssertEqual(.s403, client.s_mpn.m)
@@ -169,9 +169,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         
         ws.onText("REQOK,1")
         ws.onError()
@@ -195,14 +195,14 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         
         ws.onText("REQERR,1,-5,error")
         XCTAssertEqual(.s401, client.s_mpn.m)
-        let dev2 = MPNDevice("tok2")
-        client.registerForMPN(dev2)
+        let dev2 = MPNDevice(deviceToken: "tok2")
+        client.register(forMPN: dev2)
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
@@ -225,12 +225,12 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         
-        let dev2 = MPNDevice("tok2")
-        client.registerForMPN(dev2)
+        let dev2 = MPNDevice(deviceToken: "tok2")
+        client.register(forMPN: dev2)
         ws.onText("REQERR,1,-5,error")
         
         asyncAssert {
@@ -254,9 +254,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         
         client.disconnect()
         XCTAssertEqual(.s401, client.s_mpn.m)
@@ -292,9 +292,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         
         asyncAssert {
@@ -320,9 +320,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("REQOK,1")
         ws.onText("MPNREG,devid,adapter")
         
@@ -350,9 +350,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onText("SUBOK,1,1,2")
         ws.onText("U,1,1,ACTIVE|100")
@@ -382,9 +382,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onText("SUBOK,1,1,2")
         ws.onText("U,1,1,SUSPENDED|100")
@@ -416,9 +416,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onText("SUBOK,1,1,2")
         ws.onText("U,1,1,SUSPENDED|100")
@@ -454,13 +454,13 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
-        let dev2 = MPNDevice("tok2")
+        let dev2 = MPNDevice(deviceToken: "tok2")
         dev2.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev2)
+        client.register(forMPN: dev2)
         ws.onText("MPNREG,devid,adapter")
         
         asyncAssert {
@@ -489,13 +489,13 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
-        let dev2 = MPNDevice("tok2")
+        let dev2 = MPNDevice(deviceToken: "tok2")
         dev2.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev2)
+        client.register(forMPN: dev2)
         ws.onText("REQOK,4")
         ws.onText("MPNREG,devid,adapter")
         
@@ -526,13 +526,13 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
-        let dev2 = MPNDevice("tok2")
+        let dev2 = MPNDevice(deviceToken: "tok2")
         dev2.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev2)
+        client.register(forMPN: dev2)
         ws.onText("REQERR,4,-5,error")
         
         asyncAssert {
@@ -564,16 +564,16 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
-        let dev2 = MPNDevice("tok2")
+        let dev2 = MPNDevice(deviceToken: "tok2")
         dev2.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev2)
-        let dev3 = MPNDevice("tok3")
+        client.register(forMPN: dev2)
+        let dev3 = MPNDevice(deviceToken: "tok3")
         dev3.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev3)
+        client.register(forMPN: dev3)
         ws.onText("REQERR,4,-5,error")
         
         asyncAssert {
@@ -607,13 +607,13 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
-        let dev2 = MPNDevice("tok2")
+        let dev2 = MPNDevice(deviceToken: "tok2")
         dev2.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev2)
+        client.register(forMPN: dev2)
         ws.onText("MPNREG,devid2,adapter")
         
         asyncAssert {
@@ -644,13 +644,13 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
-        let dev2 = MPNDevice("tok2")
+        let dev2 = MPNDevice(deviceToken: "tok2")
         dev2.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev2)
+        client.register(forMPN: dev2)
         ws.onText("MPNREG,devid,adapter2")
         
         asyncAssert {
@@ -681,9 +681,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onText("SUBOK,1,1,2")
         ws.onText("U,1,1,ACTIVE|100")
@@ -732,13 +732,13 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onText("REQERR,2,-5,error")
         client.callbackQueue.async {
-            self.client.registerForMPN(dev)
+            self.client.register(forMPN: dev)
         }
         
         asyncAssert(after: 0.5) {
@@ -769,14 +769,14 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onText("SUBOK,1,1,2")
         ws.onText("UNSUB,1")
         client.callbackQueue.async {
-            self.client.registerForMPN(dev)
+            self.client.register(forMPN: dev)
         }
         
         asyncAssert(after: 0.5) {
@@ -808,13 +808,13 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onText("REQERR,3,-5,error")
         client.callbackQueue.async {
-            self.client.registerForMPN(dev)
+            self.client.register(forMPN: dev)
         }
         
         asyncAssert(after: 0.5) {
@@ -845,14 +845,14 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onText("SUBCMD,2,1,2,1,2")
         ws.onText("UNSUB,2")
         client.callbackQueue.async {
-            self.client.registerForMPN(dev)
+            self.client.register(forMPN: dev)
         }
         
         asyncAssert(after: 0.5) {
@@ -884,9 +884,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onText("SUBCMD,2,1,2,1,2")
         ws.onText("U,2,1,sub1|ADD")
@@ -921,9 +921,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onError()
         scheduler.fireRetryTimeout()
@@ -972,9 +972,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onError()
         scheduler.fireRetryTimeout()
@@ -1037,9 +1037,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onError()
         scheduler.fireRetryTimeout()
@@ -1085,9 +1085,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onError()
         scheduler.fireRetryTimeout()
@@ -1138,9 +1138,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onError()
         scheduler.fireRetryTimeout()
@@ -1185,9 +1185,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onError()
         scheduler.fireRetryTimeout()
@@ -1232,9 +1232,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onError()
         client.disconnect()
@@ -1277,16 +1277,16 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onError()
         scheduler.fireRetryTimeout()
         ws.onOpen()
         ws.onText("WSOK")
         ws.onText("CONOK,sid2,70000,5000,*")
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         
         asyncAssert(after: 0.5) {
             self.ws.onText("REQERR,4,-5,error")
@@ -1325,9 +1325,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onText("SUBOK,1,1,2")
         ws.onText("U,1,1,ACTIVE|100")
@@ -1360,9 +1360,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         client.resetMPNBadge()
         ws.onText("MPNREG,devid,adapter")
         ws.onText("SUBOK,1,1,2")
@@ -1395,9 +1395,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onText("SUBOK,1,1,2")
         ws.onText("U,1,1,ACTIVE|100")
@@ -1436,9 +1436,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onText("SUBOK,1,1,2")
         ws.onText("U,1,1,ACTIVE|100")
@@ -1478,9 +1478,9 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onText("SUBOK,1,1,2")
         ws.onText("U,1,1,ACTIVE|100")
@@ -1523,14 +1523,14 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onText("SUBOK,1,1,2")
         ws.onText("U,1,1,ACTIVE|100")
         
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         let mpnSubDelegate = TestMpnSubDelegate()
         sub.addDelegate(mpnSubDelegate)
@@ -1603,14 +1603,14 @@ final class MpnTests: BaseTestCase {
         client.connect()
         
         simulateCreation()
-        let dev = MPNDevice("tok")
+        let dev = MPNDevice(deviceToken: "tok")
         dev.addDelegate(mpnDevDelegate)
-        client.registerForMPN(dev)
+        client.register(forMPN: dev)
         ws.onText("MPNREG,devid,adapter")
         ws.onText("SUBOK,1,1,2")
         ws.onText("U,1,1,ACTIVE|100")
         
-        let sub = MPNSubscription(.MERGE, item: "i1", fields: ["f1"])
+        let sub = MPNSubscription(subscriptionMode: .MERGE, item: "i1", fields: ["f1"])
         sub.notificationFormat = "fmt"
         let mpnSubDelegate = TestMpnSubDelegate()
         sub.addDelegate(mpnSubDelegate)

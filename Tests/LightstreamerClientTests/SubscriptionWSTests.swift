@@ -9,7 +9,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         
@@ -36,7 +36,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW)
+        let sub = Subscription(subscriptionMode: .RAW)
         sub.dataAdapter = "adapter"
         sub.fieldSchema = "schema"
         sub.itemGroup = "group"
@@ -68,7 +68,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW)
+        let sub = Subscription(subscriptionMode: .RAW)
         sub.fieldSchema = "schema"
         sub.itemGroup = "group"
         sub.requestedBufferSize = .unlimited
@@ -98,7 +98,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -128,7 +128,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -164,7 +164,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -201,7 +201,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.COMMAND, item: "item", fields: ["key", "command"])
+        let sub = Subscription(subscriptionMode: .COMMAND, item: "item", fields: ["key", "command"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -238,7 +238,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -278,7 +278,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.DISTINCT, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -318,7 +318,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.DISTINCT, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -361,7 +361,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.DISTINCT, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -407,7 +407,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.DISTINCT, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -453,7 +453,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -495,7 +495,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -535,7 +535,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -578,7 +578,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -621,7 +621,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.RAW, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -666,7 +666,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.MERGE, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .MERGE, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         
@@ -703,7 +703,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.MERGE, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .MERGE, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         sub.requestedMaxFrequency = .limited(12.3)
         client.subscribe(sub)
@@ -736,7 +736,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.MERGE, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .MERGE, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         sub.requestedMaxFrequency = .unlimited
         client.subscribe(sub)
@@ -769,7 +769,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.MERGE, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .MERGE, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         sub.requestedMaxFrequency = .unfiltered
         client.subscribe(sub)
@@ -802,7 +802,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.MERGE, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .MERGE, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         
@@ -842,7 +842,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.MERGE, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .MERGE, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         sub.requestedMaxFrequency = .unlimited
         client.subscribe(sub)
@@ -876,7 +876,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.MERGE, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .MERGE, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         
@@ -916,7 +916,7 @@ final class SubscriptionWSTests: BaseTestCase {
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(.MERGE, item: "item", fields: ["f1", "f2"])
+        let sub = Subscription(subscriptionMode: .MERGE, item: "item", fields: ["f1", "f2"])
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         
