@@ -451,9 +451,9 @@ class Key2Level: ItemKey {
             }
         }
         
-        func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String) {
+        func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String?) {
             synchronized {
-                key?.evtOnSubscriptionError2Level(code, message)
+                key?.evtOnSubscriptionError2Level(code, message ?? "")
             }
         }
         
@@ -463,9 +463,9 @@ class Key2Level: ItemKey {
             }
         }
         
-        func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: Int, forItemName itemName: String?, itemPos: Int) {
+        func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: UInt, forItemName itemName: String?, itemPos: UInt) {
             synchronized {
-                key?.evtOnItemLostUpdates2Level(lostUpdates)
+                key?.evtOnItemLostUpdates2Level(Int(lostUpdates))
             }
         }
         
@@ -481,10 +481,10 @@ class Key2Level: ItemKey {
             }
         }
         
-        func subscription(_ subscription: Subscription, didClearSnapshotForItemName itemName: String?, itemPos: Int) {}
-        func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: Int, forCommandSecondLevelItemWithKey key: String) {}
-        func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String, forCommandSecondLevelItemWithKey key: String) {}
-        func subscription(_ subscription: Subscription, didEndSnapshotForItemName itemName: String?, itemPos: Int) {}
+        func subscription(_ subscription: Subscription, didClearSnapshotForItemName itemName: String?, itemPos: UInt) {}
+        func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: UInt, forCommandSecondLevelItemWithKey key: String) {}
+        func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String?, forCommandSecondLevelItemWithKey key: String) {}
+        func subscription(_ subscription: Subscription, didEndSnapshotForItemName itemName: String?, itemPos: UInt) {}
         func subscriptionDidRemoveDelegate(_ subscription: Subscription) {}
         func subscriptionDidAddDelegate(_ subscription: Subscription) {}
         func subscriptionDidSubscribe(_ subscription: Subscription) {}
@@ -493,7 +493,7 @@ class Key2Level: ItemKey {
     private func create2LevelSubscription() -> Subscription? {
         listener2Level = Mpn2LevelDelegate(self)
         let sub = item.subscription
-        let sub2 = Subscription(.MERGE)
+        let sub2 = Subscription(subscriptionMode: .MERGE)
         let items = [keyName]
         guard allValidItems(items) else {
             return nil

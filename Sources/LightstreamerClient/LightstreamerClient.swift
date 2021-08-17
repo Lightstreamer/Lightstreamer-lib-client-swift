@@ -221,35 +221,6 @@ public protocol ClientDelegate: AnyObject {
      - SeeAlso: `LightstreamerClient.connectionOptions`
      */
     func client(_ client: LightstreamerClient, didChangeProperty property: String)
-    /**
-     Event handler that receives a notificaiton each time the underlying connection is going to request authentication
-     for a challenge in order to proceed.
-
-     If the delegate implements this method, the connection will suspend until `challenge.sender` is called with one of the following methods:
-
-     - `useCredential:forAuthenticationChallenge:`,
-
-     - `continueWithoutCredentialForAuthenticationChallenge:`,
-
-     - `cancelAuthenticationChallenge:`,
-
-     - `performDefaultHandlingForAuthenticationChallenge:` or
-
-     - `rejectProtectionSpaceAndContinueWithChallenge:`.
-
-     If not implemented, the default behavior will call `performDefaultHandlingForAuthenticationChallenge:`.
-
-     Note that if more than one delegate is added to the same client, only the first one implementing this method will
-     be notified of this event.
-
-     Note also that this notification is called directly from the network thread. The method implementation should be
-     fast and nonblocking. Any slow operations should have been performed in advance.
-
-     - Parameter client: The `LightstreamerClient` instance.
-
-     - Parameter challenge: The challenge that the client must authenticate in order to proceed with its request.
-     */
-    func client(_ client: LightstreamerClient, willSendRequestForAuthenticationChallenge challenge: URLAuthenticationChallenge)
 }
 
 /**
@@ -1021,7 +992,7 @@ public class LightstreamerClient {
 
      - Precondition: the address must be valid. See `ConnectionDetails.serverAddress` for details.
      */
-    public convenience init(_ serverAddress: String?, adapterSet: String? = nil) {
+    public convenience init(serverAddress: String?, adapterSet: String? = nil) {
         self.init(serverAddress,
                   adapterSet: adapterSet,
                   wsFactory: createWS,
@@ -1069,12 +1040,12 @@ public class LightstreamerClient {
     /**
      A constant string representing the name of the library.
      */
-    public let LIB_NAME: String = LS_LIB_NAME
+    public static let LIB_NAME: String = LS_LIB_NAME
     
     /**
      A constant string representing the version of the library.
      */
-    public let LIB_VERSION: String = LS_LIB_VERSION
+    public static let LIB_VERSION: String = LS_LIB_VERSION
     
     /**
      Static method that permits to configure the logging system used by the library.
@@ -1526,7 +1497,7 @@ public class LightstreamerClient {
 
      - SeeAlso: `resetMPNBadge()`
      */
-    public func registerForMPN(_ mpnDevice: MPNDevice) {
+    public func register(forMPN mpnDevice: MPNDevice) {
         synchronized {
             mpn_candidate_devices.append(mpnDevice)
             if actionLogger.isInfoEnabled {
@@ -5835,8 +5806,8 @@ public class LightstreamerClient {
     func evtSUBS_Update(_ mpnSubId: String, _ update: ItemUpdate) {
         synchronized {
             let evt = "SUBS.update"
-            let command = update.valueWithFieldName("command")
-            let status = update.valueWithFieldName("status")
+            let command = update.value(withFieldName: "command")
+            let status = update.value(withFieldName: "status")
             if let s = s_mpn.sbs, exists(mpnSubId: mpnSubId) {
                 trace(evt, cond: "top", s, s)
                 genSUBS_update(mpnSubId, update)
@@ -6052,16 +6023,16 @@ public class LightstreamerClient {
             }
         }
         
-        func subscription(_ subscription: Subscription, didClearSnapshotForItemName itemName: String?, itemPos: Int) {}
-        func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: Int, forCommandSecondLevelItemWithKey key: String) {}
-        func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String, forCommandSecondLevelItemWithKey key: String) {}
-        func subscription(_ subscription: Subscription, didEndSnapshotForItemName itemName: String?, itemPos: Int) {}
-        func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: Int, forItemName itemName: String?, itemPos: Int) {}
+        func subscription(_ subscription: Subscription, didClearSnapshotForItemName itemName: String?, itemPos: UInt) {}
+        func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: UInt, forCommandSecondLevelItemWithKey key: String) {}
+        func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String?, forCommandSecondLevelItemWithKey key: String) {}
+        func subscription(_ subscription: Subscription, didEndSnapshotForItemName itemName: String?, itemPos: UInt) {}
+        func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: UInt, forItemName itemName: String?, itemPos: UInt) {}
         func subscription(_ subscription: Subscription, didUpdateItem itemUpdate: ItemUpdate) {}
         func subscriptionDidRemoveDelegate(_ subscription: Subscription) {}
         func subscriptionDidAddDelegate(_ subscription: Subscription) {}
         func subscriptionDidSubscribe(_ subscription: Subscription) {}
-        func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String) {}
+        func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String?) {}
         func subscriptionDidUnsubscribe(_ subscription: Subscription) {}
         func subscription(_ subscription: Subscription, didReceiveRealFrequency frequency: RealMaxFrequency?) {}
     }
@@ -6070,15 +6041,15 @@ public class LightstreamerClient {
         
         override func subscription(_ subscription: Subscription, didUpdateItem itemUpdate: ItemUpdate) {
             synchronized {
-                let status = itemUpdate.valueWithFieldName("status")
-                let timestamp = itemUpdate.valueWithFieldName("status_timestamp")
+                let status = itemUpdate.value(withFieldName: "status")
+                let timestamp = itemUpdate.value(withFieldName: "status_timestamp")
                 if let status = status {
                     client?.evtDEV_Update(status, Int64(timestamp ?? "0")!)
                 }
             }
         }
         
-        override func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String) {
+        override func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String?) {
             synchronized {
                 client?.evtMpnError(62, "MPN device activation can't be completed (62/1)")
             }
@@ -6095,7 +6066,7 @@ public class LightstreamerClient {
         
         override func subscription(_ subscription: Subscription, didUpdateItem itemUpdate: ItemUpdate) {
             synchronized {
-                let key = itemUpdate.valueWithFieldName("key")
+                let key = itemUpdate.value(withFieldName: "key")
                 if let key = key {
                     // key has the form "SUB-<id>"
                     let mpnSubId = String(key.dropFirst(4))
@@ -6104,13 +6075,13 @@ public class LightstreamerClient {
             }
         }
         
-        override func subscription(_ subscription: Subscription, didEndSnapshotForItemName itemName: String?, itemPos: Int) {
+        override func subscription(_ subscription: Subscription, didEndSnapshotForItemName itemName: String?, itemPos: UInt) {
             synchronized {
                 client?.evtSUBS_EOS()
             }
         }
         
-        override func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String) {
+        override func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String?) {
             synchronized {
                 client?.evtMpnError(62, "MPN device activation can't be completed (62/3)")
             }
@@ -6122,7 +6093,7 @@ public class LightstreamerClient {
             }
         }
         
-        override func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String, forCommandSecondLevelItemWithKey key: String) {
+        override func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String?, forCommandSecondLevelItemWithKey key: String) {
             synchronized {
                 if mpnDeviceLogger.isWarnEnabled {
                     mpnDeviceLogger.warn("MPN device can't complete the subscription of \(key)")
@@ -6133,7 +6104,7 @@ public class LightstreamerClient {
     
     private func createSpecialItems(_ deviceId: String, _ adapterName: String) {
         mpn_deviceListener = MpnDeviceDelegate(self)
-        let deviceSub = Subscription(.MERGE)
+        let deviceSub = Subscription(subscriptionMode: .MERGE)
         deviceSub.items = ["DEV-\(deviceId)"]
         deviceSub.fields = ["status", "status_timestamp"]
         deviceSub.dataAdapter = adapterName
@@ -6142,7 +6113,7 @@ public class LightstreamerClient {
         mpn_deviceSubscription = deviceSub
         
         mpn_itemListener = MpnItemDelegate(self)
-        let itemSub = Subscription(.COMMAND)
+        let itemSub = Subscription(subscriptionMode: .COMMAND)
         itemSub.items = ["SUBS-\(deviceId)"]
         itemSub.fields = ["key", "command"]
         itemSub.dataAdapter = adapterName

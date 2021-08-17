@@ -126,7 +126,7 @@ public class MPNBuilder {
      - Parameter badge: An int to be used for the `aps.badge` field value.
      */
     @discardableResult
-    public func badgeWithInt(_ badge: Int) -> MPNBuilder {
+    public func badge(with badge: Int) -> MPNBuilder {
         synchronized {
             setVal(key: "badge", val: badge)
         }
@@ -147,7 +147,7 @@ public class MPNBuilder {
      - Parameter badge: A string to be used for the `aps.badge` field value, or nil to clear it.
      */
     @discardableResult
-    public func badgeWithString(_ badge: String?) -> MPNBuilder {
+    public func badge(with badge: String?) -> MPNBuilder {
         synchronized {
             setVal(key: "badge", val: badge)
         }
@@ -252,7 +252,7 @@ public class MPNBuilder {
      - Parameter contentAvailable: An int to be used for the `aps.content-available` field value.
      */
     @discardableResult
-    public func contentAvailableWithInt(_ contentAvailable: Int) -> MPNBuilder {
+    public func contentAvailable(with contentAvailable: Int) -> MPNBuilder {
         synchronized {
             setVal(key: "content-available", val: contentAvailable)
         }
@@ -273,7 +273,7 @@ public class MPNBuilder {
      - Parameter contentAvailable: A string to be used for the `aps.content-available` field value, or nil to clear it.
      */
     @discardableResult
-    public func contentAvailableWithString(_ contentAvailable: String?) -> MPNBuilder {
+    public func contentAvailable(with contentAvailable: String?) -> MPNBuilder {
         synchronized {
             setVal(key: "content-available", val: contentAvailable)
         }
@@ -294,7 +294,7 @@ public class MPNBuilder {
      - Parameter mutableContent: An int to be used for the `aps.mutable-content` field value.
      */
     @discardableResult
-    public func mutableContentWithInt(_ mutableContent: Int) -> MPNBuilder {
+    public func mutableContent(with mutableContent: Int) -> MPNBuilder {
         synchronized {
             setVal(key: "mutable-content", val: mutableContent)
         }
@@ -315,7 +315,7 @@ public class MPNBuilder {
      - Parameter mutableContent: A string to be used for the `aps.mutable-content` field value, or nil to clear it.
      */
     @discardableResult
-    public func mutableContentWithString(_ mutableContent: String?) -> MPNBuilder {
+    public func mutableContent(with mutableContent: String?) -> MPNBuilder {
         synchronized {
             setVal(key: "mutable-content", val: mutableContent)
         }

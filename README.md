@@ -66,7 +66,7 @@ To connect to a Lightstreamer Server, a [LightstreamerClient](https://sdk.lights
 A minimal version of the code that creates a LightstreamerClient and connects to the Lightstreamer Server on *https://push.lightstreamer.com* will look like this:
 
 ```swift
-let client = LightstreamerClient("https://push.lightstreamer.com/", adapterSet: "DEMO")
+let client = LightstreamerClient(serverAddress: "https://push.lightstreamer.com/", adapterSet: "DEMO")
 client.connect()
 ```
 
@@ -76,7 +76,7 @@ A simple Subscription containing three items and two fields to be subscribed in 
 ```swift
 let items = [ "item1", "item2", "item3" ]
 let fields = [ "stock_name", "last_price" ]
-let sub = Subscription(.MERGE, items: items, fields: fields)
+let sub = Subscription(subscriptionMode: .MERGE, items: items, fields: fields)
 sub.dataAdapter = "QUOTE_ADAPTER"
 sub.requestedSnapshot = .yes
 client.subscribe(sub)
@@ -87,7 +87,7 @@ Before sending the subscription to the server, usually at least one [Subscriptio
 ```swift
 class SubscriptionDelegateImpl: SubscriptionDelegate {
     func subscription(_ subscription: Subscription, didUpdateItem itemUpdate: ItemUpdate) {
-        print("\(itemUpdate.valueWithFieldName("stock_name")): \(itemUpdate.valueWithFieldName("last_price"))")
+        print("\(itemUpdate.value(withFieldName: "stock_name")): \(itemUpdate.value(withFieldName: "last_price"))")
     }
     // other methods...
 }
@@ -116,7 +116,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
    let tokenAsString = deviceToken.map { String(format: "%02x", $0) }.joined()
-   let mpnDevice = MPNDevice(tokenAsString)
+   let mpnDevice = MPNDevice(deviceToken: tokenAsString)
 }
 
 func application(_ application: UIApplication,
@@ -132,7 +132,7 @@ To receive notifications, you need to subscribe to a [MPN subscription](https://
 let builder = MPNBuilder()
 builder.body("Stock ${stock_name} is now ${last_price}")
 builder.sound("Default")
-builder.badgeWithString("AUTO")
+builder.badge(with: "AUTO")
 builder.customData([
     "stock_name" : "${stock_name}",
     "last_price" : "${last_price}"])
@@ -140,7 +140,7 @@ let format = builder.build()
 
 let items = [ "item1", "item2", "item3" ]
 let fields = [ "stock_name", "last_price" ]
-let sub = MPNSubscription(.MERGE, items: items, fields: fields)
+let sub = MPNSubscription(subscriptionMode: .MERGE, items: items, fields: fields)
 sub.notificationFormat = format
 sub.triggerExpression = "Double.parseDouble($[2])>45.0"
 client.subscribeMPN(sub, coalescing: true)

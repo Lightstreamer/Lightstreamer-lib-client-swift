@@ -52,7 +52,7 @@ public protocol SubscriptionDelegate: AnyObject {
      
      - Parameter itemPos: The 1-based position of the item within the "Item List" or "Item Group".
      */
-    func subscription(_ subscription: Subscription, didClearSnapshotForItemName itemName: String?, itemPos: Int)
+    func subscription(_ subscription: Subscription, didClearSnapshotForItemName itemName: String?, itemPos: UInt)
     /**
      Event handler that is called by Lightstreamer to notify that, due to internal resource limitations, Lightstreamer Server dropped one or more updates
      for an item that was subscribed to as a second-level subscription.
@@ -74,7 +74,7 @@ public protocol SubscriptionDelegate: AnyObject {
      
      - SeeAlso: `Subscription.commandSecondLevelFieldSchema`
      */
-    func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: Int, forCommandSecondLevelItemWithKey key: String)
+    func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: UInt, forCommandSecondLevelItemWithKey key: String)
     /**
      Event handler that is called when the Server notifies an error on a second-level subscription.
      
@@ -119,7 +119,7 @@ public protocol SubscriptionDelegate: AnyObject {
      
      - SeeAlso: `Subscription.commandSecondLevelFieldSchema`
      */
-    func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String, forCommandSecondLevelItemWithKey key: String)
+    func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String?, forCommandSecondLevelItemWithKey key: String)
     /**
      Event handler that is called by Lightstreamer to notify that all snapshot events for an item in the `Subscription` have been received, so that
      real time events are now going to be received.
@@ -140,7 +140,7 @@ public protocol SubscriptionDelegate: AnyObject {
      
      - SeeAlso: `ItemUpdate.isSnapshot`
      */
-    func subscription(_ subscription: Subscription, didEndSnapshotForItemName itemName: String?, itemPos: Int)
+    func subscription(_ subscription: Subscription, didEndSnapshotForItemName itemName: String?, itemPos: UInt)
     /**
      Event handler that is called by Lightstreamer to notify that, due to internal resource limitations, Lightstreamer Server dropped one or more updates
      for an item in the Subscription.
@@ -167,7 +167,7 @@ public protocol SubscriptionDelegate: AnyObject {
      
      - SeeAlso: `Subscription.requestedMaxFrequency`
      */
-    func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: Int, forItemName itemName: String?, itemPos: Int)
+    func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: UInt, forItemName itemName: String?, itemPos: UInt)
     /**
      Event handler that is called by Lightstreamer each time an update pertaining to an item in the `Subscription` has been received from the Server.
      
@@ -257,7 +257,7 @@ public protocol SubscriptionDelegate: AnyObject {
      
      - SeeAlso: `ConnectionDetails.adapterSet`
      */
-    func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String)
+    func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String?)
     /**
      Event handler that is called by Lightstreamer to notify that a `Subscription` has been successfully unsubscribed from.
      
@@ -395,7 +395,7 @@ public protocol ItemUpdate: AnyObject, CustomStringConvertible {
 
      - SeeAlso: `Subscription.fields`
      */
-    func valueWithFieldPos(_ fieldPos: Int) -> String?
+    func value(withFieldPos fieldPos: Int) -> String?
     /**
      Returns the current value for the specified field.
      
@@ -415,7 +415,7 @@ public protocol ItemUpdate: AnyObject, CustomStringConvertible {
      
      - SeeAlso: `Subscription.fields`
      */
-    func valueWithFieldName(_ fieldName: String) -> String?
+    func value(withFieldName fieldName: String) -> String?
     /**
      Tells whether the current update belongs to the item snapshot (which carries the current item state at the time of Subscription).
      
@@ -466,7 +466,7 @@ public protocol ItemUpdate: AnyObject, CustomStringConvertible {
      
      - SeeAlso: `Subscription.fields`
      */
-    func isValueChangedWithFieldPos(_ fieldPos: Int) -> Bool
+    func isValueChanged(withFieldPos fieldPos: Int) -> Bool
     /**
      Inquiry method that asks whether the value for a field has changed after the reception of the last update from the Server for an item.
      
@@ -497,7 +497,7 @@ public protocol ItemUpdate: AnyObject, CustomStringConvertible {
      
      - SeeAlso: `Subscription.fields`
      */
-    func isValueChangedWithFieldName(_ fieldName: String) -> Bool
+    func isValueChanged(withFieldName fieldName: String) -> Bool
 }
 
 /**
@@ -733,7 +733,7 @@ public class Subscription: CustomStringConvertible {
 
      - Parameter subscriptionMode: The subscription mode for the items, required by Lightstreamer Server.
      */
-    public init(_ subscriptionMode: Mode) {
+    public init(subscriptionMode: Mode) {
         m_mode = subscriptionMode
         m_snapshot = subscriptionMode == .RAW ? nil : .yes
     }
@@ -765,8 +765,8 @@ public class Subscription: CustomStringConvertible {
 
      - Precondition: the specified "Field List" must be valid; see `fields` for details.
      */
-    public convenience init(_ subscriptionMode: Mode, item: String, fields: [String]) {
-        self.init(subscriptionMode, items: [item], fields: fields)
+    public convenience init(subscriptionMode: Mode, item: String, fields: [String]) {
+        self.init(subscriptionMode: subscriptionMode, items: [item], fields: fields)
     }
     
     /**
@@ -795,14 +795,14 @@ public class Subscription: CustomStringConvertible {
 
      - Precondition: the specified "Item List" and "Field List" must be valid; see `items` and `fields` for details.
      */
-    public convenience init(_ subscriptionMode: Mode, items: [String], fields: [String]) {
+    public convenience init(subscriptionMode: Mode, items: [String], fields: [String]) {
         precondition(!items.isEmpty, Self.EMPTY_ITEM_LIST)
         precondition(!fields.isEmpty, Self.EMPTY_FIELD_LIST)
         precondition(items.allSatisfy({ isValidItem($0) }), Self.INVALID_ITEM_LIST)
         precondition(fields.allSatisfy({ isValidField($0) }), Self.INVALID_FIELD_LIST)
         precondition(subscriptionMode == .COMMAND ? fields.contains("command") : true, Self.MISSING_FIELD_COMMAND)
         precondition(subscriptionMode == .COMMAND ? fields.contains("key") : true, Self.MISSING_FIELD_KEY)
-        self.init(subscriptionMode)
+        self.init(subscriptionMode: subscriptionMode)
         m_items = items
         m_fields = fields
     }
@@ -1745,7 +1745,7 @@ public class Subscription: CustomStringConvertible {
             }
             multicastDelegate.invokeDelegates { delegate in
                 callbackQueue.async {
-                    delegate.subscription(self, didEndSnapshotForItemName: self.getItemName(itemIdx), itemPos: itemIdx)
+                    delegate.subscription(self, didEndSnapshotForItemName: self.getItemName(itemIdx), itemPos: UInt(itemIdx))
                 }
             }
         }
@@ -1758,7 +1758,7 @@ public class Subscription: CustomStringConvertible {
             }
             multicastDelegate.invokeDelegates { delegate in
                 callbackQueue.async {
-                    delegate.subscription(self, didClearSnapshotForItemName: self.getItemName(itemIdx), itemPos: itemIdx)
+                    delegate.subscription(self, didClearSnapshotForItemName: self.getItemName(itemIdx), itemPos: UInt(itemIdx))
                 }
             }
         }
@@ -1771,7 +1771,7 @@ public class Subscription: CustomStringConvertible {
             }
             multicastDelegate.invokeDelegates { delegate in
                 callbackQueue.async {
-                    delegate.subscription(self, didLoseUpdates: lostUpdates, forItemName: self.getItemName(itemIdx), itemPos: itemIdx)
+                    delegate.subscription(self, didLoseUpdates: UInt(lostUpdates), forItemName: self.getItemName(itemIdx), itemPos: UInt(itemIdx))
                 }
             }
         }
@@ -1823,7 +1823,7 @@ public class Subscription: CustomStringConvertible {
             }
             multicastDelegate.invokeDelegates { delegate in
                 callbackQueue.async {
-                    delegate.subscription(self, didLoseUpdates: lostUpdates, forCommandSecondLevelItemWithKey: keyName)
+                    delegate.subscription(self, didLoseUpdates: UInt(lostUpdates), forCommandSecondLevelItemWithKey: keyName)
                 }
             }
         }

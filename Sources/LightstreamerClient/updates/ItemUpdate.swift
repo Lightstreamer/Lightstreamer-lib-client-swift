@@ -89,12 +89,12 @@ class ItemUpdateBase: ItemUpdate {
         m_newValues
     }
     
-    func valueWithFieldPos(_ fieldPos: Int) -> String? {
+    func value(withFieldPos fieldPos: Int) -> String? {
         precondition(1 <= fieldPos && fieldPos <= m_nFields, POS_OUT_BOUNDS)
         return m_newValues[fieldPos]!
     }
     
-    func valueWithFieldName(_ fieldName: String) -> String? {
+    func value(withFieldName fieldName: String) -> String? {
         guard let fields = m_fields else {
             preconditionFailure(NO_FIELDS)
         }
@@ -104,12 +104,12 @@ class ItemUpdateBase: ItemUpdate {
         return m_newValues[fieldPos]!
     }
     
-    func isValueChangedWithFieldPos(_ fieldPos: Int) -> Bool {
+    func isValueChanged(withFieldPos fieldPos: Int) -> Bool {
         precondition(1 <= fieldPos && fieldPos <= m_nFields, POS_OUT_BOUNDS)
         return m_changedFields.contains(fieldPos)
     }
     
-    func isValueChangedWithFieldName(_ fieldName: String) -> Bool {
+    func isValueChanged(withFieldName fieldName: String) -> Bool {
         guard let fields = m_fields else {
             preconditionFailure(NO_FIELDS)
         }
@@ -207,11 +207,11 @@ class ItemUpdate2Level: ItemUpdate {
         m_newValues
     }
     
-    func valueWithFieldPos(_ fieldPos: Int) -> String? {
+    func value(withFieldPos fieldPos: Int) -> String? {
         m_newValues[fieldPos] ?? nil
     }
     
-    func valueWithFieldName(_ fieldName: String) -> String? {
+    func value(withFieldName fieldName: String) -> String? {
         guard m_fields != nil || m_fields2 != nil else {
             preconditionFailure(NO_FIELDS)
         }
@@ -221,11 +221,11 @@ class ItemUpdate2Level: ItemUpdate {
         return m_newValues[fieldPos] ?? nil
     }
     
-    func isValueChangedWithFieldPos(_ fieldPos: Int) -> Bool {
+    func isValueChanged(withFieldPos fieldPos: Int) -> Bool {
         return m_changedFields.contains(fieldPos)
     }
     
-    func isValueChangedWithFieldName(_ fieldName: String) -> Bool {
+    func isValueChanged(withFieldName fieldName: String) -> Bool {
         guard m_fields != nil || m_fields2 != nil else {
             preconditionFailure(NO_FIELDS)
         }

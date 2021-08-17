@@ -101,7 +101,7 @@ public protocol MPNSubscriptionDelegate {
      
      - Parameter message: The description of the error sent by the Server; it can be nil.
      */
-    func mpnSubscription(_ subscription: MPNSubscription, didFailSubscriptionWithErrorCode code: Int, message: String)
+    func mpnSubscription(_ subscription: MPNSubscription, didFailSubscriptionWithErrorCode code: Int, message: String?)
     /**
      Event handler called when the server notifies an error while unsubscribing from an `MPNSubscription`.
      
@@ -135,7 +135,7 @@ public protocol MPNSubscriptionDelegate {
      
      - Parameter message: The description of the error sent by the Server; it can be nil.
      */
-    func mpnSubscription(_ subscription: MPNSubscription, didFailUnsubscriptionWithErrorCode code: Int, message: String)
+    func mpnSubscription(_ subscription: MPNSubscription, didFailUnsubscriptionWithErrorCode code: Int, message: String?)
     /**
      Event handler called when the server notifies that an `MPNSubscription` did trigger.
      
@@ -248,7 +248,7 @@ public protocol MPNSubscriptionDelegate {
      - SeeAlso: `MPNSubscription.triggerExpression`
      - SeeAlso: `MPNSubscription.notificationFormat`
      */
-    func mpnSubscription(_ subscription: MPNSubscription, didFailModificationWithErrorCode code: Int, message: String, property: String)
+    func mpnSubscription(_ subscription: MPNSubscription, didFailModificationWithErrorCode code: Int, message: String?, property: String)
 }
 
 /**
@@ -257,7 +257,7 @@ public protocol MPNSubscriptionDelegate {
  It contains subscription details and the delegate needed to monitor its status. Real-time data is routed via native push notifications.
  
  In order to successfully subscribe an MPN subscription, first an `MPNDevice` must be created and registered on the `LightstreamerClient` with
- `LightstreamerClient.registerForMPN(_:)`.
+ `LightstreamerClient.register(forMPN:)`.
  
  After creation, an MPNSubscription object is in the "inactive" state. When an MPNSubscription object is subscribed to on an `LightstreamerClient`
  object, through the `LightstreamerClient.subscribeMPN(_:coalescing:)` method, its state switches to "active". This means that the subscription request is being sent to the Lightstreamer Server. Once the server accepted the request, it begins to send real-time events via native push notifications and
@@ -393,7 +393,7 @@ public class MPNSubscription: CustomStringConvertible {
      
      - Parameter subscriptionMode: The subscription mode for the items, required by Lightstreamer Server.
      */
-    public init(_ subscriptionMode: Mode) {
+    public init(subscriptionMode: Mode) {
         m_mode = subscriptionMode
         m_madeByServer = false
     }
@@ -420,8 +420,8 @@ public class MPNSubscription: CustomStringConvertible {
      
      - Precondition: the specified "Item List" and "Field List" must be valid; see `items` and `fields` for details.
      */
-    public convenience init(_ subscriptionMode: Mode, item: String, fields: [String]) {
-        self.init(subscriptionMode, items: [item], fields: fields)
+    public convenience init(subscriptionMode: Mode, item: String, fields: [String]) {
+        self.init(subscriptionMode: subscriptionMode, items: [item], fields: fields)
     }
     
     /**
@@ -447,12 +447,12 @@ public class MPNSubscription: CustomStringConvertible {
      
      - Precondition: the specified "Item List" and "Field List" must be valid; see `items` and `fields` for details.
      */
-    public convenience init(_ subscriptionMode: Mode, items: [String], fields: [String]) {
+    public convenience init(subscriptionMode: Mode, items: [String], fields: [String]) {
         precondition(!items.isEmpty, Self.EMPTY_ITEM_LIST)
         precondition(!fields.isEmpty, Self.EMPTY_FIELD_LIST)
         precondition(items.allSatisfy({ isValidItem($0) }), Self.INVALID_ITEM_LIST)
         precondition(fields.allSatisfy({ isValidField($0) }), Self.INVALID_FIELD_LIST)
-        self.init(subscriptionMode)
+        self.init(subscriptionMode: subscriptionMode)
         m_items = items
         m_fields = fields
     }
@@ -466,7 +466,7 @@ public class MPNSubscription: CustomStringConvertible {
 
      - Parameter subscription: The `Subscription` object to copy properties from.
      */
-    public init(_ subscription: Subscription) {
+    public init(subscription: Subscription) {
         switch subscription.mode {
         case .MERGE:
             m_mode = .MERGE
@@ -510,7 +510,7 @@ public class MPNSubscription: CustomStringConvertible {
      
      - Parameter mpnSubscription: The MPNSubscription object to copy properties from.
      */
-    public init(_ mpnSubscription: MPNSubscription) {
+    public init(MPNSubscription mpnSubscription: MPNSubscription) {
         m_mode = mpnSubscription.mode
         m_items = mpnSubscription.items
         m_group = mpnSubscription.itemGroup

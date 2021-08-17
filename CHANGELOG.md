@@ -67,7 +67,7 @@ All methods and property setters that used to raise exceptions to validate their
 - ItemUpdate.isValueChangedWithFieldName
 - LightstreamerClient.init
 - LightstreamerClient.connect
-- LightstreamerClient.registerForMPN
+- LightstreamerClient.register
 - LightstreamerClient.subscribeMPN
 - LightstreamerClient.unsubscribeMPN
 - LightstreamerClient.unsubscribeMultipleMPN

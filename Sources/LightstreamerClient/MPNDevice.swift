@@ -85,7 +85,7 @@ public protocol MPNDeviceDelegate {
      
      - Parameter message: The description of the error sent by the Server; it can be nil.
      */
-    func mpnDevice(_ device: MPNDevice, didFailRegistrationWithErrorCode code: Int, message: String)
+    func mpnDevice(_ device: MPNDevice, didFailRegistrationWithErrorCode code: Int, message: String?)
     /**
      Event handler called when the server notifies that an `MPNDevice` changed its status.
      
@@ -147,7 +147,7 @@ public protocol MPNDeviceDelegate {
      
      - Parameter message: The description of the error sent by the Server; it can be nil.
      */
-    func mpnDevice(_ device: MPNDevice, didFailBadgeResetWithErrorCode code: Int, message: String)
+    func mpnDevice(_ device: MPNDevice, didFailBadgeResetWithErrorCode code: Int, message: String?)
 }
 
 /**
@@ -158,7 +158,7 @@ public protocol MPNDeviceDelegate {
  An MPN device is created from a device token obtained from system's Remote User Notification APIs, and must be registered on the `LightstreamerClient` in order to successfully subscribe an MPN subscription. See `MPNSubscription`.
  
  After creation, an MPNDevice object is in "unknown" state. It must then be passed to the Lightstreamer Server with the
- `LightstreamerClient.registerForMPN(_:)` method, which enables the client to subscribe MPN subscriptions and sends the device details to the
+ `LightstreamerClient.register(forMPN:)` method, which enables the client to subscribe MPN subscriptions and sends the device details to the
  server's MPN Module, where it is assigned a permanent `<deviceId>` and its state is switched to "registered".
  
  Upon registration on the server, active MPN subscriptions of the device are received and exposed in the `LightstreamerClient.MPNSubscriptions`
@@ -212,7 +212,7 @@ public class MPNDevice: CustomStringConvertible {
      
      - Precondition: the application ID may be obtained from the main bundle.
      */
-    public init(_ deviceToken: String) {
+    public init(deviceToken: String) {
         Self.classLock.lock()
         defer {
             Self.classLock.unlock()

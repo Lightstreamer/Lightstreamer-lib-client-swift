@@ -588,9 +588,9 @@ class MpnSubscriptionManager: Encodable {
     func evtMpnUpdate(_ update: ItemUpdate) {
         synchronized {
             let evt = "update"
-            let ts = update.valueWithFieldName("status_timestamp")
-            let nextStatus = update.valueWithFieldName("status")?.uppercased()
-            let command = update.valueWithFieldName("command")?.uppercased()
+            let ts = update.value(withFieldName: "status_timestamp")
+            let nextStatus = update.value(withFieldName: "status")?.uppercased()
+            let command = update.value(withFieldName: "command")?.uppercased()
             if s_m == .s44 && command == "DELETE" {
                 trace(evt, State_m.s44, State_m.s52)
                 notifyStatus(.UNKNOWN)
@@ -646,8 +646,8 @@ class MpnSubscriptionManager: Encodable {
     
     private func evtMpnUpdate_StatusRegion(_ update: ItemUpdate) -> Bool {
         let evt = "update"
-        let ts = update.valueWithFieldName("status_timestamp")
-        let nextStatus = update.valueWithFieldName("status")?.uppercased()
+        let ts = update.value(withFieldName: "status_timestamp")
+        let nextStatus = update.value(withFieldName: "status")?.uppercased()
         if s_st == .s60 {
             if nextStatus == "ACTIVE" {
                 trace(evt, State_st.s60, State_st.s60)
@@ -871,15 +871,15 @@ class MpnSubscriptionManager: Encodable {
     }
     
     private func notifyUpdate(_ update: ItemUpdate) {
-        m_subscription.changeStatusTs(update.valueWithFieldName("status_timestamp"))
-        m_subscription.changeMode(update.valueWithFieldName("mode"))
-        m_subscription.changeAdapter(update.valueWithFieldName("adapter"))
-        m_subscription.changeGroup(update.valueWithFieldName("group"))
-        m_subscription.changeSchema(update.valueWithFieldName("schema"))
-        m_subscription.changeFormat(update.valueWithFieldName("notification_format"))
-        m_subscription.changeTrigger(update.valueWithFieldName("trigger"))
-        m_subscription.changeBufferSize(update.valueWithFieldName("requested_buffer_size"))
-        m_subscription.changeMaxFrequency(update.valueWithFieldName("requested_max_frequency"))
+        m_subscription.changeStatusTs(update.value(withFieldName: "status_timestamp"))
+        m_subscription.changeMode(update.value(withFieldName: "mode"))
+        m_subscription.changeAdapter(update.value(withFieldName: "adapter"))
+        m_subscription.changeGroup(update.value(withFieldName: "group"))
+        m_subscription.changeSchema(update.value(withFieldName: "schema"))
+        m_subscription.changeFormat(update.value(withFieldName: "notification_format"))
+        m_subscription.changeTrigger(update.value(withFieldName: "trigger"))
+        m_subscription.changeBufferSize(update.value(withFieldName: "requested_buffer_size"))
+        m_subscription.changeMaxFrequency(update.value(withFieldName: "requested_max_frequency"))
     }
     
     private func doSetCurrentFormat() {
