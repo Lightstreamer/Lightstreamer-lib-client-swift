@@ -1,10 +1,39 @@
 # SDK for Swift Clients CHANGELOG
 
+
+## 5.0.0 XXXXX
+
+_Compatible with Lightstreamer Server since 7.2.0._<br>
+_Compatible with code developed with the previous version._<br>
+_Released on XXXXX ._
+
+Used a custom DispatchQueue instead of DispatchQueue.main to fire the Client delegates.
+
+Changed the signatures of the following methods in order to ease the porting of the code based on the Client SDK 4.x:
+
+- LightstreamerClient.init
+- LightstreamerClient.register
+- MPNBuilder.init
+- MPNBuilder.badge
+- MPNBuilder.contentAvailable
+- MPNBuilder.mutableContent
+- MPNDevice.init
+- MPNSubscription.init
+- Subscription.init
+- ItemUpdate.value
+- ItemUpdate.isValueChanged
+- MPNDeviceDelegate.mpnDevice
+- MPNSubscriptionDelegate.mpnSubscription
+- SubscriptionDelegate.subscription
+- ConsoleLogger.init
+- ConsoleLoggerProvider.init
+
+
 ## 5.0.0 beta 1
 
 _Compatible with Lightstreamer Server since 7.2.0._<br/>
 _Not compatible with code developed for the previous versions (i.e. iOS, macOS, tvOS, and watchOS SDKs); see the full list of changes below._<br/>
-_Released on XXXXX._
+_Released on 12 Aug 2021 ._
 
 The Swift Client SDK is meant to replace the existing Client SDKs for all the Apple platforms (iOS, macOS, tvOS and watchOS).
 The library is now open source, available on GitHub at the following address:
