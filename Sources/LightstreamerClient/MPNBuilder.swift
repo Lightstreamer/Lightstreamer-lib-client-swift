@@ -30,7 +30,7 @@ public class MPNBuilder {
 
      - Precondition: the notification must be a valid JSON structure.
      */
-    public init?(_ notificationFormat: String) {
+    public init?(notificationFormat: String) {
         guard let data = notificationFormat.data(using: .utf8),
               let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String:Any] else {
             return nil

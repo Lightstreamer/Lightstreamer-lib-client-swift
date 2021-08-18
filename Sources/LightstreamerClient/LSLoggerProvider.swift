@@ -31,11 +31,11 @@ public class ConsoleLoggerProvider: LSLoggerProvider {
      
      - Parameter level: The desired logging level for this `ConsoleLoggerProvider` instance.
      */
-    public init(_ level: ConsoleLogLevel) {
+    public init(level: ConsoleLogLevel) {
         self.level = level
     }
     
     public func loggerWithCategory(_ category: String) -> LSLogger {
-        ConsoleLogger(level, category: category)
+        ConsoleLogger(level: level, category: category)
     }
 }

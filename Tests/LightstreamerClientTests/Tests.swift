@@ -62,7 +62,7 @@ final class Tests: XCTestCase {
     }
     
     func testLog() {
-        let log = ConsoleLogger(.warn, category: "foo")
+        let log = ConsoleLogger(level: .warn, category: "foo")
         log.debug("log at debug")
         log.info("log at info")
         log.warn("log at warn")

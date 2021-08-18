@@ -220,7 +220,7 @@ public class ConsoleLogger: LSLogger {
      
      - Parameter category: The log category all messages passed to the given `ConsoleLogger` instance will pertain to.
      */
-    public init(_ level: ConsoleLogLevel, category: String) {
+    public init(level: ConsoleLogLevel, category: String) {
         let level = level.rawValue
         self.level = level
         self.category = OSLog(subsystem: "com.lightstreamer", category: category)

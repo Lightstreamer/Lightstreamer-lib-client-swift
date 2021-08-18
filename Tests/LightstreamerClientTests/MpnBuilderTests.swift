@@ -241,7 +241,7 @@ final class MpnBuilderTests: XCTestCase {
     }
     
     func testInitFromJson() {
-        let builder = MPNBuilder("""
+        let builder = MPNBuilder(notificationFormat: """
             {
               "aps" : {
                 "badge" : 9,
@@ -266,7 +266,7 @@ final class MpnBuilderTests: XCTestCase {
         XCTAssertEqual("GAME_INVITATION", builder.category)
         XCTAssertEqual(["gameID":"12345678"], builder.customData as! [String : String])
         
-        XCTAssertNil(MPNBuilder("}{"))
+        XCTAssertNil(MPNBuilder(notificationFormat: "}{"))
     }
     
     @available(macOS 10.13, *)
