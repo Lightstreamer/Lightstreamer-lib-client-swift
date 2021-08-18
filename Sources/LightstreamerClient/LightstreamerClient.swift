@@ -751,7 +751,7 @@ public class LightstreamerClient {
     /**
      Client status and transport (when applicable).
      */
-    public enum Status: String {
+    public enum Status: String, CustomStringConvertible {
         /**
          The client is waiting for a Server's response in order to establish a connection.
          */
@@ -792,6 +792,10 @@ public class LightstreamerClient {
          No connection is currently active.
          */
         case DISCONNECTED = "DISCONNECTED"
+        
+        public var description: String {
+            self.rawValue
+        }
     }
     
     /**
