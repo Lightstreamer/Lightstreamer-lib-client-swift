@@ -55,7 +55,7 @@ class LsHttp: LsHttpClient {
         request = AF.streamRequest(url, method: .post, headers: HTTPHeaders(headers)) { urlRequest in
             urlRequest.httpBody = Data(body.utf8)
         }
-        request.validate().responseStreamString(on: DispatchQueue.main, stream: { [weak self] e in self?.onEvent(e) })
+        request.validate().responseStreamString(on: defaultQueue, stream: { [weak self] e in self?.onEvent(e) })
     }
     
     var disposed: Bool {

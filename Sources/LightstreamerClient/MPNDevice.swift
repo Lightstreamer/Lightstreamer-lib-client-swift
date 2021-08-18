@@ -189,7 +189,7 @@ public class MPNDevice: CustomStringConvertible {
     static let NO_APP_ID = "Couldn't obtain an appropriate application ID for device registration"
     static let classLock = NSRecursiveLock()
     let lock = NSRecursiveLock()
-    let callbackQueue = DispatchQueue.main
+    let callbackQueue = defaultQueue
     let multicastDelegate = MulticastDelegate<MPNDeviceDelegate>()
     var m_statusTs: Int64?
     var m_deviceId: String?

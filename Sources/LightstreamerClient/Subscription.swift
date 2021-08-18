@@ -647,7 +647,7 @@ public class Subscription: CustomStringConvertible {
     var m_group: String?
     var m_schema: String?
     let multicastDelegate = MulticastDelegate<SubscriptionDelegate>()
-    let callbackQueue = DispatchQueue.main
+    let callbackQueue = defaultQueue
     var m_dataAdapter: String?
     var m_bufferSize: RequestedBufferSize?
     var m_snapshot: RequestedSnapshot?

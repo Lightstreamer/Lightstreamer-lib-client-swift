@@ -54,7 +54,7 @@ class LsWebsocket: LsWebsocketClient {
             streamLogger.debug("WS connecting: \(request) \(request.headers)")
         }
         socket = WebSocket(request: request)
-        socket.callbackQueue = DispatchQueue.main
+        socket.callbackQueue = defaultQueue
         socket.onEvent = { [weak self] e in
             self?.onEvent(e)
         }

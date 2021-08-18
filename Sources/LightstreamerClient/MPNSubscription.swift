@@ -359,7 +359,7 @@ public class MPNSubscription: CustomStringConvertible {
     static let IS_EMPTY = "The value is empty"
     let lock = NSRecursiveLock()
     let multicastDelegate = MulticastDelegate<MPNSubscriptionDelegate>()
-    let callbackQueue = DispatchQueue.main
+    let callbackQueue = defaultQueue
     var m_status: Status = .UNKNOWN
     var m_mode: Mode!
     var m_items: [String]?

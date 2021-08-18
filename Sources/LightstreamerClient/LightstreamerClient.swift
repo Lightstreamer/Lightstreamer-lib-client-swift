@@ -823,7 +823,7 @@ public class LightstreamerClient {
     let lock = NSRecursiveLock()
     var m_details: ConnectionDetails!
     var m_options: ConnectionOptions!
-    let callbackQueue = DispatchQueue.main
+    let callbackQueue = defaultQueue
     let multicastDelegate = MulticastDelegate<ClientDelegate>()
     // resource factories
     let wsFactory: WSFactoryService

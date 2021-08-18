@@ -53,7 +53,7 @@ class Scheduler: ScheduleService {
         }
     }
     
-    let callbackQueue = DispatchQueue.main
+    let callbackQueue = defaultQueue
     
     var now: Timestamp {
         DispatchTime.now().uptimeNanoseconds / NSEC_PER_MSEC

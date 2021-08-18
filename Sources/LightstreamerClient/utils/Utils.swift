@@ -1,5 +1,7 @@
 import Foundation
 
+let defaultQueue = DispatchQueue(label: "com.lightstreamer", qos: .userInteractive)
+
 func parseUpdate(_ message: String) -> (subId: Int, itemIdx: Int, values: [Pos:FieldValue]) {
     // message is either U,<table>,<item>,<filed_1>|...|<field_N>
     // or U,<table>,<item>,<field_1>|^<number of unchanged fields>|...|<field_N>
