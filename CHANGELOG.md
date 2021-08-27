@@ -1,11 +1,11 @@
 # SDK for Swift Clients CHANGELOG
 
 
-## 5.0.0 XXXXX
+## 5.0.0 beta 2
 
 _Compatible with Lightstreamer Server since 7.2.0._<br>
 _Compatible with code developed with the previous version._<br>
-_Released on XXXXX ._
+_Released on 27 Aug 2021 ._
 
 Used a custom DispatchQueue instead of DispatchQueue.main to fire the Client delegates.
 

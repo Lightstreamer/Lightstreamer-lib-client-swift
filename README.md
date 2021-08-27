@@ -28,7 +28,7 @@ Once you have your Swift package set up, adding Lightstreamer Swift Client SDK a
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/Lightstreamer/Lightstreamer-lib-client-swift.git", from: "5.0.0-beta.1")
+    .package(url: "https://github.com/Lightstreamer/Lightstreamer-lib-client-swift.git", from: "5.0.0-beta.2")
 ]
 ```
 
@@ -62,7 +62,7 @@ If you prefer not to use any of the aforementioned dependency managers, you can 
 
 ## Quickstart
 
-To connect to a Lightstreamer Server, a [LightstreamerClient](https://sdk.lightstreamer.com/ls-swift-client/5.0.0-beta.1/api/Classes/LightstreamerClient.html) object has to be created, configured, and instructed to connect to the Lightstreamer Server. 
+To connect to a Lightstreamer Server, a [LightstreamerClient](https://sdk.lightstreamer.com/ls-swift-client/5.0.0-beta.2/api/Classes/LightstreamerClient.html) object has to be created, configured, and instructed to connect to the Lightstreamer Server. 
 A minimal version of the code that creates a LightstreamerClient and connects to the Lightstreamer Server on *https://push.lightstreamer.com* will look like this:
 
 ```swift
@@ -70,7 +70,7 @@ let client = LightstreamerClient(serverAddress: "https://push.lightstreamer.com/
 client.connect()
 ```
 
-For each subscription to be subscribed to a Lightstreamer Server a [Subscription](https://sdk.lightstreamer.com/ls-swift-client/5.0.0-beta.1/api/Classes/Subscription.html) instance is needed.
+For each subscription to be subscribed to a Lightstreamer Server a [Subscription](https://sdk.lightstreamer.com/ls-swift-client/5.0.0-beta.2/api/Classes/Subscription.html) instance is needed.
 A simple Subscription containing three items and two fields to be subscribed in *MERGE* mode is easily created (see [Lightstreamer General Concepts](https://www.lightstreamer.com/docs/base/General%20Concepts.pdf)):
 
 ```swift
@@ -82,7 +82,7 @@ sub.requestedSnapshot = .yes
 client.subscribe(sub)
 ```
 
-Before sending the subscription to the server, usually at least one [SubscriptionDelegate](https://sdk.lightstreamer.com/ls-swift-client/5.0.0-beta.1/api/Protocols/SubscriptionDelegate.html) is attached to the Subscription instance in order to consume the real-time updates. The following code shows the values of the fields *stock_name* and *last_price* each time a new update is received for the subscription:
+Before sending the subscription to the server, usually at least one [SubscriptionDelegate](https://sdk.lightstreamer.com/ls-swift-client/5.0.0-beta.2/api/Protocols/SubscriptionDelegate.html) is attached to the Subscription instance in order to consume the real-time updates. The following code shows the values of the fields *stock_name* and *last_price* each time a new update is received for the subscription:
 
 ```swift
 class SubscriptionDelegateImpl: SubscriptionDelegate {
@@ -103,7 +103,7 @@ Before you can use MPN services, you need to
 - register your app with APNs (read carefully the documentation about [Setting Up a Remote Notification Server](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server));
 - configure the Lightstreamer MPN module (read carefully the section *5 Mobile and Web Push Notifications* in the [General Concepts guide](https://lightstreamer.com/docs/ls-server/7.2.0/General%20Concepts.pdf)).
 
-After you have an APNs account, you can create a [MPN device](https://sdk.lightstreamer.com/ls-swift-client/5.0.0-beta.1/api/Classes/MPNDevice.html), which represents a specific app running on a specific mobile device.
+After you have an APNs account, you can create a [MPN device](https://sdk.lightstreamer.com/ls-swift-client/5.0.0-beta.2/api/Classes/MPNDevice.html), which represents a specific app running on a specific mobile device.
 
 The following snippet shows a sample implementation of the iOS app delegate methods needed to register for remote notifications and receive the corresponding token.
 
@@ -126,7 +126,7 @@ func application(_ application: UIApplication,
 }
 ```
 
-To receive notifications, you need to subscribe to a [MPN subscription](https://sdk.lightstreamer.com/ls-swift-client/5.0.0-beta.1/api/Classes/MPNSubscription.html): it contains subscription details and the listener needed to monitor its status. Real-time data is routed via native push notifications.
+To receive notifications, you need to subscribe to a [MPN subscription](https://sdk.lightstreamer.com/ls-swift-client/5.0.0-beta.2/api/Classes/MPNSubscription.html): it contains subscription details and the listener needed to monitor its status. Real-time data is routed via native push notifications.
 
 ```swift
 let builder = MPNBuilder()
@@ -152,10 +152,10 @@ The optional  trigger expression  lets you specify  when to send  the notificati
 
 ## Logging
 
-To enable the internal client logger, create an instance of [LoggerProvider](https://sdk.lightstreamer.com/ls-swift-client/5.0.0-beta.1/api/Protocols/LSLoggerProvider.html) and set it as the default provider of [LightstreamerClient](https://sdk.lightstreamer.com/ls-swift-client/5.0.0-beta.1/api/Classes/LightstreamerClient.html).
+To enable the internal client logger, create an instance of [LoggerProvider](https://sdk.lightstreamer.com/ls-swift-client/5.0.0-beta.2/api/Protocols/LSLoggerProvider.html) and set it as the default provider of [LightstreamerClient](https://sdk.lightstreamer.com/ls-swift-client/5.0.0-beta.2/api/Classes/LightstreamerClient.html).
 
 ```swift
-let loggerProvider = ConsoleLoggerProvider(.debug)
+let loggerProvider = ConsoleLoggerProvider(level: .debug)
 LightstreamerClient.setLoggerProvider(loggerProvider)
 ```
 ## Compatibility
@@ -166,7 +166,7 @@ Compatible with Lightstreamer Server since version 7.2.0.
 
 - [Live demos](https://demos.lightstreamer.com/?p=lightstreamer&t=client&lclient=apple&sclientapple=ios&sclientapple=macos&sclientapple=tvos&sclientapple=watchos)
 
-- [API Reference](https://sdk.lightstreamer.com/ls-swift-client/5.0.0-beta.1/api/index.html)
+- [API Reference](https://sdk.lightstreamer.com/ls-swift-client/5.0.0-beta.2/api/index.html)
 
 - [Lightstreamer General Concepts](https://lightstreamer.com/docs/ls-server/7.2.0/General%20Concepts.pdf)
 
