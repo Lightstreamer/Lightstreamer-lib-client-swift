@@ -415,6 +415,7 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onPropertyChange status_timestamp
                 mpn.onPropertyChange group
                 mpn.onPropertyChange schema
+                mpn.onPropertyChange notification_format
                 """, self.mpnSubDelegate.trace)
             XCTAssertEqual("""
                 dev.onStatus REGISTERED 0
@@ -483,6 +484,8 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onPropertyChange status_timestamp
                 mpn.onPropertyChange group
                 mpn.onPropertyChange schema
+                mpn.onPropertyChange notification_format
+                mpn.onPropertyChange trigger
                 mpn.onStatusChange TRIGGERED 110
                 mpn.onTrigger
                 mpn.onPropertyChange status_timestamp
@@ -556,6 +559,8 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onPropertyChange status_timestamp
                 mpn.onPropertyChange group
                 mpn.onPropertyChange schema
+                mpn.onPropertyChange notification_format
+                mpn.onPropertyChange trigger
                 mpn.onStatusChange TRIGGERED 110
                 mpn.onTrigger
                 mpn.onPropertyChange status_timestamp
@@ -635,6 +640,8 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onPropertyChange status_timestamp
                 mpn.onPropertyChange group
                 mpn.onPropertyChange schema
+                mpn.onPropertyChange notification_format
+                mpn.onPropertyChange trigger
                 mpn.onPropertyChange status_timestamp
                 mpn.onStatusChange TRIGGERED 120
                 mpn.onTrigger
@@ -681,8 +688,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(.SUBSCRIBED, sub.status)
             XCTAssertEqual(100, sub.statusTimestamp)
-            XCTAssertEqual("format", sub.notificationFormat)
-            XCTAssertEqual("trigger", sub.triggerExpression)
+            XCTAssertEqual("format", sub.actualNotificationFormat)
+            XCTAssertEqual("trigger", sub.actualTriggerExpression)
             XCTAssertEqual("item", sub.itemGroup)
             XCTAssertEqual("field", sub.fieldSchema)
             XCTAssertEqual("adapter", sub.dataAdapter)
@@ -753,8 +760,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(.SUBSCRIBED, sub.status)
             XCTAssertEqual(100, sub.statusTimestamp)
-            XCTAssertEqual("format", sub.notificationFormat)
-            XCTAssertEqual("trigger", sub.triggerExpression)
+            XCTAssertEqual("format", sub.actualNotificationFormat)
+            XCTAssertEqual("trigger", sub.actualTriggerExpression)
             XCTAssertEqual("item", sub.itemGroup)
             XCTAssertEqual("field", sub.fieldSchema)
             XCTAssertEqual("adapter", sub.dataAdapter)
@@ -1378,7 +1385,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         asyncAssert(after: 0.5) {
             XCTAssertEqual(.s74, self.client.mpnSubscriptionManagers[0].s_ct)
-            XCTAssertEqual("fmt", sub.notificationFormat)
+            XCTAssertEqual(nil, sub.actualNotificationFormat)
+            XCTAssertEqual("new fmt", sub.notificationFormat)
             
             XCTAssertEqual(self.preamble + """
                 control\r
@@ -1417,7 +1425,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         asyncAssert(after: 0.5) {
             XCTAssertEqual(.s71, self.client.mpnSubscriptionManagers[0].s_ct)
-            XCTAssertEqual("fmt", sub.notificationFormat)
+            XCTAssertEqual(nil, sub.actualNotificationFormat)
+            XCTAssertEqual("new fmt", sub.notificationFormat)
             
             XCTAssertEqual(self.preamble + """
                 control\r
@@ -1457,7 +1466,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         asyncAssert(after: 0.5) {
             XCTAssertEqual(.s71, self.client.mpnSubscriptionManagers[0].s_ct)
-            XCTAssertEqual("fmt", sub.notificationFormat)
+            XCTAssertEqual(nil, sub.actualNotificationFormat)
+            XCTAssertEqual("new fmt", sub.notificationFormat)
             
             XCTAssertEqual(self.preamble + """
                 control\r
@@ -1500,7 +1510,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         asyncAssert(after: 0.5) {
             XCTAssertEqual(.s71, self.client.mpnSubscriptionManagers[0].s_ct)
-            XCTAssertEqual("fmt", sub.notificationFormat)
+            XCTAssertEqual(nil, sub.actualNotificationFormat)
+            XCTAssertEqual("fmt3", sub.notificationFormat)
             
             XCTAssertEqual(self.preamble + """
                 control\r
@@ -1545,7 +1556,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         asyncAssert(after: 0.5) {
             XCTAssertEqual(.s71, self.client.mpnSubscriptionManagers[0].s_ct)
-            XCTAssertEqual("fmt", sub.notificationFormat)
+            XCTAssertEqual(nil, sub.actualNotificationFormat)
+            XCTAssertEqual("fmt3", sub.notificationFormat)
             
             XCTAssertEqual(self.preamble + """
                 control\r
@@ -1589,7 +1601,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         XCTAssertEqual(.s20, self.client.mpnSubscriptionManagers[0].s_fu)
 
         asyncAssert(after: 0.5) {
-            XCTAssertEqual("fmt", sub.notificationFormat)
+            XCTAssertEqual(nil, sub.actualNotificationFormat)
+            XCTAssertEqual("new fmt", sub.notificationFormat)
             
             XCTAssertEqual(self.preamble + """
                 control\r
@@ -1630,7 +1643,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         asyncAssert(after: 0.5) {
             XCTAssertEqual(.s73, self.client.mpnSubscriptionManagers[0].s_ct)
-            XCTAssertEqual("trg", sub.triggerExpression)
+            XCTAssertEqual(nil, sub.actualTriggerExpression)
+            XCTAssertEqual("new trg", sub.triggerExpression)
             
             XCTAssertEqual(self.preamble + """
                 control\r
@@ -1669,7 +1683,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         asyncAssert(after: 0.5) {
             XCTAssertEqual(.s73, self.client.mpnSubscriptionManagers[0].s_ct)
-            XCTAssertEqual("trg", sub.triggerExpression)
+            XCTAssertEqual(nil, sub.actualTriggerExpression)
+            XCTAssertEqual(nil, sub.triggerExpression)
             
             XCTAssertEqual(self.preamble + """
                 control\r
@@ -1709,7 +1724,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         asyncAssert(after: 0.5) {
             XCTAssertEqual(.s71, self.client.mpnSubscriptionManagers[0].s_ct)
-            XCTAssertEqual("trg", sub.triggerExpression)
+            XCTAssertEqual(nil, sub.actualTriggerExpression)
+            XCTAssertEqual("new trg", sub.triggerExpression)
             
             XCTAssertEqual(self.preamble + """
                 control\r
@@ -1750,7 +1766,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         asyncAssert(after: 0.5) {
             XCTAssertEqual(.s71, self.client.mpnSubscriptionManagers[0].s_ct)
-            XCTAssertEqual("trg", sub.triggerExpression)
+            XCTAssertEqual(nil, sub.actualTriggerExpression)
+            XCTAssertEqual("new trg", sub.triggerExpression)
             
             XCTAssertEqual(self.preamble + """
                 control\r
@@ -1794,7 +1811,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         asyncAssert(after: 0.5) {
             XCTAssertEqual(.s71, self.client.mpnSubscriptionManagers[0].s_ct)
-            XCTAssertEqual("trg", sub.triggerExpression)
+            XCTAssertEqual(nil, sub.actualTriggerExpression)
+            XCTAssertEqual("trg3", sub.triggerExpression)
             
             XCTAssertEqual(self.preamble + """
                 control\r
@@ -1840,7 +1858,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         
         asyncAssert(after: 0.5) {
             XCTAssertEqual(.s71, self.client.mpnSubscriptionManagers[0].s_ct)
-            XCTAssertEqual("trg", sub.triggerExpression)
+            XCTAssertEqual(nil, sub.actualTriggerExpression)
+            XCTAssertEqual("trg3", sub.triggerExpression)
             
             XCTAssertEqual(self.preamble + """
                 control\r
@@ -1885,7 +1904,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         XCTAssertEqual(.s30, self.client.mpnSubscriptionManagers[0].s_tu)
 
         asyncAssert(after: 0.5) {
-            XCTAssertEqual("trg", sub.triggerExpression)
+            XCTAssertEqual(nil, sub.actualTriggerExpression)
+            XCTAssertEqual("new trg", sub.triggerExpression)
             
             XCTAssertEqual(self.preamble + """
                 control\r
@@ -1936,8 +1956,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         ws.onText("U,6,1,ACTIVE|100|fmt2|#|i1|f1|#|MERGE|#|#")
         
         asyncAssert(after: 0.5) {
-            XCTAssertEqual("fmt1", sub1.notificationFormat)
-            XCTAssertEqual("fmt2", sub2.notificationFormat)
+            XCTAssertEqual("fmt1", sub1.actualNotificationFormat)
+            XCTAssertEqual("fmt2", sub2.actualNotificationFormat)
             
             XCTAssertEqual(self.preamble + """
                 control\r
@@ -2009,8 +2029,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         ws.onText("U,5,1,ACTIVE|100|fmt1|#|i1|f1|#|MERGE|#|#")
         
         asyncAssert(after: 0.5) {
-            XCTAssertEqual("fmt1", sub1.notificationFormat)
-            XCTAssertEqual("fmt1", sub2.notificationFormat)
+            XCTAssertEqual("fmt1", sub1.actualNotificationFormat)
+            XCTAssertEqual("fmt1", sub2.actualNotificationFormat)
             
             XCTAssertEqual(self.preamble + """
                 control\r
@@ -2076,8 +2096,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         ws.onText("U,2,1,SUB-sub3|DELETE")
         
         asyncAssert(after: 0.5) {
-            XCTAssertEqual(nil, sub1.notificationFormat)
-            XCTAssertEqual(nil, sub2.notificationFormat)
+            XCTAssertEqual(nil, sub1.actualNotificationFormat)
+            XCTAssertEqual(nil, sub2.actualNotificationFormat)
             XCTAssertEqual(0, self.client.mpnSubscriptionManagers.count)
             
             XCTAssertEqual(self.preamble + """
@@ -2180,6 +2200,7 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onPropertyChange status_timestamp
                 mpn.onPropertyChange group
                 mpn.onPropertyChange schema
+                mpn.onPropertyChange notification_format
                 """, mpnSubDelegate1.trace)
             XCTAssertEqual("""
                 mpn.onStatusChange ACTIVE 0
@@ -2190,6 +2211,7 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onPropertyChange status_timestamp
                 mpn.onPropertyChange group
                 mpn.onPropertyChange schema
+                mpn.onPropertyChange notification_format
                 """, mpnSubDelegate2.trace)
             XCTAssertEqual("""
                 dev.onStatus REGISTERED 0
@@ -2262,6 +2284,7 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onPropertyChange status_timestamp
                 mpn.onPropertyChange group
                 mpn.onPropertyChange schema
+                mpn.onPropertyChange notification_format
                 """, mpnSubDelegate1.trace)
             XCTAssertEqual("""
                 mpn.onStatusChange ACTIVE 0
@@ -2272,6 +2295,7 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onPropertyChange status_timestamp
                 mpn.onPropertyChange group
                 mpn.onPropertyChange schema
+                mpn.onPropertyChange notification_format
                 """, mpnSubDelegate2.trace)
             XCTAssertEqual("""
                 dev.onStatus REGISTERED 0
@@ -2344,6 +2368,7 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onPropertyChange status_timestamp
                 mpn.onPropertyChange group
                 mpn.onPropertyChange schema
+                mpn.onPropertyChange notification_format
                 """, mpnSubDelegate1.trace)
             XCTAssertEqual("""
                 mpn.onStatusChange ACTIVE 0
@@ -2354,6 +2379,7 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onPropertyChange status_timestamp
                 mpn.onPropertyChange group
                 mpn.onPropertyChange schema
+                mpn.onPropertyChange notification_format
                 """, mpnSubDelegate2.trace)
             XCTAssertEqual("""
                 dev.onStatus REGISTERED 0
@@ -2426,6 +2452,7 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onPropertyChange status_timestamp
                 mpn.onPropertyChange group
                 mpn.onPropertyChange schema
+                mpn.onPropertyChange notification_format
                 """, mpnSubDelegate1.trace)
             XCTAssertEqual("""
                 mpn.onStatusChange ACTIVE 0
@@ -2436,6 +2463,7 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onPropertyChange status_timestamp
                 mpn.onPropertyChange group
                 mpn.onPropertyChange schema
+                mpn.onPropertyChange notification_format
                 """, mpnSubDelegate2.trace)
             XCTAssertEqual("""
                 dev.onStatus REGISTERED 0
@@ -2508,6 +2536,7 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onPropertyChange status_timestamp
                 mpn.onPropertyChange group
                 mpn.onPropertyChange schema
+                mpn.onPropertyChange notification_format
                 """, mpnSubDelegate1.trace)
             XCTAssertEqual("""
                 mpn.onStatusChange ACTIVE 0
@@ -2518,6 +2547,7 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onPropertyChange status_timestamp
                 mpn.onPropertyChange group
                 mpn.onPropertyChange schema
+                mpn.onPropertyChange notification_format
                 """, mpnSubDelegate2.trace)
             XCTAssertEqual("""
                 dev.onStatus REGISTERED 0
@@ -2595,6 +2625,7 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onPropertyChange status_timestamp
                 mpn.onPropertyChange group
                 mpn.onPropertyChange schema
+                mpn.onPropertyChange notification_format
                 """, mpnSubDelegate1.trace)
             XCTAssertEqual("""
                 mpn.onStatusChange ACTIVE 0
@@ -2605,6 +2636,7 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onPropertyChange status_timestamp
                 mpn.onPropertyChange group
                 mpn.onPropertyChange schema
+                mpn.onPropertyChange notification_format
                 """, mpnSubDelegate2.trace)
             XCTAssertEqual("""
                 dev.onStatus REGISTERED 0
@@ -2739,8 +2771,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             let sub = self.client.MPNSubscriptions[0]
             XCTAssertEqual(.SUBSCRIBED, sub.status)
             XCTAssertEqual(100, sub.statusTimestamp)
-            XCTAssertEqual("fmt", sub.notificationFormat)
-            XCTAssertEqual("trg", sub.triggerExpression)
+            XCTAssertEqual("fmt", sub.actualNotificationFormat)
+            XCTAssertEqual("trg", sub.actualTriggerExpression)
             XCTAssertEqual("i1", sub.itemGroup)
             XCTAssertEqual("f1", sub.fieldSchema)
             XCTAssertEqual("adt", sub.dataAdapter)
@@ -2788,8 +2820,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             let sub = self.client.MPNSubscriptions[0]
             XCTAssertEqual(.SUBSCRIBED, sub.status)
             XCTAssertEqual(100, sub.statusTimestamp)
-            XCTAssertEqual("fmt", sub.notificationFormat)
-            XCTAssertEqual("trg", sub.triggerExpression)
+            XCTAssertEqual("fmt", sub.actualNotificationFormat)
+            XCTAssertEqual("trg", sub.actualTriggerExpression)
             XCTAssertEqual("i1", sub.itemGroup)
             XCTAssertEqual("f1", sub.fieldSchema)
             XCTAssertEqual("adt", sub.dataAdapter)
@@ -2841,8 +2873,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             let sub = self.client.MPNSubscriptions[0]
             XCTAssertEqual(.SUBSCRIBED, sub.status)
             XCTAssertEqual(100, sub.statusTimestamp)
-            XCTAssertEqual("fmt", sub.notificationFormat)
-            XCTAssertEqual("trg", sub.triggerExpression)
+            XCTAssertEqual("fmt", sub.actualNotificationFormat)
+            XCTAssertEqual("trg", sub.actualTriggerExpression)
             XCTAssertEqual("i1", sub.itemGroup)
             XCTAssertEqual("f1", sub.fieldSchema)
             XCTAssertEqual("adt", sub.dataAdapter)
@@ -2852,8 +2884,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             let sub2 = self.client.MPNSubscriptions[1]
             XCTAssertEqual(.SUBSCRIBED, sub2.status)
             XCTAssertEqual(100, sub2.statusTimestamp)
-            XCTAssertEqual("fmt", sub2.notificationFormat)
-            XCTAssertEqual("trg", sub2.triggerExpression)
+            XCTAssertEqual("fmt", sub2.actualNotificationFormat)
+            XCTAssertEqual("trg", sub2.actualTriggerExpression)
             XCTAssertEqual("i1", sub2.itemGroup)
             XCTAssertEqual("f1", sub2.fieldSchema)
             XCTAssertEqual("adt", sub2.dataAdapter)
@@ -2911,8 +2943,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             let sub = self.client.MPNSubscriptions[0]
             XCTAssertEqual(.SUBSCRIBED, sub.status)
             XCTAssertEqual(100, sub.statusTimestamp)
-            XCTAssertEqual("fmt", sub.notificationFormat)
-            XCTAssertEqual("trg", sub.triggerExpression)
+            XCTAssertEqual("fmt", sub.actualNotificationFormat)
+            XCTAssertEqual("trg", sub.actualTriggerExpression)
             XCTAssertEqual("i1", sub.itemGroup)
             XCTAssertEqual("f1", sub.fieldSchema)
             XCTAssertEqual("adt", sub.dataAdapter)
@@ -2922,8 +2954,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             let sub2 = self.client.MPNSubscriptions[1]
             XCTAssertEqual(.SUBSCRIBED, sub2.status)
             XCTAssertEqual(100, sub2.statusTimestamp)
-            XCTAssertEqual("fmt", sub2.notificationFormat)
-            XCTAssertEqual("trg", sub2.triggerExpression)
+            XCTAssertEqual("fmt", sub2.actualNotificationFormat)
+            XCTAssertEqual("trg", sub2.actualTriggerExpression)
             XCTAssertEqual("i1", sub2.itemGroup)
             XCTAssertEqual("f1", sub2.fieldSchema)
             XCTAssertEqual("adt", sub2.dataAdapter)
@@ -2984,8 +3016,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             let sub = self.client.MPNSubscriptions[0]
             XCTAssertEqual(.SUBSCRIBED, sub.status)
             XCTAssertEqual(100, sub.statusTimestamp)
-            XCTAssertEqual("fmt", sub.notificationFormat)
-            XCTAssertEqual("trg", sub.triggerExpression)
+            XCTAssertEqual("fmt", sub.actualNotificationFormat)
+            XCTAssertEqual("trg", sub.actualTriggerExpression)
             XCTAssertEqual("i1", sub.itemGroup)
             XCTAssertEqual("f1", sub.fieldSchema)
             XCTAssertEqual("adt", sub.dataAdapter)
@@ -2995,8 +3027,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             let sub2 = self.client.MPNSubscriptions[1]
             XCTAssertEqual(.SUBSCRIBED, sub2.status)
             XCTAssertEqual(100, sub2.statusTimestamp)
-            XCTAssertEqual("fmt", sub2.notificationFormat)
-            XCTAssertEqual("trg", sub2.triggerExpression)
+            XCTAssertEqual("fmt", sub2.actualNotificationFormat)
+            XCTAssertEqual("trg", sub2.actualTriggerExpression)
             XCTAssertEqual("i1", sub2.itemGroup)
             XCTAssertEqual("f1", sub2.fieldSchema)
             XCTAssertEqual("adt", sub2.dataAdapter)
@@ -3054,8 +3086,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             let sub = self.client.MPNSubscriptions[0]
             XCTAssertEqual(.TRIGGERED, sub.status)
             XCTAssertEqual(100, sub.statusTimestamp)
-            XCTAssertEqual("fmt", sub.notificationFormat)
-            XCTAssertEqual("trg", sub.triggerExpression)
+            XCTAssertEqual("fmt", sub.actualNotificationFormat)
+            XCTAssertEqual("trg", sub.actualTriggerExpression)
             XCTAssertEqual("i1", sub.itemGroup)
             XCTAssertEqual("f1", sub.fieldSchema)
             XCTAssertEqual("adt", sub.dataAdapter)
@@ -3111,7 +3143,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(.SUBSCRIBED, sub.status)
             XCTAssertEqual(100, sub.statusTimestamp)
-            XCTAssertEqual("fmt2-sub3", sub.notificationFormat)
+            XCTAssertEqual("fmt2-sub3", sub.actualNotificationFormat)
             XCTAssertEqual(nil, sub.triggerExpression)
             XCTAssertEqual("i1", sub.itemGroup)
             XCTAssertEqual("f1", sub.fieldSchema)
@@ -3123,10 +3155,10 @@ final class MpnSubscriptionTests: BaseTestCase {
             XCTAssertEqual([], self.client.mpn_snapshotSet)
             XCTAssertEqual(2, self.client.mpnSubscriptionManagers.count)
             XCTAssertEqual(2, self.client.MPNSubscriptions.count)
-            let sub4 = self.client.MPNSubscriptions.filter({ $0.notificationFormat == "fmt2-sub4" }).first!
+            let sub4 = self.client.MPNSubscriptions.filter({ $0.actualNotificationFormat == "fmt2-sub4" }).first!
             XCTAssertEqual(.SUBSCRIBED, sub4.status)
             XCTAssertEqual(100, sub4.statusTimestamp)
-            XCTAssertEqual("fmt2-sub4", sub4.notificationFormat)
+            XCTAssertEqual("fmt2-sub4", sub4.actualNotificationFormat)
             XCTAssertEqual(nil, sub4.triggerExpression)
             XCTAssertEqual("i1", sub4.itemGroup)
             XCTAssertEqual("f1", sub4.fieldSchema)
@@ -3135,10 +3167,10 @@ final class MpnSubscriptionTests: BaseTestCase {
             XCTAssertEqual(nil, sub4.requestedBufferSize)
             XCTAssertEqual(nil, sub4.requestedMaxFrequency)
             
-            let sub3 = self.client.MPNSubscriptions.filter({ $0.notificationFormat == "fmt2-sub3" }).first!
+            let sub3 = self.client.MPNSubscriptions.filter({ $0.actualNotificationFormat == "fmt2-sub3" }).first!
             XCTAssertEqual(.SUBSCRIBED, sub3.status)
             XCTAssertEqual(100, sub3.statusTimestamp)
-            XCTAssertEqual("fmt2-sub3", sub3.notificationFormat)
+            XCTAssertEqual("fmt2-sub3", sub3.actualNotificationFormat)
             XCTAssertEqual(nil, sub3.triggerExpression)
             XCTAssertEqual("i1", sub3.itemGroup)
             XCTAssertEqual("f1", sub3.fieldSchema)

@@ -434,7 +434,8 @@ class MpnHttpTests: BaseTestCase {
         
         asyncAssert(after: 0.5) {
             XCTAssertEqual(.s74, self.client.mpnSubscriptionManagers[0].s_ct)
-            XCTAssertEqual("fmt", sub.notificationFormat)
+            XCTAssertEqual(nil, sub.actualNotificationFormat)
+            XCTAssertEqual("new fmt", sub.notificationFormat)
             
             XCTAssertEqual(self.preamble + """
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
@@ -500,7 +501,8 @@ class MpnHttpTests: BaseTestCase {
         
         asyncAssert(after: 0.5) {
             XCTAssertEqual(.s73, self.client.mpnSubscriptionManagers[0].s_ct)
-            XCTAssertEqual("trg", sub.triggerExpression)
+            XCTAssertEqual(nil, sub.actualTriggerExpression)
+            XCTAssertEqual("new trg", sub.triggerExpression)
             
             XCTAssertEqual(self.preamble + """
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
@@ -638,6 +640,7 @@ class MpnHttpTests: BaseTestCase {
                 mpn.onPropertyChange status_timestamp
                 mpn.onPropertyChange group
                 mpn.onPropertyChange schema
+                mpn.onPropertyChange notification_format
                 """, mpnSubDelegate1.trace)
             XCTAssertEqual("""
                 mpn.onStatusChange ACTIVE 0
@@ -648,6 +651,7 @@ class MpnHttpTests: BaseTestCase {
                 mpn.onPropertyChange status_timestamp
                 mpn.onPropertyChange group
                 mpn.onPropertyChange schema
+                mpn.onPropertyChange notification_format
                 """, mpnSubDelegate2.trace)
             XCTAssertEqual("""
                 dev.onStatus REGISTERED 0
