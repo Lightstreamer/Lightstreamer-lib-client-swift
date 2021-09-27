@@ -587,27 +587,38 @@ public class MPNSubscription: CustomStringConvertible {
      
      - Parameter newValue: the boolean expression that acts as a trigger to deliver the push notification. If the value is `nil`, no trigger is set on the subscription.
 
-     - Returns: if the MPNSubscription is in "inactive" state, returns the trigger expression requested by the user. If the state is "active", returns the real trigger sent by the Server or `nil` if the value is not available.
+     - Returns: returns the trigger expression requested by the user.
 
      - SeeAlso: `isTriggered`
+     - SeeAlso: `actualTriggerExpression`
      */
     public var triggerExpression: String? {
         get {
             synchronized {
-                m_realTrigger
+                m_requestedTrigger
             }
         }
         
         set {
             var manager: MpnSubscriptionManager?
             synchronized {
-                if !isActive {
-                    m_realTrigger = newValue
-                }
                 m_requestedTrigger = newValue
                 manager = m_manager
             }
             manager?.evtExtMpnSetTrigger()
+        }
+    }
+    
+    /**
+     Inquiry method that gets the trigger expression evaluated by the Sever.
+     
+     - Returns: returns the trigger sent by the Server or `nil` if the value is not available.
+     
+     - SeeAlso: `triggerExpression`
+     */
+    public var actualTriggerExpression: String? {
+        synchronized {
+            m_realTrigger
         }
     }
     
@@ -653,27 +664,38 @@ public class MPNSubscription: CustomStringConvertible {
 
      - Parameter newValue: the JSON structure to be used as the format of push notifications.
 
-     - Returns: if the MPNSubscription is in "inactive" state, returns the notification format requested by the user. If the state is "active", returns the real notification format sent by the Server or `nil` if the value is not available.
+     - Returns: returns the notification format requested by the user.
      
      - SeeAlso: `MPNBuilder`
+     - SeeAlso: `actualNotificationFormat`
      */
     public var notificationFormat: String? {
         get {
             synchronized {
-                m_realFormat
+                m_requestedFormat
             }
         }
         
         set {
             var manager: MpnSubscriptionManager?
             synchronized {
-                if !isActive {
-                    m_realFormat = newValue
-                }
                 m_requestedFormat = newValue
                 manager = m_manager
             }
             manager?.evtExtMpnSetFormat()
+        }
+    }
+    
+    /**
+      Inquiry method that gets the notification format used by the Sever to send notifications.
+      
+      - Returns: returns the notification format sent by the Server or `nil` if the value is not available.
+      
+      - SeeAlso: `notificationFormat`
+     */
+    public var actualNotificationFormat: String? {
+        synchronized {
+            m_realFormat
         }
     }
     

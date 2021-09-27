@@ -1,10 +1,21 @@
 # SDK for Swift Clients CHANGELOG
 
 
+## 5.0.0 beta 3
+
+_Compatible with Lightstreamer Server since 7.2.0._<br>
+_Not compatible with code developed for the previous versions._<br>
+_Released on 27 Sept 2021 ._
+
+The behavior of the property getters MPNSubscription.triggerExpression and MPNSubscription.notificationFormat has been changed with respect to version 5.0.0-beta.1. Now they returns the last value requested by the user, while in the previous version they returned the current value used by the Server. 
+
+Two new properties has been added: MPNSubscription.actualTriggerExpression and MPNSubscription.actualNotificationFormat, that return the actual values of the trigger expression and of the notification format as seen by the Server.  
+
+
 ## 5.0.0 beta 2
 
 _Compatible with Lightstreamer Server since 7.2.0._<br>
-_Compatible with code developed with the previous version._<br>
+_Not compatible with code developed for the previous versions._<br>
 _Released on 27 Aug 2021 ._
 
 Used a custom DispatchQueue instead of DispatchQueue.main to fire the Client delegates.
