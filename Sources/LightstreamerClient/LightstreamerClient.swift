@@ -1125,13 +1125,17 @@ public class LightstreamerClient {
 
      With this method, cookies received from the Server can be extracted for sending through other connections, according with the URL to be accessed.
 
-     - Parameter url: The URL to which the cookies should be sent, or null.
+     - Parameter url: The URL to which the cookies should be sent, or nil.
 
-     - Returns: An immutable list with the various cookies that can be sent in a HTTP request for the specified URL. If a null URI was supplied,
+     - Returns: An immutable list with the various cookies that can be sent in a HTTP request for the specified URL. If a nil URI was supplied,
      all available non-expired cookies will be returned. The cookies are represented by the system's standard cookie object `HTTPCookie`.
      */
-    public static func getCookiesForURL(_ url: URL) -> [HTTPCookie]? {
-        return HTTPCookieStorage.shared.cookies(for: url)
+    public static func getCookiesForURL(_ url: URL?) -> [HTTPCookie]? {
+        if let url = url {
+            return HTTPCookieStorage.shared.cookies(for: url)
+        } else {
+            return HTTPCookieStorage.shared.cookies
+        }
     }
     
     /**
