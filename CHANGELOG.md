@@ -1,5 +1,10 @@
 # SDK for Swift Clients CHANGELOG
 
+## xxxxxxxxxx
+
+<!-- 17/6/2022 -->
+Fixed a bug in the stream-sensing mechanism which could have caused a useless sending of a forced-rebind request when HTTP streaming was unresponsive.
+
 
 ## 5.0.0 beta 3
 

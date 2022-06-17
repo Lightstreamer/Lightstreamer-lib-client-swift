@@ -2506,7 +2506,6 @@ public class LightstreamerClient {
                         case .s800:
                             trace(evt, State_hs_m.s800, State_hs_m.s801)
                             disableHTTP_Streaming();
-                            disposeHTTP()
                             cause = "http.streaming.unavailable"
                             s_hs.m = .s801
                             cancel_evtTransportTimeout()
