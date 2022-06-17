@@ -28,13 +28,13 @@ final class StreamSenseTests: BaseTestCase {
                 http.dispose
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                http.dispose
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
                 LS_reqId=1&LS_op=force_rebind&LS_cause=http.streaming.unavailable
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
                 LOOP,0
+                http.dispose
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
@@ -95,13 +95,13 @@ final class StreamSenseTests: BaseTestCase {
                 ws.dispose
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=ws.unavailable
-                http.dispose
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
                 LS_reqId=1&LS_op=force_rebind&LS_cause=http.streaming.unavailable
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
                 LOOP,0
+                http.dispose
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*

@@ -491,7 +491,6 @@ final class BindHTTPTests: BaseTestCase {
             XCTAssertEqual(self.preamble + """
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                http.dispose
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
                 LS_reqId=1&LS_op=force_rebind&LS_cause=http.streaming.unavailable
                 """, self.io.trace)
@@ -522,9 +521,9 @@ final class BindHTTPTests: BaseTestCase {
             XCTAssertEqual(self.preamble + """
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                http.dispose
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
                 LS_reqId=1&LS_op=force_rebind&LS_cause=http.streaming.unavailable
+                http.dispose
                 ctrl.dispose
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=http.timeout
@@ -560,9 +559,9 @@ final class BindHTTPTests: BaseTestCase {
             XCTAssertEqual(self.preamble + """
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                http.dispose
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
                 LS_reqId=1&LS_op=force_rebind&LS_cause=http.streaming.unavailable
+                http.dispose
                 ctrl.dispose
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -624,9 +623,9 @@ final class BindHTTPTests: BaseTestCase {
             XCTAssertEqual(self.preamble + """
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                http.dispose
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
                 LS_reqId=1&LS_op=force_rebind&LS_cause=http.streaming.unavailable
+                http.dispose
                 ctrl.dispose
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=http.error
@@ -723,9 +722,9 @@ final class BindHTTPTests: BaseTestCase {
             XCTAssertEqual(self.preamble + """
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                http.dispose
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
                 LS_reqId=1&LS_op=force_rebind&LS_cause=http.streaming.unavailable
+                http.dispose
                 ctrl.dispose
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
