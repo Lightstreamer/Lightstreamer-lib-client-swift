@@ -4024,7 +4024,6 @@ public class LightstreamerClient {
                 trace(evt, State_m.s122, State_w_p.s300)
                 doCONOK_CreateWS(sessionId, reqLimit, keepalive, clink)
                 resetCurrentRetryDelay()
-                notifyStatus(.CONNECTED_STREAM_SENSING)
                 notifyStatus(.CONNECTED_WS_STREAMING)
                 s_m = .s150
                 s_tr = .s210

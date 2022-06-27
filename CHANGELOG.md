@@ -2,6 +2,9 @@
 
 ## xxxxxxxxxx
 
+<!-- 27/6/2022 -->
+Don't notify the status CONNECTED:STREAM-SENSING to the client when a Websocket session is established without sending a pre-flight request. 
+
 <!-- 17/6/2022 -->
 Fixed a bug in the stream-sensing mechanism which could have caused a useless sending of a forced-rebind request when HTTP streaming was unresponsive.
 
