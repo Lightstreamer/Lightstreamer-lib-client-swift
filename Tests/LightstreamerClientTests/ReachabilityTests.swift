@@ -203,7 +203,6 @@ final class ReachabilityTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 DISCONNECTED:TRYING-RECOVERY
                 """, self.delegate.trace)

@@ -58,7 +58,6 @@ final class SlowingTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 CONNECTED:WS-POLLING
                 """, self.delegate.trace)
@@ -140,7 +139,6 @@ final class SlowingTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 CONNECTED:WS-POLLING
                 """, self.delegate.trace)
@@ -271,7 +269,6 @@ final class SlowingTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual("""
@@ -334,7 +331,6 @@ final class SlowingTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual("""

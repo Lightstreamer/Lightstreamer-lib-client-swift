@@ -15,7 +15,6 @@ ws.dispose
 """
     let delegatePreamble = """
 CONNECTING
-CONNECTED:STREAM-SENSING
 CONNECTED:WS-STREAMING
 
 """
@@ -54,7 +53,6 @@ cancel keepalive.timeout
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual(self.schedulerPreamble + """
@@ -97,7 +95,6 @@ cancel keepalive.timeout
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual(self.schedulerPreamble + """
@@ -140,7 +137,6 @@ cancel keepalive.timeout
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual(self.schedulerPreamble + """
@@ -504,7 +500,6 @@ cancel keepalive.timeout
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual(self.schedulerPreamble + """
@@ -592,7 +587,6 @@ cancel keepalive.timeout
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual(self.schedulerPreamble + """
@@ -758,7 +752,6 @@ cancel keepalive.timeout
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual(self.schedulerPreamble + """

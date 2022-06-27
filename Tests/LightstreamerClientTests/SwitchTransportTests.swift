@@ -34,7 +34,6 @@ final class SwitchTransportTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 CONNECTED:HTTP-STREAMING
                 """, self.delegate.trace)
@@ -93,7 +92,6 @@ final class SwitchTransportTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 CONNECTED:HTTP-STREAMING
                 """, self.delegate.trace)
@@ -432,7 +430,6 @@ final class SwitchTransportTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual("""
@@ -475,7 +472,6 @@ final class SwitchTransportTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual("""
@@ -730,7 +726,6 @@ final class SwitchTransportTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 DISCONNECTED:TRYING-RECOVERY
                 """, self.delegate.trace)
@@ -768,7 +763,6 @@ final class SwitchTransportTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual("""

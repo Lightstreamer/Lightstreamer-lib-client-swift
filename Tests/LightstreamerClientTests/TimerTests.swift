@@ -93,7 +93,6 @@ final class TimerTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 DISCONNECTED:WILL-RETRY
                 """, self.delegate.trace)

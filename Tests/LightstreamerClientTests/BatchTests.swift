@@ -202,7 +202,6 @@ final class BatchTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual("""
@@ -403,7 +402,6 @@ final class BatchTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual("""
@@ -450,7 +448,6 @@ final class BatchTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual("""
@@ -645,7 +642,6 @@ final class BatchTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual("""
@@ -696,7 +692,6 @@ final class BatchTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual("""
@@ -903,7 +898,6 @@ final class BatchTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
         }
@@ -1009,7 +1003,6 @@ final class BatchTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
         }

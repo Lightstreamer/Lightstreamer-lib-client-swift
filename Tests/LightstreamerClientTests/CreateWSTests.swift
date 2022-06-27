@@ -136,7 +136,6 @@ final class CreateWSTests: BaseTestCase {
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual("""
@@ -169,7 +168,6 @@ final class CreateWSTests: BaseTestCase {
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 DISCONNECTED
                 onServerError 39 error
@@ -210,7 +208,6 @@ final class CreateWSTests: BaseTestCase {
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 DISCONNECTED:WILL-RETRY
                 CONNECTING
@@ -249,7 +246,6 @@ final class CreateWSTests: BaseTestCase {
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 DISCONNECTED
                 onServerError 10 error
@@ -285,7 +281,6 @@ final class CreateWSTests: BaseTestCase {
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 DISCONNECTED
                 onServerError 65 error
@@ -326,7 +321,6 @@ final class CreateWSTests: BaseTestCase {
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 DISCONNECTED:WILL-RETRY
                 CONNECTING
@@ -457,7 +451,6 @@ final class CreateWSTests: BaseTestCase {
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 DISCONNECTED:WILL-RETRY
                 CONNECTING
@@ -511,7 +504,6 @@ final class CreateWSTests: BaseTestCase {
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual("""
@@ -738,7 +730,6 @@ final class CreateWSTests: BaseTestCase {
                 """, self.http.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 DISCONNECTED:TRYING-RECOVERY
                 """, self.delegate.trace)
@@ -776,7 +767,6 @@ final class CreateWSTests: BaseTestCase {
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 DISCONNECTED:WILL-RETRY
                 """, self.delegate.trace)
@@ -889,7 +879,6 @@ final class CreateWSTests: BaseTestCase {
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 DISCONNECTED
                 """, self.delegate.trace)

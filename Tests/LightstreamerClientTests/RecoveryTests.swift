@@ -16,7 +16,6 @@ LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_mi
 """
     let delegatePreamble = """
 CONNECTING
-CONNECTED:STREAM-SENSING
 CONNECTED:WS-STREAMING
 
 """
@@ -73,7 +72,6 @@ cancel recovery.timeout
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 DISCONNECTED:TRYING-RECOVERY
                 CONNECTED:WS-STREAMING
@@ -136,7 +134,6 @@ cancel recovery.timeout
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 DISCONNECTED:TRYING-RECOVERY
                 CONNECTED:WS-STREAMING
@@ -198,7 +195,6 @@ cancel recovery.timeout
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 DISCONNECTED:TRYING-RECOVERY
                 CONNECTED:WS-STREAMING
@@ -269,7 +265,6 @@ cancel recovery.timeout
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 DISCONNECTED:TRYING-RECOVERY
                 CONNECTED:WS-STREAMING

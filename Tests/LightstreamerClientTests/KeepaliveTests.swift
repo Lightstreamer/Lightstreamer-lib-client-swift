@@ -76,7 +76,6 @@ final class KeepaliveTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 DISCONNECTED:TRYING-RECOVERY
                 """, self.delegate.trace)
@@ -127,7 +126,6 @@ final class KeepaliveTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 DISCONNECTED:WILL-RETRY
                 CONNECTING
@@ -248,7 +246,6 @@ final class KeepaliveTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 DISCONNECTED:TRYING-RECOVERY
                 """, self.delegate.trace)
@@ -315,7 +312,6 @@ final class KeepaliveTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 DISCONNECTED:WILL-RETRY
                 CONNECTING

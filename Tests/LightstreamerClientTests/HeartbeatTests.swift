@@ -28,7 +28,6 @@ final class HeartbeatTests: BaseTestCase {
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual("""
@@ -78,7 +77,6 @@ final class HeartbeatTests: BaseTestCase {
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual("""
@@ -212,7 +210,6 @@ final class HeartbeatTests: BaseTestCase {
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual("""
@@ -262,7 +259,6 @@ final class HeartbeatTests: BaseTestCase {
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual("""
@@ -396,7 +392,6 @@ final class HeartbeatTests: BaseTestCase {
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual("""
@@ -446,7 +441,6 @@ final class HeartbeatTests: BaseTestCase {
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
-                CONNECTED:STREAM-SENSING
                 CONNECTED:WS-STREAMING
                 """, self.delegate.trace)
             XCTAssertEqual("""
