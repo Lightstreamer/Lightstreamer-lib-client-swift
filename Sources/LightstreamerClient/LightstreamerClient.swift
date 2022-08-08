@@ -1,5 +1,4 @@
 import Foundation
-import OrderedCollections
 
 /**
  Protocol to be implemented to receive `LightstreamerClient` events comprehending notifications of connection activity and errors.
@@ -7592,7 +7591,7 @@ public class LightstreamerClient {
         if constrainRequest.isPending() {
             res.append(constrainRequest)
         }
-        for sub in subscriptionManagers.values.filter({ $0.isPending() }) {
+        for sub in subscriptionManagers.orderedValues.filter({ $0.isPending() }) {
             res.append(sub)
         }
         if mpnRegisterRequest.isPending() {

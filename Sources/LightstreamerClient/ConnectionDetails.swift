@@ -1,5 +1,4 @@
 import Foundation
-import OrderedCollections
 
 enum ServerAddressError: Error {
     case malformed

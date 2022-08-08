@@ -1,5 +1,4 @@
 import Foundation
-import OrderedCollections
 
 /**
  Protocol to be implemented to receive `MPNSubscription` events including subscription/unsubscription, triggering and status change.

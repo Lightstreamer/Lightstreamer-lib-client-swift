@@ -5,14 +5,14 @@ import XCTest
 final class Update2LevelTests: BaseTestCase {
     
     func state(_ client: LightstreamerClient, subId: Int, itemPos: Pos, keyName: String) -> Key2Level.State_m {
-        let sm = client.subscriptionManagers[subId] as! SubscriptionManagerLiving
+      let sm = client.subscriptionManagers.value(forKey:subId) as! SubscriptionManagerLiving
         let item = sm.m_strategy.items[itemPos] as! ItemCommand2Level
         let key = item.keys[keyName] as! Key2Level
         return key.s_m
     }
     
     func state(_ client: LightstreamerClient, subId: Int) -> SubscriptionManagerLiving.State_m {
-        let sm = client.subscriptionManagers[subId] as! SubscriptionManagerLiving
+      let sm = client.subscriptionManagers.value(forKey:subId) as! SubscriptionManagerLiving
         return sm.s_m
     }
     

@@ -1,5 +1,4 @@
 import Foundation
-import OrderedCollections
 
 class MessageManager: Encodable, CustomStringConvertible {
     

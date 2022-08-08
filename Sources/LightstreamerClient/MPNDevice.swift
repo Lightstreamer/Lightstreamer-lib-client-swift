@@ -1,5 +1,4 @@
 import Foundation
-import OrderedCollections
 
 /**
  Protocol to be implemented to receive `MPNDevice` events including registration, suspension/resume and status change.

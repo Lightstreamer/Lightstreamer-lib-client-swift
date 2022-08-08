@@ -1,5 +1,4 @@
 import Foundation
-import OrderedCollections
 
 /**
  The real maximum update frequency of a Subscription.
