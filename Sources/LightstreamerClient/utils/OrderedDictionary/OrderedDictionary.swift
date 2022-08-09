@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  */
-
+/// :nodoc:
 /// A generic collection for storing key-value pairs in an ordered manner.
 ///
 /// See the following example for a brief showcase including the initialization from a dictionary
