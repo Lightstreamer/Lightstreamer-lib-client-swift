@@ -28,8 +28,17 @@ Once you have your Swift package set up, adding Lightstreamer Swift Client SDK a
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/Lightstreamer/Lightstreamer-lib-client-swift.git", from: "5.0.0-beta.3")
+    .package(url: "https://github.com/Lightstreamer/Lightstreamer-lib-client-swift.git", from: "5.0.0")
 ]
+```
+
+### CocoaPods
+
+[CocoaPods](https://cocoapods.org) is a dependency manager for Cocoa projects. 
+To integrate LightstreamerClient into your Xcode project using CocoaPods, specify it in your Podfile:
+
+```
+pod 'LightstreamerClient'
 ```
 
 ### Manually
