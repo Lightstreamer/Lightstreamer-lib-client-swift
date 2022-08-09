@@ -1,12 +1,19 @@
 # SDK for Swift Clients CHANGELOG
 
-## xxxxxxxxxx
+## 5.0.0 beta 4
+
+_Compatible with Lightstreamer Server since 7.2.0._<br>
+_Not compatible with code developed for the previous versions._<br>
+_Released on 9 Aug 2022 ._
 
 <!-- 27/6/2022 -->
 Don't notify the status CONNECTED:STREAM-SENSING to the client when a Websocket session is established without sending a pre-flight request. 
 
 <!-- 17/6/2022 -->
 Fixed a bug in the stream-sensing mechanism which could have caused a useless sending of a forced-rebind request when HTTP streaming was unresponsive.
+
+<!-- 8/8/2022 -->
+Published the pod `LightstreamerClient` on CocoaPods.
 
 
 ## 5.0.0 beta 3
