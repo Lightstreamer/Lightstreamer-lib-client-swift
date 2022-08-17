@@ -4,7 +4,7 @@
 
 _Compatible with Lightstreamer Server since 7.2.0._<br>
 _Not compatible with code developed for the previous versions._<br>
-_Released on XXXXXXXXXX ._
+_Released on 17 Aug 2022._
 
 <!-- 27/6/2022 -->
 Don't notify the status CONNECTED:STREAM-SENSING to the client when a Websocket session is established without sending a pre-flight request. 
