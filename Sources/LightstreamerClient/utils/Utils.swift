@@ -64,10 +64,18 @@ func parseUpdate(_ message: String) -> (subId: Int, itemIdx: Int, values: [Pos:F
             values[nextFieldIndex] = .changed("")
             nextFieldIndex += 1
         } else if value.first == "^" { // step D
-            let count = Int(value.dropFirst())!
-            for _ in 1...count {
-                values[nextFieldIndex] = .unchanged
+            if value[value.index(value.startIndex, offsetBy: 1)] == "P" {
+                let unquoted = value.suffix(from: value.index(value.startIndex, offsetBy: 2)).removingPercentEncoding
+                let patch = try! newJsonPatch(unquoted!)
+                // TODO catch and rethrow exception
+                values[nextFieldIndex] = .jsonPatch(patch)
                 nextFieldIndex += 1
+            } else {
+                let count = Int(value.dropFirst())!
+                for _ in 1...count {
+                    values[nextFieldIndex] = .unchanged
+                    nextFieldIndex += 1
+                }
             }
         } else { // step E
             values[nextFieldIndex] = .changed(value.removingPercentEncoding)

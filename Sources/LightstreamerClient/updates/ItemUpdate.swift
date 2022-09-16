@@ -29,11 +29,12 @@ class ItemUpdateBase: ItemUpdate {
     let m_items: [Pos:String]?
     let m_nFields: Int
     let m_fields: [Pos:String]?
-    let m_newValues: [Pos:String?]
+    let m_newValues: [Pos:CurrFieldVal?]
     let m_changedFields: Set<Pos>
     let m_isSnapshot: Bool
+    let m_jsonPatches: [Pos:LsJsonPatch]
     
-    init(_ itemIdx: Pos, _ sub: Subscription, _ newValues: [Pos:String?], _ changedFields: Set<Pos>, _ isSnapshot: Bool) {
+    init(_ itemIdx: Pos, _ sub: Subscription, _ newValues: [Pos:CurrFieldVal?], _ changedFields: Set<Pos>, _ isSnapshot: Bool, _ jsonPatches: [Pos:LsJsonPatch]) {
         self.m_itemIdx = itemIdx
         self.m_items = toMap(sub.items)
         self.m_nFields = sub.nFields!
@@ -41,6 +42,7 @@ class ItemUpdateBase: ItemUpdate {
         self.m_newValues = newValues
         self.m_changedFields = changedFields
         self.m_isSnapshot = isSnapshot
+        self.m_jsonPatches = jsonPatches
     }
     
     var itemName: String? {
@@ -61,7 +63,7 @@ class ItemUpdateBase: ItemUpdate {
         }
         var res = [String:String?]()
         for fieldPos in m_changedFields {
-            res[fields[fieldPos]!] = m_newValues[fieldPos]
+            res[fields[fieldPos]!] = currFieldValToString(m_newValues[fieldPos] ?? nil)
         }
         return res
     }
@@ -69,7 +71,7 @@ class ItemUpdateBase: ItemUpdate {
     var changedFieldsByPositions: [Int : String?] {
         var res = [Int:String?]()
         for fieldPos in m_changedFields {
-            res[fieldPos] = m_newValues[fieldPos]
+            res[fieldPos] = currFieldValToString(m_newValues[fieldPos] ?? nil)
         }
         return res
     }
@@ -80,18 +82,18 @@ class ItemUpdateBase: ItemUpdate {
         }
         var res = [String:String?]()
         for (fieldPos, fieldName) in fields {
-            res[fieldName] = m_newValues[fieldPos]
+            res[fieldName] = currFieldValToString(m_newValues[fieldPos] ?? nil)
         }
         return res
     }
     
     var fieldsByPositions: [Int : String?] {
-        m_newValues
+        m_newValues.mapValues { val in currFieldValToString(val) }
     }
     
     func value(withFieldPos fieldPos: Int) -> String? {
         precondition(1 <= fieldPos && fieldPos <= m_nFields, POS_OUT_BOUNDS)
-        return m_newValues[fieldPos]!
+        return currFieldValToString(m_newValues[fieldPos] ?? nil)
     }
     
     func value(withFieldName fieldName: String) -> String? {
@@ -101,7 +103,7 @@ class ItemUpdateBase: ItemUpdate {
         guard let fieldPos = findFirstIndex(fields, of: fieldName) else {
             preconditionFailure(UNKNOWN_FIELD_NAME)
         }
-        return m_newValues[fieldPos]!
+        return currFieldValToString(m_newValues[fieldPos] ?? nil)
     }
     
     func isValueChanged(withFieldPos fieldPos: Int) -> Bool {
@@ -117,6 +119,22 @@ class ItemUpdateBase: ItemUpdate {
             preconditionFailure(UNKNOWN_FIELD_NAME)
         }
         return m_changedFields.contains(fieldPos)
+    }
+    
+    func valueAsJSONPatchIfAvailable(withFieldName fieldName: String) -> String? {
+        guard let fields = m_fields else {
+            preconditionFailure(NO_FIELDS)
+        }
+        guard let fieldPos = findFirstIndex(fields, of: fieldName) else {
+            preconditionFailure(UNKNOWN_FIELD_NAME)
+        }
+        let val = m_jsonPatches[fieldPos]
+        return val != nil ? jsonPatchToString(val!) : nil
+    }
+    
+    func valueAsJSONPatchIfAvailable(withFieldPos fieldPos: Int) -> String? {
+        let val = m_jsonPatches[fieldPos]
+        return val != nil ? jsonPatchToString(val!) : nil
     }
     
     private func getFieldNameOrNilFromIdx(_ fieldIdx: Pos) -> String? {
@@ -128,7 +146,7 @@ class ItemUpdateBase: ItemUpdate {
         for i in 1...m_newValues.count {
             let val = m_newValues[i]!
             let fieldName = getFieldNameOrNilFromIdx(i) ?? "\(i)"
-            let fieldVal = val == nil ? "nil" : String(reflecting: val!)
+            let fieldVal = currFieldValToString(val) ?? "nil"
             if i > 1 {
                 s += ","
             }
@@ -139,6 +157,8 @@ class ItemUpdateBase: ItemUpdate {
     }
 }
 
+typealias JsonPatchTypeAsReturnedByGetPatch = String
+
 class ItemUpdate2Level: ItemUpdate {
     
     let m_itemIdx: Pos
@@ -146,11 +166,12 @@ class ItemUpdate2Level: ItemUpdate {
     let m_nFields: Int
     let m_fields: [Pos:String]?
     let m_fields2: [Pos:String]?
-    let m_newValues: [Pos:String?]
+    let m_newValues: [Pos:CurrFieldVal?]
     let m_changedFields: Set<Pos>
     let m_isSnapshot: Bool
+    let m_jsonPatches: [Pos:JsonPatchTypeAsReturnedByGetPatch]
     
-    init(_ itemIdx: Pos, _ sub: Subscription, _ newValues: [Pos:String?], _ changedFields: Set<Pos>, _ isSnapshot: Bool) {
+    init(_ itemIdx: Pos, _ sub: Subscription, _ newValues: [Pos:CurrFieldVal?], _ changedFields: Set<Pos>, _ isSnapshot: Bool, _ jsonPatches: [Pos:JsonPatchTypeAsReturnedByGetPatch]) {
         self.m_itemIdx = itemIdx
         self.m_items = toMap(sub.items)
         self.m_nFields = sub.nFields!
@@ -159,6 +180,7 @@ class ItemUpdate2Level: ItemUpdate {
         self.m_newValues = newValues
         self.m_changedFields = changedFields
         self.m_isSnapshot = isSnapshot
+        self.m_jsonPatches = jsonPatches
     }
     
     var itemName: String? {
@@ -179,7 +201,7 @@ class ItemUpdate2Level: ItemUpdate {
         }
         var res = [String:String?]()
         for fieldPos in m_changedFields {
-            res[getFieldNameFromIdx(fieldPos)] = m_newValues[fieldPos]
+            res[getFieldNameFromIdx(fieldPos)] = currFieldValToString(m_newValues[fieldPos] ?? nil)
         }
         return res
     }
@@ -187,7 +209,7 @@ class ItemUpdate2Level: ItemUpdate {
     var changedFieldsByPositions: [Int : String?] {
         var res = [Int:String?]()
         for fieldPos in m_changedFields {
-            res[fieldPos] = m_newValues[fieldPos]
+            res[fieldPos] = currFieldValToString(m_newValues[fieldPos] ?? nil)
         }
         return res
     }
@@ -198,17 +220,17 @@ class ItemUpdate2Level: ItemUpdate {
         }
         var res = [String:String?]()
         for (f, v) in m_newValues {
-            res[getFieldNameFromIdx(f)] = v
+            res[getFieldNameFromIdx(f)] = currFieldValToString(v)
         }
         return res
     }
     
     var fieldsByPositions: [Int : String?] {
-        m_newValues
+        m_newValues.mapValues { val in currFieldValToString(val) }
     }
     
     func value(withFieldPos fieldPos: Int) -> String? {
-        m_newValues[fieldPos] ?? nil
+        currFieldValToString(m_newValues[fieldPos] ?? nil)
     }
     
     func value(withFieldName fieldName: String) -> String? {
@@ -218,7 +240,7 @@ class ItemUpdate2Level: ItemUpdate {
         guard let fieldPos = getFieldIdxFromName(fieldName) else {
             preconditionFailure(UNKNOWN_FIELD_NAME)
         }
-        return m_newValues[fieldPos] ?? nil
+        return currFieldValToString(m_newValues[fieldPos] ?? nil)
     }
     
     func isValueChanged(withFieldPos fieldPos: Int) -> Bool {
@@ -233,6 +255,22 @@ class ItemUpdate2Level: ItemUpdate {
             preconditionFailure(UNKNOWN_FIELD_NAME)
         }
         return m_changedFields.contains(fieldPos)
+    }
+    
+    func valueAsJSONPatchIfAvailable(withFieldName fieldName: String) -> String? {
+        guard m_fields != nil || m_fields2 != nil else {
+            preconditionFailure(NO_FIELDS)
+        }
+        guard let fieldPos = getFieldIdxFromName(fieldName) else {
+            preconditionFailure(UNKNOWN_FIELD_NAME)
+        }
+        let val = m_jsonPatches[fieldPos]
+        return val != nil ? val! : nil
+    }
+    
+    func valueAsJSONPatchIfAvailable(withFieldPos fieldPos: Int) -> String? {
+        let val = m_jsonPatches[fieldPos]
+        return val != nil ? val! : nil
     }
     
     private func getFieldNameFromIdx(_ fieldIdx: Pos) -> String {
@@ -268,7 +306,7 @@ class ItemUpdate2Level: ItemUpdate {
         for i in 1...m_newValues.count {
             let val = m_newValues[i]!
             let fieldName = getFieldNameOrNilFromIdx(i) ?? "\(i)"
-            let fieldVal = val == nil ? "nil" : String(reflecting: val!)
+            let fieldVal = currFieldValToString(val) ?? "nil"
             if i > 1 {
                 s += ","
             }

@@ -3,7 +3,7 @@ import Foundation
 class ItemBase {
     let m_subId: Int
     let itemIdx: Int
-    var currValues: [Pos:String?]!
+    var currValues: [Pos:CurrFieldVal?]!
     let subscription: Subscription
     unowned let client: LightstreamerClient
     let lock: NSRecursiveLock
@@ -46,7 +46,7 @@ class ItemBase {
     
     func getValue(_ fieldIdx: Int) -> String? {
         synchronized {
-            currValues?[fieldIdx] ?? nil
+            currValues != nil ? currFieldValToString(currValues[fieldIdx] ?? nil) : nil
         }
     }
     
@@ -72,9 +72,10 @@ class ItemBase {
     
     func doUpdate(_ values: [Pos:FieldValue], snapshot: Bool) {
         let prevValues = currValues
-        currValues = mapUpdateValues(prevValues, values)
+        currValues = applyUpatesToCurrentFields(prevValues, values)
         let changedFields = findChangedFields(prev: prevValues, curr: currValues)
-        let update = ItemUpdateBase(itemIdx, subscription, currValues, changedFields, snapshot)
+        let jsonPatches = computeJsonPatches(prevValues, values)
+        let update = ItemUpdateBase(itemIdx, subscription, currValues, changedFields, snapshot, jsonPatches)
         subscription.fireOnItemUpdate(update, subId: m_subId)
     }
     

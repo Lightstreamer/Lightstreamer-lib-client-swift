@@ -1,7 +1,7 @@
 import Foundation
 
 protocol ItemKey {
-    func evtUpdate(_ keyValue: [Pos:String?], _ snapshot: Bool)
+    func evtUpdate(_ keyValue: [Pos:CurrFieldVal?], _ snapshot: Bool)
     func evtSetRequestedMaxFrequency()
     func evtDispose()
     func getCommandValue(_ fieldIdx: Pos) -> String?
@@ -18,7 +18,7 @@ class Key1Level: ItemKey {
     
     let keyName: String
     unowned let item: ItemCommand1Level
-    var currKeyValues: [Pos:String?]!
+    var currKeyValues: [Pos:CurrFieldVal?]!
     var s_m: State_m = .s1
     let lock: NSRecursiveLock
     
@@ -41,7 +41,7 @@ class Key1Level: ItemKey {
         item.unrelate(from: keyName)
     }
     
-    func evtUpdate(_ keyValues: [Pos:String?], _ snapshot: Bool) {
+    func evtUpdate(_ keyValues: [Pos:CurrFieldVal?], _ snapshot: Bool) {
         synchronized {
             let evt = "update"
             switch s_m {
@@ -95,52 +95,52 @@ class Key1Level: ItemKey {
     
     func getCommandValue(_ fieldIdx: Pos) -> String? {
         synchronized {
-            currKeyValues[fieldIdx] ?? nil
+            currKeyValues != nil ? currFieldValToString(currKeyValues[fieldIdx] ?? nil) : nil
         }
     }
     
-    private func doFirstUpdate(_ keyValues: [Pos:String?], _ snapshot: Bool) {
+    private func doFirstUpdate(_ keyValues: [Pos:CurrFieldVal?], _ snapshot: Bool) {
         let nFields = item.subscription.nFields!
         let cmdIdx = item.subscription.commandPosition!
         currKeyValues = keyValues
-        currKeyValues[cmdIdx] = "ADD"
+        currKeyValues[cmdIdx] = .stringVal("ADD")
         let changedFields = Set(1...nFields)
-        let update = ItemUpdateBase(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot)
+        let update = ItemUpdateBase(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot, [:])
         
         fireOnItemUpdate(update)
     }
     
-    private func doUpdate(_ keyValues: [Pos:String?], _ snapshot: Bool) {
+    private func doUpdate(_ keyValues: [Pos:CurrFieldVal?], _ snapshot: Bool) {
         let cmdIdx = item.subscription.commandPosition!
         let prevKeyValues = currKeyValues
         currKeyValues = keyValues
-        currKeyValues[cmdIdx] = "UPDATE"
+        currKeyValues[cmdIdx] = .stringVal("UPDATE")
         let changedFields = findChangedFields(prev: prevKeyValues, curr: currKeyValues)
-        let update = ItemUpdateBase(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot)
+        let update = ItemUpdateBase(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot, [:])
         
         fireOnItemUpdate(update)
     }
     
-    private func doLightDelete(_ keyValues: [Pos:String?], _ snapshot: Bool) {
+    private func doLightDelete(_ keyValues: [Pos:CurrFieldVal?], _ snapshot: Bool) {
         currKeyValues = nil
         let changedFields = Set(keyValues.keys)
-        let update = ItemUpdateBase(item.itemIdx, item.subscription, nullify(keyValues), changedFields, snapshot)
+        let update = ItemUpdateBase(item.itemIdx, item.subscription, nullify(keyValues), changedFields, snapshot, [:])
         item.unrelate(from: keyName)
         
         fireOnItemUpdate(update)
     }
     
-    private func doDelete(_ keyValues: [Pos:String?], _ snapshot: Bool) {
+    private func doDelete(_ keyValues: [Pos:CurrFieldVal?], _ snapshot: Bool) {
         currKeyValues = nil
         let changedFields = Set(keyValues.keys).subtracting([item.subscription.keyPosition!])
-        let update = ItemUpdateBase(item.itemIdx, item.subscription, nullify(keyValues), changedFields, snapshot)
+        let update = ItemUpdateBase(item.itemIdx, item.subscription, nullify(keyValues), changedFields, snapshot, [:])
         item.unrelate(from: keyName)
         
         fireOnItemUpdate(update)
     }
     
-    private func nullify(_ keyValues: [Pos:String?]) -> [Pos:String?] {
-        var values = [Pos:String?]()
+    private func nullify(_ keyValues: [Pos:CurrFieldVal?]) -> [Pos:CurrFieldVal?] {
+        var values = [Pos:CurrFieldVal?]()
         for (p, val) in keyValues {
             let newVal = p == item.subscription.commandPosition || p == item.subscription.keyPosition ? val : nil
             values.updateValue(newVal, forKey: p)
@@ -148,8 +148,8 @@ class Key1Level: ItemKey {
         return values
     }
     
-    private func isDelete(_ keyValues: [Pos:String?]) -> Bool {
-        keyValues[item.subscription.commandPosition!] == "DELETE"
+    private func isDelete(_ keyValues: [Pos:CurrFieldVal?]) -> Bool {
+        currFieldValToString(keyValues[item.subscription.commandPosition!] ?? nil) == "DELETE"
     }
     
     private func fireOnItemUpdate(_ update: ItemUpdate) {

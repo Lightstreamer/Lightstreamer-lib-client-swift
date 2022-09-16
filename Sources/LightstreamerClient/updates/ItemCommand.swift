@@ -103,7 +103,7 @@ class ItemCommand: ItemBase {
     
     override func doUpdate(_ values: [Pos:FieldValue], snapshot: Bool) {
         let prevValues = currValues
-        currValues = mapUpdateValues(prevValues, values)
+        currValues = applyUpatesToCurrentFields(prevValues, values)
         let key = selectKey()
         
         key.evtUpdate(currValues, snapshot)
@@ -116,7 +116,7 @@ class ItemCommand: ItemBase {
     }
     
     private func selectKey() -> ItemKey {
-        let keyName = currValues[subscription.keyPosition!]!!
+        let keyName = currFieldValToString(currValues[subscription.keyPosition!] ?? nil)!
         var key = keys[keyName]
         if key == nil {
             key = createKey(keyName)

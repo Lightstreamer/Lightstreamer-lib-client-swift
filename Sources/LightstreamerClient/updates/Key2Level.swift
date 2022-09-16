@@ -12,7 +12,7 @@ class Key2Level: ItemKey {
     
     let keyName: String
     unowned let item: ItemCommand2Level
-    var currKeyValues: [Pos:String?]!
+    var currKeyValues: [Pos:CurrFieldVal?]!
     var currKey2Values: [Pos:String?]!
     var listener2Level: Mpn2LevelDelegate?
     var subscription2Level: Subscription?
@@ -40,7 +40,7 @@ class Key2Level: ItemKey {
         item.unrelate(from: keyName)
     }
     
-    func evtUpdate(_ keyValues: [Pos:String?], _ snapshot: Bool) {
+    func evtUpdate(_ keyValues: [Pos:CurrFieldVal?], _ snapshot: Bool) {
         synchronized {
             let evt = "update"
             switch s_m {
@@ -212,7 +212,7 @@ class Key2Level: ItemKey {
     func getCommandValue(_ fieldIdx: Pos) -> String? {
         synchronized {
             if let values = currKeyValues, let val = values[fieldIdx] {
-                return val
+                return currFieldValToString(val)
             } else if let values = currKey2Values,
                       let nFields = item.subscription.nFields,
                       let val = values[fieldIdx - nFields] {
@@ -223,23 +223,23 @@ class Key2Level: ItemKey {
         }
     }
     
-    private func doFirstUpdate(_ keyValues: [Pos:String?], snapshot: Bool) {
+    private func doFirstUpdate(_ keyValues: [Pos:CurrFieldVal?], snapshot: Bool) {
         let cmdIdx = item.subscription.commandPosition!
         currKeyValues = keyValues
-        currKeyValues[cmdIdx] = "ADD"
+        currKeyValues[cmdIdx] = .stringVal("ADD")
         let changedFields = findChangedFields(prev: nil, curr: currKeyValues)
-        let update = ItemUpdate2Level(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot)
+        let update = ItemUpdate2Level(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot, [:])
         
         fireOnItemUpdate(update)
     }
     
-    private func doUpdate(_ keyValues: [Pos:String?], snapshot: Bool) {
+    private func doUpdate(_ keyValues: [Pos:CurrFieldVal?], snapshot: Bool) {
         let cmdIdx = item.subscription.commandPosition!
         let prevKeyValues = currKeyValues
         currKeyValues = keyValues
-        currKeyValues[cmdIdx] = "UPDATE"
+        currKeyValues[cmdIdx] = .stringVal("UPDATE")
         let changedFields = findChangedFields(prev: prevKeyValues, curr: currKeyValues)
-        let update = ItemUpdate2Level(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot)
+        let update = ItemUpdate2Level(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot, [:])
         
         fireOnItemUpdate(update)
     }
@@ -248,59 +248,66 @@ class Key2Level: ItemKey {
         let cmdIdx = item.subscription.commandPosition!
         let nFields = item.subscription.nFields!
         let prevKeyValues = currKeyValues!
-        currKeyValues[cmdIdx] = "UPDATE"
+        currKeyValues[cmdIdx] = .stringVal("UPDATE")
         currKey2Values = update.fieldsByPositions
         var extKeyValues = currKeyValues!
         for (f, v) in currKey2Values {
-            extKeyValues[f + nFields] = v
+            extKeyValues.updateValue(v == nil ? nil : .stringVal(v!), forKey: f + nFields)
         }
         var changedFields = Set<Int>()
-        if prevKeyValues[cmdIdx] != currKeyValues[cmdIdx] {
+        if currFieldValToString(prevKeyValues[cmdIdx] ?? nil) != currFieldValToString(currKeyValues[cmdIdx] ?? nil) {
             changedFields.insert(cmdIdx)
         }
         for (f, _) in update.changedFieldsByPositions {
             changedFields.insert(f + nFields)
         }
         let snapshot = update.isSnapshot
-        let extUpdate = ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot)
+        var jsonPatches = [Pos:JsonPatchTypeAsReturnedByGetPatch]()
+        for (f, _) in currKey2Values {
+            let u = update.valueAsJSONPatchIfAvailable(withFieldPos: f);
+            if (u != nil) {
+                jsonPatches.updateValue(u!, forKey: f + nFields)
+            }
+        }
+        let extUpdate = ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot, jsonPatches)
         
         fireOnItemUpdate(extUpdate)
     }
     
-    private func doUpdate1Level(_ keyValues: [Pos:String?], snapshot: Bool) {
+    private func doUpdate1Level(_ keyValues: [Pos:CurrFieldVal?], snapshot: Bool) {
         let cmdIdx = item.subscription.commandPosition!
         let nFields = item.subscription.nFields!
         let prevKeyValues = currKeyValues!
         currKeyValues =  keyValues
-        currKeyValues[cmdIdx] = "UPDATE"
+        currKeyValues[cmdIdx] = .stringVal("UPDATE")
         var extKeyValues = currKeyValues!
         for (f, v) in currKey2Values {
-            extKeyValues[f + nFields] = v
+            extKeyValues.updateValue(v == nil ? nil : .stringVal(v!), forKey: f + nFields)
         }
         var changedFields = Set<Int>()
         for f in 1...nFields {
-            if prevKeyValues[f] != extKeyValues[f] {
+            if currFieldValToString(prevKeyValues[f] ?? nil) != currFieldValToString(extKeyValues[f] ?? nil) {
                 changedFields.insert(f)
             }
         }
-        let extUpdate = ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot)
+        let extUpdate = ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot, [:])
         
         fireOnItemUpdate(extUpdate)
     }
     
-    private func doDelete(_ keyValues: [Pos:String?], snapshot: Bool) {
+    private func doDelete(_ keyValues: [Pos:CurrFieldVal?], snapshot: Bool) {
         let n = item.subscription.nFields!
         let keyIdx = item.subscription.keyPosition!
         let cmdIdx = item.subscription.commandPosition!
         currKeyValues = nil
         let changedFields = Set(1...n).subtracting([keyIdx])
-        var extKeyValues = [Pos:String?]()
+        var extKeyValues = [Pos:CurrFieldVal?]()
         for f in 1...n {
             extKeyValues.updateValue(nil, forKey: f)
         }
-        extKeyValues[keyIdx] = keyName
-        extKeyValues[cmdIdx] = "DELETE"
-        let update = ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot)
+        extKeyValues[keyIdx] = .stringVal(keyName)
+        extKeyValues[cmdIdx] = .stringVal("DELETE")
+        let update = ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot, [:])
         
         item.unrelate(from: keyName)
         
@@ -314,7 +321,7 @@ class Key2Level: ItemKey {
         fireOnItemUpdate(update)
     }
     
-    private func doDeleteExt(_ keyValues: [Pos:String?], snapshot: Bool) {
+    private func doDeleteExt(_ keyValues: [Pos:CurrFieldVal?], snapshot: Bool) {
         let nFields = item.subscription.nFields!
         let keyIdx = item.subscription.keyPosition!
         let cmdIdx = item.subscription.commandPosition!
@@ -322,13 +329,13 @@ class Key2Level: ItemKey {
         currKeyValues = nil
         currKey2Values = nil
         let changedFields = Set(1...n).subtracting([keyIdx])
-        var extKeyValues = [Pos:String?]()
+        var extKeyValues = [Pos:CurrFieldVal?]()
         for f in 1...n {
             extKeyValues.updateValue(nil, forKey: f)
         }
-        extKeyValues[keyIdx] = keyName
-        extKeyValues[cmdIdx] = "DELETE"
-        let update = ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot)
+        extKeyValues[keyIdx] = .stringVal(keyName)
+        extKeyValues[cmdIdx] = .stringVal("DELETE")
+        let update = ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot, [:])
         
         item.unrelate(from: keyName)
         
@@ -342,36 +349,36 @@ class Key2Level: ItemKey {
         fireOnItemUpdate(update)
     }
     
-    private func doLightDelete(_ keyValues: [Pos:String?], snapshot: Bool) {
+    private func doLightDelete(_ keyValues: [Pos:CurrFieldVal?], snapshot: Bool) {
         let nFields = item.subscription.nFields!
         let keyIdx = item.subscription.keyPosition!
         let cmdIdx = item.subscription.commandPosition!
         currKeyValues = nil
         let changedFields = Set(1...nFields)
-        var values = [Pos:String?]()
+        var values = [Pos:CurrFieldVal?]()
         for f in 1...nFields {
             values.updateValue(nil, forKey: f)
         }
         values[keyIdx] = keyValues[keyIdx]
         values[cmdIdx] = keyValues[cmdIdx]
-        let update = ItemUpdate2Level(item.itemIdx, item.subscription, values, changedFields, snapshot)
+        let update = ItemUpdate2Level(item.itemIdx, item.subscription, values, changedFields, snapshot, [:])
         
         fireOnItemUpdate(update)
     }
     
-    private func doDelete1LevelOnly(_ keyValues: [Pos:String?], snapshot: Bool) {
+    private func doDelete1LevelOnly(_ keyValues: [Pos:CurrFieldVal?], snapshot: Bool) {
         let nFields = item.subscription.nFields!
         let keyIdx = item.subscription.keyPosition!
         let cmdIdx = item.subscription.commandPosition!
         currKeyValues = nil
         let changedFields = Set(1...nFields).subtracting([keyIdx])
-        var values = [Pos:String?]()
+        var values = [Pos:CurrFieldVal?]()
         for f in 1...nFields {
             values.updateValue(nil, forKey: f)
         }
         values[keyIdx] = keyValues[keyIdx]
         values[cmdIdx] = keyValues[cmdIdx]
-        let update = ItemUpdate2Level(item.itemIdx, item.subscription, values, changedFields, snapshot)
+        let update = ItemUpdate2Level(item.itemIdx, item.subscription, values, changedFields, snapshot, [:])
         
         fireOnItemUpdate(update)
     }
@@ -512,8 +519,8 @@ class Key2Level: ItemKey {
         return sub2
     }
     
-    private func isDelete(_ keyValues: [Pos:String?]) -> Bool {
-        keyValues[item.subscription.commandPosition!] == "DELETE"
+    private func isDelete(_ keyValues: [Pos:CurrFieldVal?]) -> Bool {
+        currFieldValToString(keyValues[item.subscription.commandPosition!] ?? nil) == "DELETE"
     }
     
     func trace(_ evt: String, _ from: State, _ to: State) {
