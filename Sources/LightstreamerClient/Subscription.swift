@@ -506,31 +506,56 @@ public protocol ItemUpdate: AnyObject, CustomStringConvertible {
      compression for this field;</li>
      <li>both the previous and new value are suitable for the JSON Patch computation
      (i.e. they are valid JSON representations);</li>
-     <li>the item was subscribed to in MERGE or DISTINCT mode;</li>
      <li>sending the JSON Patch difference has been evaluated by the Server as more
      efficient than sending the full new value.</li>
      </ul>
      Note that the last condition can be enforced by leveraging the Server's
-     &lt;jsonpatch_min_length&gt; configuration flag, so that the availability of the
+     `<jsonpatch_min_length>` configuration flag, so that the availability of the
      JSON Patch form would only depend on the Client and the Data Adapter.
-     <BR>When the above conditions are not met, the method just returns null; in this
-     case, the new value can only be determined through getValue. For instance,
+     <BR>When the above conditions are not met, the method just returns nil; in this
+     case, the new value can only be determined through `value(...)`. For instance,
      this will always be needed to get the first value received.
-     
-     @throws {IllegalArgumentException} if the specified field is not
-     part of the Subscription.
     
-     @param {String} fieldNameOrPos The field name or the 1-based position of the field
-     within the "Field List" or "Field Schema".
+     - Parameter fieldName: The field name as specified within the "Field List".
        
-     @return {Object} A JSON Patch structure representing the difference between
-     the new value and the previous one, or null if the difference in JSON Patch format
+     - Returns: A JSON Patch structure representing the difference between
+     the new value and the previous one, or nil if the difference in JSON Patch format
      is not available for any reason.
+     
+     - Precondition: the specified field is part of the `Subscription`.
        
-     @see Subscription#getValue
+     - SeeAlso: `value(...)`
      */
     func valueAsJSONPatchIfAvailable(withFieldName fieldName: String) -> String?
-    // TODO fix docs and test with jazzy
+    /**
+     Inquiry method that gets the difference between the new value and the previous one
+     as a JSON Patch structure, provided that the Server has used the JSON Patch format
+     to send this difference, as part of the "delta delivery" mechanism.
+     This, in turn, requires that:<ul>
+     <li>the Data Adapter has explicitly indicated JSON Patch as the privileged type of
+     compression for this field;</li>
+     <li>both the previous and new value are suitable for the JSON Patch computation
+     (i.e. they are valid JSON representations);</li>
+     <li>sending the JSON Patch difference has been evaluated by the Server as more
+     efficient than sending the full new value.</li>
+     </ul>
+     Note that the last condition can be enforced by leveraging the Server's
+     `<jsonpatch_min_length>` configuration flag, so that the availability of the
+     JSON Patch form would only depend on the Client and the Data Adapter.
+     <BR>When the above conditions are not met, the method just returns nil; in this
+     case, the new value can only be determined through `value(...)`. For instance,
+     this will always be needed to get the first value received.
+    
+     - Parameter fieldPos: The 1-based position of the field within the "Field List" or "Field Schema".
+       
+     - Returns: A JSON Patch structure representing the difference between
+     the new value and the previous one, or nil if the difference in JSON Patch format
+     is not available for any reason.
+     
+     - Precondition: the specified field is part of the `Subscription`.
+       
+     - SeeAlso: `value(...)`
+     */
     func valueAsJSONPatchIfAvailable(withFieldPos fieldPos: Int) -> String?
 }
 
