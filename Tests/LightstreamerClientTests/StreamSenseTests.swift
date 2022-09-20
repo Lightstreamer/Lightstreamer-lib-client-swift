@@ -21,21 +21,21 @@ final class StreamSenseTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=force_rebind&LS_cause=http.streaming.unavailable
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 """, self.io.trace)
@@ -86,23 +86,23 @@ final class StreamSenseTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 ws.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.unavailable
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
                 ws.init http://server/lightstreamer
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=ws.unavailable
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=force_rebind&LS_cause=http.streaming.unavailable
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 """, self.io.trace)
@@ -147,15 +147,15 @@ final class StreamSenseTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server.com/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,host.it
                 LOOP,0
                 http.dispose
-                http.send http://host.it/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://host.it/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
-                ctrl.send http://host.it/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://host.it/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=constrain&LS_requested_max_bandwidth=10.0
                 """, self.io.trace)
             XCTAssertEqual("""

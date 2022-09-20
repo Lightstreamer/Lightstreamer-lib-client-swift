@@ -69,7 +69,7 @@ cancel transport.timeout
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
                 CONERR,10,error
                 http.dispose
@@ -104,7 +104,7 @@ cancel transport.timeout
                 WSOK
                 CONERR,5,server busy
                 ws.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
                 CONERR,4,error
                 http.dispose
@@ -137,11 +137,11 @@ cancel transport.timeout
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
                 CONERR,5,error
                 http.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ttl.conerr.5
                 """, self.http.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -167,7 +167,7 @@ cancel transport.timeout
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 """, self.http.trace)
@@ -282,7 +282,7 @@ cancel transport.timeout
                 WSOK
                 CONERR,5,server busy
                 ws.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 PROG,100
@@ -320,7 +320,7 @@ cancel transport.timeout
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 PROG,0
@@ -357,7 +357,7 @@ cancel transport.timeout
                 WSOK
                 CONERR,5,server busy
                 ws.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 LOOP,0
@@ -406,7 +406,7 @@ cancel transport.timeout
                 WSOK
                 CONERR,5,server busy
                 ws.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 LOOP,0
@@ -453,12 +453,12 @@ cancel transport.timeout
                 WSOK
                 CONERR,5,server busy
                 ws.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=ttl.loop
                 CONOK,sid,70000,5000,*
                 """, self.io.trace)
@@ -498,12 +498,12 @@ cancel transport.timeout
                 WSOK
                 CONERR,5,server busy
                 ws.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=ttl.loop
                 CONOK,sid,70000,5000,*
                 """, self.io.trace)
@@ -533,10 +533,10 @@ cancel transport.timeout
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
                 http.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ttl.timeout
                 """, self.http.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -574,7 +574,7 @@ cancel transport.timeout
                 WSOK
                 CONERR,5,server busy
                 ws.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 http.dispose
@@ -612,11 +612,11 @@ cancel transport.timeout
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ttl.timeout
                 """, self.http.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -647,10 +647,10 @@ cancel transport.timeout
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
                 http.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ttl.error
                 """, self.http.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -688,7 +688,7 @@ cancel transport.timeout
                 WSOK
                 CONERR,5,server busy
                 ws.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 http.dispose
@@ -726,11 +726,11 @@ cancel transport.timeout
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ttl.error
                 """, self.http.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -760,7 +760,7 @@ cancel transport.timeout
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
                 http.dispose
                 """, self.http.trace)
@@ -786,7 +786,7 @@ cancel transport.timeout
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 http.dispose
@@ -816,7 +816,7 @@ cancel transport.timeout
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
                 http.dispose
                 """, self.http.trace)

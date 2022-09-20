@@ -19,7 +19,6 @@ class BaseTestCase: XCTestCase {
     
     override class func setUp() {
         LS_CID = "cid"
-        TLCP_VERSION = "TLCP-2.3.0"
         LightstreamerClient.setLoggerProvider(ConsoleLoggerProvider(level: .debug))
     }
     

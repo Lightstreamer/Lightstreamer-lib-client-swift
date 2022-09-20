@@ -195,10 +195,10 @@ final class ReachabilityTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 ws.dispose
-                http.send http://www.example.com/fido/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://www.example.com/fido/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 http.dispose
-                http.send http://www.example.com/fido/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://www.example.com/fido/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=recovery.error
                 """, self.io.trace)
             XCTAssertEqual("""

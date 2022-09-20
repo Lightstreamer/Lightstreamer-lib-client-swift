@@ -582,7 +582,7 @@ cancel keepalive.timeout
             XCTAssertEqual(self.preamble + """
                 ws.init http://server/lightstreamer
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_keepalive_millis=5000&LS_send_sync=false&LS_cause=ws.unavailable
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -613,7 +613,7 @@ cancel keepalive.timeout
                 wsok
                 bind_session\r\nLS_session=sid&LS_keepalive_millis=5000&LS_send_sync=false&LS_cause=ws.loop
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.unavailable
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -647,7 +647,7 @@ cancel keepalive.timeout
                 bind_session\r\nLS_session=sid&LS_keepalive_millis=5000&LS_send_sync=false&LS_cause=ws.loop
                 WSOK
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.timeout
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -680,7 +680,7 @@ cancel keepalive.timeout
                 wsok
                 bind_session\r\nLS_session=sid&LS_keepalive_millis=5000&LS_send_sync=false&LS_cause=ws.loop
                 ws.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=ws.unavailable
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -747,7 +747,7 @@ cancel keepalive.timeout
             XCTAssertEqual(self.preamble + """
                 ws.init http://server/lightstreamer
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_keepalive_millis=5000&LS_send_sync=false&LS_cause=ws.unavailable
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -778,7 +778,7 @@ cancel keepalive.timeout
                 wsok
                 bind_session\r\nLS_session=sid&LS_keepalive_millis=5000&LS_send_sync=false&LS_cause=ws.loop
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.unavailable
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -812,7 +812,7 @@ cancel keepalive.timeout
                 bind_session\r\nLS_session=sid&LS_keepalive_millis=5000&LS_send_sync=false&LS_cause=ws.loop
                 WSOK
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -848,7 +848,7 @@ cancel keepalive.timeout
                 WSOK
                 CONOK,sid,70000,5000,*
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -883,7 +883,7 @@ cancel keepalive.timeout
                 wsok
                 bind_session\r\nLS_session=sid&LS_keepalive_millis=5000&LS_send_sync=false&LS_cause=ws.loop
                 ws.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=ws.unavailable
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """

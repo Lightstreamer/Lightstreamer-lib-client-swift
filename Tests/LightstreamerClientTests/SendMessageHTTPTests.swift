@@ -4,12 +4,12 @@ import XCTest
 
 final class SendMessageHTTPTests: BaseTestCase {
     let preamble = """
-        http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+        http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
         LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
         CONOK,sid,70000,5000,*
         LOOP,0
         http.dispose
-        http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+        http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
         LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
         CONOK,sid,70000,5000,*
         
@@ -39,7 +39,7 @@ final class SendMessageHTTPTests: BaseTestCase {
 
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_message=foo&LS_sequence=seq&LS_msg_prog=1
                 MSGDONE,seq,1
                 """, self.io.trace)
@@ -61,7 +61,7 @@ final class SendMessageHTTPTests: BaseTestCase {
 
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_message=foo&LS_sequence=seq&LS_msg_prog=1
                 MSGFAIL,seq,1,-5,error
                 """, self.io.trace)
@@ -89,11 +89,11 @@ final class SendMessageHTTPTests: BaseTestCase {
 
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_message=foo1&LS_sequence=seq&LS_msg_prog=1
                 REQOK,1
                 ctrl.dispose
-                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=2&LS_message=foo2&LS_sequence=seq&LS_msg_prog=2\r
                 LS_reqId=3&LS_message=foo3&LS_sequence=seq&LS_msg_prog=3
                 REQOK,2
@@ -123,7 +123,7 @@ final class SendMessageHTTPTests: BaseTestCase {
 
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_message=foo&LS_sequence=seq&LS_msg_prog=1
                 REQOK,1
                 ctrl.dispose
@@ -150,7 +150,7 @@ final class SendMessageHTTPTests: BaseTestCase {
 
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_message=foo&LS_sequence=seq&LS_msg_prog=1
                 REQOK,1
                 ctrl.dispose
@@ -173,7 +173,7 @@ final class SendMessageHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_message=foo&LS_sequence=seq&LS_msg_prog=1
                 http.dispose
                 ctrl.dispose
@@ -197,7 +197,7 @@ final class SendMessageHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_message=foo&LS_outcome=false&LS_sequence=seq&LS_msg_prog=1
                 http.dispose
                 ctrl.dispose
@@ -221,14 +221,14 @@ final class SendMessageHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_message=foo&LS_outcome=false
                 http.dispose
                 ctrl.dispose
@@ -251,7 +251,7 @@ final class SendMessageHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_message=foo&LS_sequence=seq&LS_msg_prog=1
                 REQERR,1,-5,error
                 """, self.io.trace)
@@ -274,7 +274,7 @@ final class SendMessageHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_message=foo&LS_outcome=false&LS_sequence=seq&LS_msg_prog=1
                 REQERR,1,-5,error
                 """, self.io.trace)
@@ -295,7 +295,7 @@ final class SendMessageHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_message=foo&LS_outcome=false
                 REQERR,1,-5,error
                 """, self.io.trace)
@@ -317,7 +317,7 @@ final class SendMessageHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_message=foo&LS_outcome=false&LS_sequence=seq&LS_msg_prog=1
                 REQOK,1
                 """, self.io.trace)
@@ -339,7 +339,7 @@ final class SendMessageHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_message=foo&LS_outcome=false
                 REQOK,1
                 """, self.io.trace)

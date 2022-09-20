@@ -24,14 +24,14 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
                 """, self.io.trace)
         }
@@ -56,12 +56,12 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
                 """, self.io.trace)
         }
@@ -88,14 +88,14 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
                 REQERR,1,-5,error
                 ctrl.dispose
@@ -131,14 +131,14 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
                 REQOK,1
                 ctrl.dispose
@@ -176,14 +176,14 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true
                 REQOK,1
                 ctrl.dispose
@@ -222,14 +222,14 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
                 REQOK,1
                 ctrl.dispose
@@ -270,14 +270,14 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true
                 REQOK,1
                 ctrl.dispose
@@ -319,14 +319,14 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true
                 REQOK,1
                 ctrl.dispose
@@ -371,14 +371,14 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true
                 REQOK,1
                 ctrl.dispose
@@ -425,14 +425,14 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true
                 REQOK,1
                 ctrl.dispose
@@ -477,14 +477,14 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
                 REQOK,1
                 ctrl.dispose
@@ -525,14 +525,14 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
                 REQOK,1
                 ctrl.dispose
@@ -573,20 +573,20 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,2
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=2&LS_subId=1&LS_op=delete
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -620,18 +620,18 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
                 REQOK,1
                 ctrl.dispose
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=2&LS_subId=1&LS_op=delete
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -663,14 +663,14 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
                 REQOK,1
                 ctrl.dispose
@@ -708,20 +708,20 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,2
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=2&LS_subId=1&LS_op=delete
                 UNSUB,1
                 """, self.io.trace)
@@ -760,20 +760,20 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,2
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=2&LS_subId=1&LS_op=delete
                 REQOK,2
                 ctrl.dispose
@@ -813,20 +813,20 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,2
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=2&LS_subId=1&LS_op=delete
                 REQERR,2,-5,error
                 ctrl.dispose
@@ -865,20 +865,20 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,2
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=2&LS_subId=1&LS_op=delete
                 http.dispose
                 ctrl.dispose
@@ -913,20 +913,20 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,2
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=2&LS_subId=1&LS_op=reconf&LS_requested_max_frequency=12.3
                 REQOK,2
                 """, self.io.trace)
@@ -952,16 +952,16 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,2
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_subId=1&LS_op=delete&LS_cause=zombie
                 REQOK,1
                 ctrl.dispose
@@ -988,16 +988,16 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 SUBCMD,1,1,2,1,2
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_subId=1&LS_op=delete&LS_cause=zombie
                 REQOK,1
                 ctrl.dispose
@@ -1024,16 +1024,16 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 CONF,1,unlimited,unfiltered
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_subId=1&LS_op=delete&LS_cause=zombie
                 REQOK,1
                 ctrl.dispose
@@ -1060,16 +1060,16 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 U,1,1,a
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_subId=1&LS_op=delete&LS_cause=zombie
                 REQOK,1
                 ctrl.dispose
@@ -1096,16 +1096,16 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 EOS,1,1
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_subId=1&LS_op=delete&LS_cause=zombie
                 REQOK,1
                 ctrl.dispose
@@ -1132,16 +1132,16 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 CS,1,1
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_subId=1&LS_op=delete&LS_cause=zombie
                 REQOK,1
                 ctrl.dispose
@@ -1168,16 +1168,16 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 OV,1,1,2
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_subId=1&LS_op=delete&LS_cause=zombie
                 REQOK,1
                 ctrl.dispose
@@ -1205,16 +1205,16 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 OV,1,1,2
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_subId=1&LS_op=delete&LS_cause=zombie
                 REQERR,1,-5,error
                 ctrl.dispose
@@ -1242,16 +1242,16 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 OV,1,1,2
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_subId=1&LS_op=delete&LS_cause=zombie
                 REQOK,1
                 ctrl.dispose
@@ -1278,16 +1278,16 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 OV,1,1,2
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_subId=1&LS_op=delete&LS_cause=zombie
                 UNSUB,1
                 """, self.io.trace)
@@ -1313,16 +1313,16 @@ final class SubscriptionHTTPTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 OV,1,1,2
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_subId=1&LS_op=delete&LS_cause=zombie
                 http.dispose
                 ctrl.dispose

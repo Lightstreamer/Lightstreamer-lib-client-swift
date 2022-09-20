@@ -4,7 +4,7 @@ import XCTest
 
 final class BindHTTPPollingTests: BaseTestCase {
     let preamble = """
-        http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+        http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
         LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
         CONOK,sid,70000,5000,*
         LOOP,0
@@ -45,7 +45,7 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 """, self.io.trace)
@@ -75,17 +75,17 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 Foo=bar
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 Foo=bar
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 Foo=bar
                 LS_reqId=1&LS_op=constrain&LS_requested_max_bandwidth=10.0
                 """, self.io.trace)
@@ -117,16 +117,16 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 Foo=bar
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=constrain&LS_requested_max_bandwidth=10.0
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -151,7 +151,7 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONERR,10,error
                 http.dispose
@@ -181,16 +181,16 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONERR,4,error
                 http.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=http.conerr.4
                 CONOK,sid2,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid2&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid2,70000,5000,*
                 """, self.io.trace)
@@ -225,7 +225,7 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 END,10,error
@@ -255,12 +255,12 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 END,41,error
                 http.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=http.end.41
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -288,7 +288,7 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 END,10,error
                 http.dispose
@@ -315,11 +315,11 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 END,41,error
                 http.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=http.end.41
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -348,10 +348,10 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=force_rebind
                 ERROR,10,error
                 http.dispose
@@ -383,10 +383,10 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=force_rebind
                 REQERR,1,11,error
                 http.dispose
@@ -420,10 +420,10 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
-                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_op=force_rebind
                 REQERR,1,20,error
                 http.dispose
@@ -465,17 +465,17 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,15000,*
                 LOOP,300
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=300&LS_idle_millis=15000
                 CONOK,sid,70000,25000,*
                 LOOP,600
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=600&LS_idle_millis=25000
                 CONOK,sid,70000,35000,*
                 """, self.io.trace)
@@ -509,7 +509,7 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 http.dispose
@@ -536,10 +536,10 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=http.error
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -567,11 +567,11 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=http.error
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -599,7 +599,7 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 http.dispose
                 """, self.io.trace)
@@ -626,7 +626,7 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 http.dispose
@@ -654,10 +654,10 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=http.idle.timeout
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -685,11 +685,11 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=http.idle.timeout
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -718,10 +718,10 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 http.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=http.idle.timeout
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -751,11 +751,11 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 http.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=http.idle.timeout
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -865,12 +865,12 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 PROG,100
                 http.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=prog.mismatch.100.0
                 """, self.ws.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -910,7 +910,7 @@ final class BindHTTPPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual(self.preamble + """
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 http.dispose
                 """, self.io.trace)

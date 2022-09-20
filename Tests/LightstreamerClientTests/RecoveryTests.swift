@@ -10,7 +10,7 @@ create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
 WSOK
 CONOK,sid,70000,5000,*
 ws.dispose
-http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
 
 """
@@ -58,7 +58,7 @@ cancel recovery.timeout
                 WSOK
                 CONOK,sid,70000,5000,*
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 CONOK,sid,70000,5000,*
                 LOOP,0
@@ -118,7 +118,7 @@ cancel recovery.timeout
                 WSOK
                 CONOK,sid,70000,5000,*
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 Foo=bar
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 CONOK,sid,70000,5000,*
@@ -181,7 +181,7 @@ cancel recovery.timeout
                 WSOK
                 CONOK,sid,70000,5000,*
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 CONOK,sid,70000,5000,*
                 LOOP,0
@@ -251,7 +251,7 @@ cancel recovery.timeout
                 LS_session=sid&LS_keepalive_millis=5000&LS_send_sync=false&LS_cause=ws.loop
                 WSOK
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 CONOK,sid,70000,5000,*
                 LOOP,0
@@ -309,7 +309,7 @@ cancel recovery.timeout
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
@@ -321,7 +321,7 @@ cancel recovery.timeout
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 CONOK,sid,70000,5000,*
                 LOOP,0
@@ -378,21 +378,21 @@ cancel recovery.timeout
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=http.error
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_keepalive_millis=5000&LS_send_sync=false&LS_cause=recovery.loop
                 CONOK,sid,70000,5000,*
                 """, self.io.trace)
@@ -441,21 +441,21 @@ cancel recovery.timeout
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=http.error
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=5000&LS_cause=recovery.loop
                 CONOK,sid,70000,5000,*
                 """, self.io.trace)
@@ -736,7 +736,7 @@ cancel recovery.timeout
         asyncAssert {
             XCTAssertEqual(self.preamble + """
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=recovery.error
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -764,7 +764,7 @@ cancel recovery.timeout
         asyncAssert {
             XCTAssertEqual(self.preamble + """
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=recovery.error
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -808,10 +808,10 @@ cancel recovery.timeout
                 WSOK
                 CONOK,sid,70000,5000,*
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=recovery.error
                 http.dispose
                 ws.init http://server/lightstreamer
@@ -862,7 +862,7 @@ cancel recovery.timeout
         asyncAssert {
             XCTAssertEqual(self.preamble + """
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=recovery.error
                 CONOK,sid,70000,5000,*
                 LOOP,0
@@ -942,7 +942,7 @@ cancel recovery.timeout
                 LS_reqId=1&LS_message=foo&LS_msg_prog=1
                 MSGDONE,*,1
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=1&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -982,7 +982,7 @@ cancel recovery.timeout
                 msg\r
                 LS_reqId=1&LS_message=foo&LS_msg_prog=1
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 CONOK,sid,70000,5000,*
                 PROG,0
@@ -1032,7 +1032,7 @@ cancel recovery.timeout
                 LS_reqId=1&LS_message=foo&LS_msg_prog=1
                 MSGDONE,*,1
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=1&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 CONOK,sid,70000,5000,*
                 PROG,0
@@ -1074,7 +1074,7 @@ cancel recovery.timeout
                 LS_reqId=1&LS_message=foo&LS_msg_prog=1
                 MSGFAIL,*,1,10,error
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=1&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -1114,7 +1114,7 @@ cancel recovery.timeout
                 msg\r
                 LS_reqId=1&LS_message=foo&LS_msg_prog=1
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 CONOK,sid,70000,5000,*
                 PROG,0
@@ -1164,7 +1164,7 @@ cancel recovery.timeout
                 LS_reqId=1&LS_message=foo&LS_msg_prog=1
                 MSGFAIL,*,1,10,error
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=1&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 CONOK,sid,70000,5000,*
                 PROG,0
@@ -1221,7 +1221,7 @@ cancel recovery.timeout
                 CONF,1,unlimited,unfiltered
                 UNSUB,1
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=7&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -1276,7 +1276,7 @@ cancel recovery.timeout
                 control\r
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=itm&LS_schema=fld&LS_snapshot=true&LS_ack=false
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 CONOK,sid,70000,5000,*
                 PROG,0
@@ -1359,7 +1359,7 @@ cancel recovery.timeout
                 CONF,1,unlimited,unfiltered
                 UNSUB,1
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=7&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 CONOK,sid,70000,5000,*
                 PROG,0
@@ -1428,7 +1428,7 @@ cancel recovery.timeout
                 CONF,1,unlimited,unfiltered
                 UNSUB,1
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=7&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -1483,7 +1483,7 @@ cancel recovery.timeout
                 control\r
                 LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=itm&LS_schema=key%20command&LS_snapshot=true&LS_ack=false
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 CONOK,sid,70000,5000,*
                 PROG,0
@@ -1566,7 +1566,7 @@ cancel recovery.timeout
                 CONF,1,unlimited,unfiltered
                 UNSUB,1
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=7&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 CONOK,sid,70000,5000,*
                 PROG,0
@@ -1620,10 +1620,10 @@ cancel recovery.timeout
                 WSOK
                 CONOK,sid,70000,5000,*
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 http.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=recovery.error
                 http.dispose
                 """, self.io.trace)
@@ -1698,7 +1698,7 @@ cancel recovery.timeout
                 MPNDEL,sub1
                 MPNZERO,devid
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=5&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -1762,7 +1762,7 @@ cancel recovery.timeout
                 control\r
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 CONOK,sid,70000,5000,*
                 PROG,0
@@ -1854,7 +1854,7 @@ cancel recovery.timeout
                 MPNDEL,sub1
                 MPNZERO,devid
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=5&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 CONOK,sid,70000,5000,*
                 PROG,0

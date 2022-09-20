@@ -1647,7 +1647,7 @@ final class MpnTests: BaseTestCase {
                 control\r
                 LS_reqId=6&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=3&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 CONOK,sid,70000,5000,*
                 PROG,3

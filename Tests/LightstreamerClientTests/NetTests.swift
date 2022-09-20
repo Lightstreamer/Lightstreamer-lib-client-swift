@@ -9,7 +9,7 @@ class NetTests: XCTestCase {
         expectation.expectedFulfillmentCount = 2
         
         let client = LsHttp(
-            "http://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0",
+            "http://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)",
             body: "LS_polling=true&LS_polling_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg",
             onText: { http, text in
                 if text.contains("CONOK") {
@@ -33,7 +33,7 @@ class NetTests: XCTestCase {
         
         let client = LsWebsocket(
             "http://push.lightstreamer.com/lightstreamer",
-            protocols: "TLCP-2.3.0.lightstreamer.com",
+            protocols: "\(TLCP_VERSION).lightstreamer.com",
             onOpen: { ws in
                 ws.send("""
                     create_session\r

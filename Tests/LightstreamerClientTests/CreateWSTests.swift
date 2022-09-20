@@ -101,7 +101,7 @@ final class CreateWSTests: BaseTestCase {
                 ws.dispose
                 """, self.ws.trace)
             XCTAssertEqual("""
-            http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+            http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
             LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
             """, self.http.trace)
             XCTAssertEqual("""
@@ -529,7 +529,7 @@ final class CreateWSTests: BaseTestCase {
                 ws.dispose
                 """, self.ws.trace)
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.unavailable
                 """, self.http.trace)
             XCTAssertEqual("""
@@ -559,7 +559,7 @@ final class CreateWSTests: BaseTestCase {
                 ws.dispose
                 """, self.ws.trace)
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.unavailable
                 """, self.http.trace)
             XCTAssertEqual("""
@@ -623,7 +623,7 @@ final class CreateWSTests: BaseTestCase {
                 ws.dispose
                 """, self.ws.trace)
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.unavailable
                 """, self.http.trace)
             XCTAssertEqual("""
@@ -653,7 +653,7 @@ final class CreateWSTests: BaseTestCase {
                 ws.dispose
                 """, self.ws.trace)
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.unavailable
                 """, self.http.trace)
             XCTAssertEqual("""
@@ -725,7 +725,7 @@ final class CreateWSTests: BaseTestCase {
                 ws.dispose
                 """, self.ws.trace)
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 """, self.http.trace)
             XCTAssertEqual("""

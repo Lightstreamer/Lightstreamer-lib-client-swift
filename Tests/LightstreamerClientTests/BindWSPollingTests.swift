@@ -4,7 +4,7 @@ import XCTest
 
 final class BindWSPollingTests: BaseTestCase {
     let preamble = """
-        http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+        http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
         LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
         CONOK,sid,70000,5000,*
         LOOP,0
@@ -82,7 +82,7 @@ final class BindWSPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 Foo=bar
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
@@ -125,7 +125,7 @@ final class BindWSPollingTests: BaseTestCase {
         
         asyncAssert {
             XCTAssertEqual("""
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 Foo=bar
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
                 CONOK,sid,70000,5000,*
@@ -205,7 +205,7 @@ final class BindWSPollingTests: BaseTestCase {
                 bind_session\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONERR,4,error
                 ws.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=ws.conerr.4
                 CONOK,sid2,70000,5000,*
                 LOOP,0
@@ -295,7 +295,7 @@ final class BindWSPollingTests: BaseTestCase {
                 CONOK,sid,70000,5000,*
                 END,41,error
                 ws.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=ws.end.41
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -367,7 +367,7 @@ final class BindWSPollingTests: BaseTestCase {
                 bind_session\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 END,41,error
                 ws.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=ws.end.41
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -478,7 +478,7 @@ final class BindWSPollingTests: BaseTestCase {
                 CONOK,sid,70000,5000,*
                 REQERR,1,20,error
                 ws.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=ws.reqerr.20
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -720,7 +720,7 @@ final class BindWSPollingTests: BaseTestCase {
                 WSOK
                 bind_session\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -757,7 +757,7 @@ final class BindWSPollingTests: BaseTestCase {
                 WSOK
                 bind_session\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ws.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=ws.error
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -794,7 +794,7 @@ final class BindWSPollingTests: BaseTestCase {
                 WSOK
                 bind_session\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.idle.timeout
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -832,7 +832,7 @@ final class BindWSPollingTests: BaseTestCase {
                 bind_session\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 ws.dispose
-                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.idle.timeout
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -870,7 +870,7 @@ final class BindWSPollingTests: BaseTestCase {
                 WSOK
                 bind_session\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ws.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=ws.idle.timeout
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -910,7 +910,7 @@ final class BindWSPollingTests: BaseTestCase {
                 bind_session\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 CONOK,sid,70000,5000,*
                 ws.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=ws.idle.timeout
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -1046,7 +1046,7 @@ final class BindWSPollingTests: BaseTestCase {
                 CONOK,sid,70000,5000,*
                 PROG,100
                 ws.dispose
-                http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=prog.mismatch.100.0
                 """, self.ws.trace)
             XCTAssertEqual(self.delegatePreamble + """
