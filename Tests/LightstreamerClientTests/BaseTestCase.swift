@@ -20,7 +20,7 @@ class BaseTestCase: XCTestCase {
     override class func setUp() {
         LS_CID = "cid"
         TLCP_VERSION = "TLCP-2.3.0"
-        LightstreamerClient.setLoggerProvider(ConsoleLoggerProvider(level: .trace))
+        LightstreamerClient.setLoggerProvider(ConsoleLoggerProvider(level: .debug))
     }
     
     func newClient(_ url: String, adapterSet: String? = nil) -> LightstreamerClient {
@@ -49,7 +49,7 @@ class BaseTestCase: XCTestCase {
             block()
             self.expectation.fulfill()
         }
-        wait(for: [expectation], timeout: max(1, delay))
+        wait(for: [expectation], timeout: max(1, delay) + 0.5)
     }
     
     func async(after delay: TimeInterval, _ block: @escaping () -> Void) {
