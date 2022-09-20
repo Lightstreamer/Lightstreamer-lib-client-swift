@@ -21,7 +21,7 @@ final class SwitchTransportTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r\nLS_reqId=1&LS_op=force_rebind&LS_close_socket=true
@@ -72,7 +72,7 @@ final class SwitchTransportTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 LOOP,0
@@ -132,7 +132,7 @@ final class SwitchTransportTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -191,7 +191,7 @@ final class SwitchTransportTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -252,7 +252,7 @@ final class SwitchTransportTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -311,7 +311,7 @@ final class SwitchTransportTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -370,7 +370,7 @@ final class SwitchTransportTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -424,7 +424,7 @@ final class SwitchTransportTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 """, self.io.trace)
@@ -459,7 +459,7 @@ final class SwitchTransportTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 LOOP,0
@@ -503,7 +503,7 @@ final class SwitchTransportTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -545,7 +545,7 @@ final class SwitchTransportTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -585,7 +585,7 @@ final class SwitchTransportTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -624,7 +624,7 @@ final class SwitchTransportTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -668,11 +668,11 @@ final class SwitchTransportTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONERR,5,error
                 http.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=http.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=http.conerr.5
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -719,7 +719,7 @@ final class SwitchTransportTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 ws.dispose
@@ -755,7 +755,7 @@ final class SwitchTransportTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r\nLS_reqId=1&LS_op=force_rebind&LS_close_socket=true
@@ -792,7 +792,7 @@ final class SwitchTransportTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -840,7 +840,7 @@ final class SwitchTransportTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -891,7 +891,7 @@ final class SwitchTransportTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -963,7 +963,7 @@ final class SwitchTransportTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -1034,7 +1034,7 @@ final class SwitchTransportTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose

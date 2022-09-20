@@ -6,7 +6,7 @@ final class RecoveryTests: BaseTestCase {
     let preamble = """
 ws.init http://server/lightstreamer
 wsok
-create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
+create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
 WSOK
 CONOK,sid,70000,5000,*
 ws.dispose
@@ -54,7 +54,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 ws.dispose
@@ -114,7 +114,7 @@ cancel recovery.timeout
                 Foo=bar
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 ws.dispose
@@ -177,7 +177,7 @@ cancel recovery.timeout
                 Foo=bar
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 ws.dispose
@@ -240,7 +240,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 LOOP,0
@@ -310,7 +310,7 @@ cancel recovery.timeout
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -379,7 +379,7 @@ cancel recovery.timeout
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -442,7 +442,7 @@ cancel recovery.timeout
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -579,7 +579,7 @@ cancel recovery.timeout
                 http.dispose
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_keepalive_millis=5000&LS_cid=cid&LS_old_session=sid&LS_send_sync=false&LS_cause=prog.mismatch.100.0
+                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=prog.mismatch.100.0
                 """, self.ws.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 DISCONNECTED:TRYING-RECOVERY
@@ -623,7 +623,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_keepalive_millis=5000&LS_cid=cid&LS_old_session=sid&LS_send_sync=false&LS_cause=recovery.conerr.4
+                LS_keepalive_millis=5000&LS_cid=\(LS_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=recovery.conerr.4
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 DISCONNECTED:TRYING-RECOVERY
@@ -682,7 +682,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_keepalive_millis=5000&LS_cid=cid&LS_old_session=sid&LS_send_sync=false&LS_cause=recovery.end.41
+                LS_keepalive_millis=5000&LS_cid=\(LS_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=recovery.end.41
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 DISCONNECTED:TRYING-RECOVERY
@@ -804,7 +804,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 ws.dispose
@@ -817,7 +817,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_keepalive_millis=5000&LS_cid=cid&LS_old_session=sid&LS_send_sync=false&LS_cause=recovery.timeout
+                LS_keepalive_millis=5000&LS_cid=\(LS_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=recovery.timeout
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 DISCONNECTED:TRYING-RECOVERY
@@ -935,7 +935,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 msg\r
@@ -976,7 +976,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 msg\r
@@ -1025,7 +1025,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 msg\r
@@ -1067,7 +1067,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 msg\r
@@ -1108,7 +1108,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 msg\r
@@ -1157,7 +1157,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 msg\r
@@ -1208,7 +1208,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -1270,7 +1270,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -1346,7 +1346,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -1415,7 +1415,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -1477,7 +1477,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -1553,7 +1553,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -1616,7 +1616,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 ws.dispose
@@ -1681,7 +1681,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -1756,7 +1756,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -1837,7 +1837,7 @@ cancel recovery.timeout
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r

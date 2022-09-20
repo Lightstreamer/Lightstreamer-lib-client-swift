@@ -45,7 +45,7 @@ cancel transport.timeout
             XCTAssertEqual("""
             ws.init http://server/lightstreamer
             wsok
-            create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
+            create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
             WSOK
             CONERR,5,server busy
             ws.dispose
@@ -70,7 +70,7 @@ cancel transport.timeout
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.conerr.5
                 CONERR,10,error
                 http.dispose
                 """, self.http.trace)
@@ -100,17 +100,17 @@ cancel transport.timeout
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONERR,5,server busy
                 ws.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.conerr.5
                 CONERR,4,error
                 http.dispose
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=ttl.conerr.4
+                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=ttl.conerr.4
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 CONNECTING
@@ -138,11 +138,11 @@ cancel transport.timeout
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.conerr.5
                 CONERR,5,error
                 http.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ttl.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ttl.conerr.5
                 """, self.http.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 CONNECTING
@@ -168,7 +168,7 @@ cancel transport.timeout
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 """, self.http.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -278,18 +278,18 @@ cancel transport.timeout
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONERR,5,server busy
                 ws.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 PROG,100
                 http.dispose
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_old_session=sid&LS_send_sync=false&LS_cause=prog.mismatch.100.0
+                create_session\r\nLS_cid=\(LS_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=prog.mismatch.100.0
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 CONNECTING
@@ -321,7 +321,7 @@ cancel transport.timeout
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 PROG,0
                 """, self.http.trace)
@@ -353,12 +353,12 @@ cancel transport.timeout
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONERR,5,server busy
                 ws.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -402,12 +402,12 @@ cancel transport.timeout
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONERR,5,server busy
                 ws.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -449,12 +449,12 @@ cancel transport.timeout
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONERR,5,server busy
                 ws.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -494,12 +494,12 @@ cancel transport.timeout
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONERR,5,server busy
                 ws.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -534,10 +534,10 @@ cancel transport.timeout
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.conerr.5
                 http.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ttl.timeout
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ttl.timeout
                 """, self.http.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 CONNECTING
@@ -570,17 +570,17 @@ cancel transport.timeout
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONERR,5,server busy
                 ws.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 http.dispose
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_old_session=sid&LS_send_sync=false&LS_cause=ttl.timeout
+                create_session\r\nLS_cid=\(LS_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=ttl.timeout
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 CONNECTING
@@ -613,7 +613,7 @@ cancel transport.timeout
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 http.dispose
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
@@ -648,10 +648,10 @@ cancel transport.timeout
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.conerr.5
                 http.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ttl.error
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ttl.error
                 """, self.http.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 CONNECTING
@@ -684,17 +684,17 @@ cancel transport.timeout
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONERR,5,server busy
                 ws.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 http.dispose
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_old_session=sid&LS_send_sync=false&LS_cause=ttl.error
+                create_session\r\nLS_cid=\(LS_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=ttl.error
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 CONNECTING
@@ -727,7 +727,7 @@ cancel transport.timeout
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 http.dispose
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
@@ -761,7 +761,7 @@ cancel transport.timeout
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.conerr.5
                 http.dispose
                 """, self.http.trace)
             XCTAssertEqual(self.delegatePreamble + """
@@ -787,7 +787,7 @@ cancel transport.timeout
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.conerr.5
                 CONOK,sid,70000,5000,*
                 http.dispose
                 """, self.http.trace)
@@ -817,7 +817,7 @@ cancel transport.timeout
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.conerr.5
                 http.dispose
                 """, self.http.trace)
             XCTAssertEqual(self.delegatePreamble + """

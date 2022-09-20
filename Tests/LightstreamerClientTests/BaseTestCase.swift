@@ -18,7 +18,6 @@ class BaseTestCase: XCTestCase {
     var client: LightstreamerClient!
     
     override class func setUp() {
-        LS_CID = "cid"
         LightstreamerClient.setLoggerProvider(ConsoleLoggerProvider(level: .debug))
     }
     

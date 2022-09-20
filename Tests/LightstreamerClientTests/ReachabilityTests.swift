@@ -108,7 +108,7 @@ final class ReachabilityTests: BaseTestCase {
                 ws.init http://www.example.com/fido/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 ws.dispose
                 ws.init http://www.example.com/fido/lightstreamer
@@ -148,7 +148,7 @@ final class ReachabilityTests: BaseTestCase {
                 ws.init http://www.example.com/fido/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 ws.dispose
                 ws.init http://www.example.com/fido/lightstreamer
@@ -191,7 +191,7 @@ final class ReachabilityTests: BaseTestCase {
                 ws.init http://www.example.com/fido/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 ws.dispose

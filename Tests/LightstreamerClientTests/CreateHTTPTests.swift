@@ -20,7 +20,7 @@ final class CreateHTTPTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONERR,10,error
                 http.dispose
                 """, self.http.trace)
@@ -47,11 +47,11 @@ final class CreateHTTPTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONERR,4,error
                 http.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=http.conerr.4
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=http.conerr.4
                 """, self.http.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -78,11 +78,11 @@ final class CreateHTTPTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONERR,5,error
                 http.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=http.conerr.5
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=http.conerr.5
                 """, self.http.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -107,7 +107,7 @@ final class CreateHTTPTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 """, self.http.trace)
             XCTAssertEqual("""
@@ -207,12 +207,12 @@ final class CreateHTTPTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 PROG,100
                 http.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=prog.mismatch.100.0
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_old_session=sid&LS_cause=prog.mismatch.100.0
                 """, self.http.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -243,7 +243,7 @@ final class CreateHTTPTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 PROG,0
                 """, self.http.trace)
@@ -271,7 +271,7 @@ final class CreateHTTPTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -309,7 +309,7 @@ final class CreateHTTPTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -347,7 +347,7 @@ final class CreateHTTPTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -390,7 +390,7 @@ final class CreateHTTPTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -429,10 +429,10 @@ final class CreateHTTPTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 http.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=http.timeout
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=http.timeout
                 """, self.http.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -462,11 +462,11 @@ final class CreateHTTPTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 http.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=http.timeout
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_old_session=sid&LS_cause=http.timeout
                 """, self.http.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -498,7 +498,7 @@ final class CreateHTTPTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 http.dispose
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
@@ -532,10 +532,10 @@ final class CreateHTTPTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 http.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=http.error
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=http.error
                 """, self.http.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -565,11 +565,11 @@ final class CreateHTTPTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 http.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=http.error
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_old_session=sid&LS_cause=http.error
                 """, self.http.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -601,7 +601,7 @@ final class CreateHTTPTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 http.dispose
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
@@ -634,7 +634,7 @@ final class CreateHTTPTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 http.dispose
                 """, self.http.trace)
             XCTAssertEqual("""
@@ -659,7 +659,7 @@ final class CreateHTTPTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 http.dispose
                 """, self.http.trace)
@@ -688,7 +688,7 @@ final class CreateHTTPTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 http.dispose
                 """, self.http.trace)
             XCTAssertEqual("""
@@ -723,7 +723,7 @@ final class CreateHTTPTests: BaseTestCase {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 h1=v1
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_requested_max_bandwidth=30.3&LS_adapter_set=adapter&LS_user=user&LS_cid=cid&LS_cause=api&LS_password=pwd
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_requested_max_bandwidth=30.3&LS_adapter_set=adapter&LS_user=user&LS_cid=\(LS_CID)&LS_cause=api&LS_password=pwd
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING

@@ -39,7 +39,7 @@ final class SlowingTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_cause=api
+                LS_cid=\(LS_CID)&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 SYNC,0
@@ -112,7 +112,7 @@ final class SlowingTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_cause=api
+                LS_cid=\(LS_CID)&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 LOOP,0
@@ -190,7 +190,7 @@ final class SlowingTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -260,7 +260,7 @@ final class SlowingTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 SYNC,0
@@ -314,7 +314,7 @@ final class SlowingTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=cid&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 LOOP,0
@@ -375,7 +375,7 @@ final class SlowingTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose

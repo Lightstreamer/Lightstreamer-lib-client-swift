@@ -22,7 +22,7 @@ final class StreamSenseTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -87,7 +87,7 @@ final class StreamSenseTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 ws.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=ws.unavailable
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.unavailable
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -148,7 +148,7 @@ final class StreamSenseTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server.com/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,host.it
                 LOOP,0
                 http.dispose

@@ -6,7 +6,7 @@ class MpnHttpPollingTests: BaseTestCase {
     
     let preamble = """
         http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-        LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+        LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
         CONOK,sid,70000,5000,*
         LOOP,0
         http.dispose
@@ -206,7 +206,7 @@ class MpnHttpPollingTests: BaseTestCase {
                 http.dispose
                 ctrl.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=http.error
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_old_session=sid&LS_cause=http.error
                 CONOK,sid2,70000,5000,*
                 LOOP,0
                 http.dispose

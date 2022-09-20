@@ -27,7 +27,7 @@ final class ConstrainTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r\nLS_reqId=1&LS_op=constrain&LS_requested_max_bandwidth=12.5
@@ -72,7 +72,7 @@ final class ConstrainTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 LOOP,0
@@ -126,7 +126,7 @@ final class ConstrainTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -175,7 +175,7 @@ final class ConstrainTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -228,7 +228,7 @@ final class ConstrainTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -277,7 +277,7 @@ final class ConstrainTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_requested_max_bandwidth=12.3&LS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_requested_max_bandwidth=12.3&LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r\nLS_reqId=1&LS_op=constrain&LS_requested_max_bandwidth=unlimited
@@ -316,7 +316,7 @@ final class ConstrainTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_requested_max_bandwidth=12.3&LS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_requested_max_bandwidth=12.3&LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 """, self.io.trace)
@@ -350,7 +350,7 @@ final class ConstrainTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_requested_max_bandwidth=12.3&LS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_requested_max_bandwidth=12.3&LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 CONS,unmanaged
@@ -385,7 +385,7 @@ final class ConstrainTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r\nLS_reqId=1&LS_op=constrain&LS_requested_max_bandwidth=12.5
@@ -423,7 +423,7 @@ final class ConstrainTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=cid&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r\nLS_reqId=1&LS_op=constrain&LS_requested_max_bandwidth=12.5
@@ -467,7 +467,7 @@ final class ConstrainTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose

@@ -5,7 +5,7 @@ import XCTest
 final class BindHTTPTests: BaseTestCase {
     let preamble = """
         http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-        LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+        LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
         CONOK,sid,70000,5000,*
         LOOP,0
         http.dispose
@@ -79,7 +79,7 @@ final class BindHTTPTests: BaseTestCase {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 Foo=bar
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -123,7 +123,7 @@ final class BindHTTPTests: BaseTestCase {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 Foo=bar
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -189,7 +189,7 @@ final class BindHTTPTests: BaseTestCase {
                 CONERR,4,error
                 http.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=http.conerr.4
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_old_session=sid&LS_cause=http.conerr.4
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 DISCONNECTED:WILL-RETRY
@@ -254,7 +254,7 @@ final class BindHTTPTests: BaseTestCase {
                 END,41,error
                 http.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=http.end.41
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_old_session=sid&LS_cause=http.end.41
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 CONNECTED:HTTP-STREAMING
@@ -315,7 +315,7 @@ final class BindHTTPTests: BaseTestCase {
                 END,41,error
                 http.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=http.end.41
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_old_session=sid&LS_cause=http.end.41
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 DISCONNECTED:WILL-RETRY
@@ -429,7 +429,7 @@ final class BindHTTPTests: BaseTestCase {
                 ctrl.dispose
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_keepalive_millis=5000&LS_cid=cid&LS_old_session=sid&LS_send_sync=false&LS_cause=http.reqerr.20
+                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=http.reqerr.20
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 CONNECTED:HTTP-STREAMING
@@ -871,7 +871,7 @@ final class BindHTTPTests: BaseTestCase {
                 PROG,100
                 http.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=cid&LS_old_session=sid&LS_cause=prog.mismatch.100.0
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_old_session=sid&LS_cause=prog.mismatch.100.0
                 """, self.ws.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 CONNECTED:HTTP-STREAMING
