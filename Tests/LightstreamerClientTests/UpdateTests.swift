@@ -69,12 +69,12 @@ class TestSubDelegate: SubscriptionDelegate {
 final class UpdateTests: BaseTestCase {
     
     func testDecodingAlgorithm() {
-        XCTAssertEqual(3, parseUpdate("U,3,1,abc").subId)
-        XCTAssertEqual(1, parseUpdate("U,3,1,abc").itemIdx)
+        XCTAssertEqual(3, try! parseUpdate("U,3,1,abc").subId)
+        XCTAssertEqual(1, try! parseUpdate("U,3,1,abc").itemIdx)
         
-        XCTAssertEqual([1:.changed("abc")], parseUpdate("U,3,1,abc").values)
-        XCTAssertEqual([1:.changed("😀")], parseUpdate("U,3,1,😀").values)
-        XCTAssertEqual([1:.changed("baràè%#$^")], parseUpdate("U,3,1,bar%c3%a0%C3%A8%25%23%24%5E").values)
+        XCTAssertEqual([1:.changed("abc")], try! parseUpdate("U,3,1,abc").values)
+        XCTAssertEqual([1:.changed("😀")], try! parseUpdate("U,3,1,😀").values)
+        XCTAssertEqual([1:.changed("baràè%#$^")], try! parseUpdate("U,3,1,bar%c3%a0%C3%A8%25%23%24%5E").values)
 
         XCTAssertEqual([
             1 : .changed("20:00:33"),
@@ -87,7 +87,7 @@ final class UpdateTests: BaseTestCase {
             8 : .changed(nil),
             9 : .changed(nil),
             10 : .changed(""),
-        ], parseUpdate("U,3,1,20:00:33|3.04|0.0|2.41|3.67|3.03|3.04|#|#|$").values)
+        ], try! parseUpdate("U,3,1,20:00:33|3.04|0.0|2.41|3.67|3.03|3.04|#|#|$").values)
         
         XCTAssertEqual([
             1 : .changed("20:00:54"),
@@ -100,7 +100,7 @@ final class UpdateTests: BaseTestCase {
             8 : .unchanged,
             9 : .unchanged,
             10 : .changed("Suspended"),
-        ], parseUpdate("U,3,1,20:00:54|3.07|0.98|||3.06|3.07|||Suspended").values)
+        ], try! parseUpdate("U,3,1,20:00:54|3.07|0.98|||3.06|3.07|||Suspended").values)
         
         XCTAssertEqual([
             1 : .changed("20:04:16"),
@@ -113,7 +113,7 @@ final class UpdateTests: BaseTestCase {
             8 : .unchanged,
             9 : .unchanged,
             10 : .changed(""),
-        ], parseUpdate("U,3,1,20:04:16|3.02|-0.65|||3.01|3.02|||$").values)
+        ], try! parseUpdate("U,3,1,20:04:16|3.02|-0.65|||3.01|3.02|||$").values)
         
         XCTAssertEqual([
             1 : .changed("20:06:10"),
@@ -126,7 +126,7 @@ final class UpdateTests: BaseTestCase {
             8 : .unchanged,
             9 : .unchanged,
             10 : .unchanged,
-        ], parseUpdate("U,3,1,20:06:10|3.05|0.32|^7").values)
+        ], try! parseUpdate("U,3,1,20:06:10|3.05|0.32|^7").values)
         
         XCTAssertEqual([
             1 : .changed("20:06:49"),
@@ -139,7 +139,7 @@ final class UpdateTests: BaseTestCase {
             8 : .unchanged,
             9 : .unchanged,
             10 : .unchanged,
-        ], parseUpdate("U,3,1,20:06:49|3.08|1.31|||3.08|3.09|||").values)
+        ], try! parseUpdate("U,3,1,20:06:49|3.08|1.31|||3.08|3.09|||").values)
     }
     
     func testNil() {
