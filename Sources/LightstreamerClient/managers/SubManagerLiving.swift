@@ -8,7 +8,7 @@ protocol SubscriptionManager: AnyObject, Encodable {
     func evtSUBOK(nItems: Int, nFields: Int)
     func evtSUBCMD(nItems: Int, nFields: Int, keyIdx: Int, cmdIdx: Int)
     func evtUNSUB()
-    func evtU(_ itemIdx: Int, _ values: [Pos:FieldValue])
+    func evtU(_ itemIdx: Int, _ values: [Pos:FieldValue]) throws 
     func evtEOS(_ itemIdx: Int)
     func evtCS(_ itemIdx: Int)
     func evtOV(_ itemIdx: Int, _ lostUpdates: Int)
@@ -92,6 +92,14 @@ class SubscriptionManagerLiving: SubscriptionManager {
             lock.unlock()
         }
         return block()
+    }
+    
+    private func synchronized<T>(_ block: () throws -> T) throws -> T {
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+        return try block()
     }
     
     var subId: Int {
@@ -284,12 +292,12 @@ class SubscriptionManagerLiving: SubscriptionManager {
         }
     }
     
-    func evtU(_ itemIdx: Int, _ values: [Pos:FieldValue]) {
-        synchronized {
+    func evtU(_ itemIdx: Int, _ values: [Pos:FieldValue]) throws {
+        try synchronized {
             let evt = "U"
             if s_s == .s10 {
                 trace(evt, State_s.s10, State_s.s10)
-                doU(itemIdx, values)
+                try doU(itemIdx, values)
                 s_s = .s10
             }
         }
@@ -567,9 +575,9 @@ class SubscriptionManagerLiving: SubscriptionManager {
         m_strategy.evtOnUNSUB()
     }
     
-    private func doU(_ itemIdx: Int, _ values: [Pos:FieldValue]) {
+    private func doU(_ itemIdx: Int, _ values: [Pos:FieldValue]) throws {
         assert(itemIdx <= m_subscription.nItems)
-        m_strategy.evtUpdate(itemIdx, values)
+        try m_strategy.evtUpdate(itemIdx, values)
     }
     
     private func doEOS(_ itemIdx: Int) {

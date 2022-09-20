@@ -975,6 +975,14 @@ public class LightstreamerClient {
         return block()
     }
     
+    func synchronized<T>(block: () throws -> T) throws -> T {
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+        return try block()
+    }
+    
     func fireDidChangeProperty(_ property: String) {
         multicastDelegate.invokeDelegates { delegate in
             callbackQueue.async {
@@ -1310,7 +1318,7 @@ public class LightstreamerClient {
             if actionLogger.isInfoEnabled {
                 actionLogger.info("Disconnection requested")
             }
-            evtExtDisconnect()
+            evtExtDisconnect(.api)
         }
     }
     
@@ -1933,15 +1941,15 @@ public class LightstreamerClient {
         }
     }
 
-    func evtExtDisconnect() {
+    func evtExtDisconnect(_ terminationCause: TerminationCause) {
         synchronized {
-            let evt = "disconnect"
-            let terminationCause = TerminationCause.api
+            let evt = "disconnect: cause=\(terminationCause)"
             switch s_m {
             case .s120, .s121, .s122:
                 trace(evt, s_m, State_m.s100)
                 disposeWS()
                 notifyStatus(.DISCONNECTED)
+                notifyServerErrorIfCauseIsError(terminationCause)
                 s_m = .s100
                 cancel_evtTransportTimeout()
                 evtTerminate(terminationCause)
@@ -1949,6 +1957,7 @@ public class LightstreamerClient {
                 trace(evt, State_m.s130, State_m.s100)
                 disposeHTTP()
                 notifyStatus(.DISCONNECTED)
+                notifyServerErrorIfCauseIsError(terminationCause)
                 s_m = .s100
                 cancel_evtTransportTimeout()
                 evtTerminate(terminationCause)
@@ -1956,6 +1965,7 @@ public class LightstreamerClient {
                 trace(evt, State_m.s140, State_m.s100)
                 disposeHTTP()
                 notifyStatus(.DISCONNECTED)
+                notifyServerErrorIfCauseIsError(terminationCause)
                 s_m = .s100
                 cancel_evtTransportTimeout()
                 evtTerminate(terminationCause)
@@ -1966,6 +1976,7 @@ public class LightstreamerClient {
                     sendDestroyWS()
                     closeWS()
                     notifyStatus(.DISCONNECTED)
+                    notifyServerErrorIfCauseIsError(terminationCause)
                     clear_w()
                     goto_m_from_session(.s100)
                     exit_w()
@@ -1975,6 +1986,7 @@ public class LightstreamerClient {
                     trace(evt, State_tr.s220, State_m.s100)
                     disposeHTTP()
                     notifyStatus(.DISCONNECTED)
+                    notifyServerErrorIfCauseIsError(terminationCause)
                     goto_m_from_session(.s100)
                     cancel_evtTransportTimeout()
                     evtEndSession()
@@ -1983,6 +1995,7 @@ public class LightstreamerClient {
                     trace(evt, State_tr.s230, State_m.s100)
                     disposeHTTP()
                     notifyStatus(.DISCONNECTED)
+                    notifyServerErrorIfCauseIsError(terminationCause)
                     goto_m_from_session(.s100)
                     cancel_evtTransportTimeout()
                     evtEndSession()
@@ -1993,6 +2006,7 @@ public class LightstreamerClient {
                         trace(evt, State_ws_m.s500, State_m.s100)
                         disposeWS()
                         notifyStatus(.DISCONNECTED)
+                        notifyServerErrorIfCauseIsError(terminationCause)
                         goto_m_from_ws(.s100)
                         exit_ws_to_m()
                         evtTerminate(terminationCause)
@@ -2001,6 +2015,7 @@ public class LightstreamerClient {
                         sendDestroyWS()
                         closeWS()
                         notifyStatus(.DISCONNECTED)
+                        notifyServerErrorIfCauseIsError(terminationCause)
                         goto_m_from_ws(.s100)
                         exit_ws_to_m()
                         evtTerminate(terminationCause)
@@ -2011,6 +2026,7 @@ public class LightstreamerClient {
                         trace(evt, State_wp_m.s600, State_m.s100)
                         disposeWS()
                         notifyStatus(.DISCONNECTED)
+                        notifyServerErrorIfCauseIsError(terminationCause)
                         goto_m_from_wp(.s100)
                         exit_ws_to_m()
                         evtTerminate(terminationCause)
@@ -2019,6 +2035,7 @@ public class LightstreamerClient {
                         sendDestroyWS()
                         closeWS()
                         notifyStatus(.DISCONNECTED)
+                        notifyServerErrorIfCauseIsError(terminationCause)
                         goto_m_from_wp(.s100)
                         exit_wp_to_m()
                         evtTerminate(terminationCause)
@@ -2027,6 +2044,7 @@ public class LightstreamerClient {
                     trace(evt, s_rec!, State_m.s100)
                     disposeHTTP()
                     notifyStatus(.DISCONNECTED)
+                    notifyServerErrorIfCauseIsError(terminationCause)
                     goto_m_from_rec(.s100)
                     exit_rec_to_m()
                     evtTerminate(terminationCause)
@@ -2036,6 +2054,7 @@ public class LightstreamerClient {
                         trace(evt, s_hs.m, State_m.s100)
                         disposeHTTP()
                         notifyStatus(.DISCONNECTED)
+                        notifyServerErrorIfCauseIsError(terminationCause)
                         goto_m_from_hs(.s100)
                         exit_hs_to_m()
                         evtTerminate(terminationCause)
@@ -2043,6 +2062,7 @@ public class LightstreamerClient {
                         trace(evt, s_hp.m, State_m.s100)
                         disposeHTTP()
                         notifyStatus(.DISCONNECTED)
+                        notifyServerErrorIfCauseIsError(terminationCause)
                         goto_m_from_hp(.s100)
                         exit_hp_to_m()
                         evtTerminate(terminationCause)
@@ -2053,6 +2073,7 @@ public class LightstreamerClient {
             case .s110, .s111, .s112, .s113, .s114, .s115, .s116:
                 trace(evt, s_m, State_m.s100)
                 notifyStatus(.DISCONNECTED)
+                notifyServerErrorIfCauseIsError(terminationCause)
                 s_m = .s100
                 cancel_evtRetryTimeout()
                 evtTerminate(terminationCause)
@@ -2126,12 +2147,12 @@ public class LightstreamerClient {
         }
     }
     
-    func evtMessage(_ line: String) {
-        synchronized {
+    func evtMessage(_ line: String) throws {
+        try synchronized {
             if line.starts(with: "U,") {
                 // U,<subscription id>,<itemd index>,<field values>
-                let update = parseUpdate(line)
-                evtU(update.subId, update.itemIdx, update.values, line)
+                let update = try parseUpdate(line)
+                try evtU(update.subId, update.itemIdx, update.values, line)
             } else if line.starts(with: "REQOK") {
                 // REQOK,<request id>
                 if line == "REQOK" {
@@ -4300,8 +4321,8 @@ public class LightstreamerClient {
         }
     }
     
-    func evtU(_ subId: Int, _ itemIdx: Pos, _ values: [Pos:FieldValue], _ rawValue: String) {
-        synchronized {
+    func evtU(_ subId: Int, _ itemIdx: Pos, _ values: [Pos:FieldValue], _ rawValue: String) throws {
+        try synchronized {
             let evt = "U"
             if protocolLogger.isDebugEnabled {
                 protocolLogger.debug(rawValue)
@@ -4309,7 +4330,7 @@ public class LightstreamerClient {
             if inPushing() {
                 if isFreshData() {
                     trace(evt)
-                    doU(subId, itemIdx, values)
+                    try doU(subId, itemIdx, values)
                     if inStreaming() {
                         evtRestartKeepalive()
                     }
@@ -6386,7 +6407,15 @@ public class LightstreamerClient {
                             guard !wsClient.disposed else {
                                 return
                             }
-                            self?.evtMessage(line)
+                            do {
+                                try self?.evtMessage(line)
+                            } catch InternalException.IllegalStateException(let exMsg) {
+                                sessionLogger.error(exMsg)
+                                self?.evtExtDisconnect(.standardError(61, exMsg))
+                            } catch {
+                                sessionLogger.error(error.localizedDescription)
+                                self?.evtExtDisconnect(.standardError(61, error.localizedDescription))
+                            }
                          },
                          { [weak self] wsClient, error in
                             guard !wsClient.disposed else {
@@ -6534,7 +6563,15 @@ public class LightstreamerClient {
                             guard !httpClient.disposed else {
                                 return
                             }
-                            self?.evtMessage(line)
+                            do {
+                                try self?.evtMessage(line)
+                            } catch InternalException.IllegalStateException(let exMsg) {
+                                sessionLogger.error(exMsg)
+                                self?.evtExtDisconnect(.standardError(61, exMsg))
+                            } catch {
+                                sessionLogger.error(error.localizedDescription)
+                                self?.evtExtDisconnect(.standardError(61, error.localizedDescription))
+                            }
                            },
                            { [weak self] httpClient, error in
                             guard !httpClient.disposed else {
@@ -6828,6 +6865,26 @@ public class LightstreamerClient {
     private func resetCurrentRetryDelay() {
         delayCounter.reset(m_options.m_retryDelay)
     }
+    
+    private func notifyServerErrorIfCauseIsError(_ terminationCause: TerminationCause) {
+        switch terminationCause {
+        case .api:
+            // don't notify onServerError
+            break
+        case .standardError(let code, let msg):
+            multicastDelegate.invokeDelegates { delegate in
+                callbackQueue.async {
+                    delegate.client(self, didReceiveServerError: code, withMessage: msg)
+                }
+            }
+        case .otherError(let msg):
+            multicastDelegate.invokeDelegates { delegate in
+                callbackQueue.async {
+                    delegate.client(self, didReceiveServerError: 61, withMessage: msg)
+                }
+            }
+        }
+    }
 
     private func notifyServerError_CONERR(_ code: Int, _ msg: String) {
         multicastDelegate.invokeDelegates { delegate in
@@ -6978,10 +7035,10 @@ public class LightstreamerClient {
         }
     }
     
-    private func doU(_ subId: Int, _ itemIdx: Pos, _ values: [Pos:FieldValue]) {
+    private func doU(_ subId: Int, _ itemIdx: Pos, _ values: [Pos:FieldValue]) throws {
         onFreshData()
         if let sub = subscriptionManagers[subId] {
-            sub.evtU(itemIdx, values)
+            try sub.evtU(itemIdx, values)
         } else {
             let sub = SubscriptionManagerZombie(subId, self)
             sub.evtU(itemIdx, values)

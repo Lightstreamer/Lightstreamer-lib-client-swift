@@ -25,25 +25,25 @@ class ItemCommand: ItemBase {
         keys.removeValue(forKey: keyName)
     }
     
-    override func evtUpdate(_ values: [Pos:FieldValue]) {
-        synchronized {
+    override func evtUpdate(_ values: [Pos:FieldValue]) throws {
+        try synchronized {
             let evt = "update"
             switch s_m {
             case .s1:
                 trace(evt, s_m, State_m.s2)
-                doFirstUpdate(values)
+                try doFirstUpdate(values)
                 s_m = .s2
             case .s2:
                 trace(evt, s_m, State_m.s2)
-                doUpdate(values)
+                try doUpdate(values)
                 s_m = .s2
             case .s3:
                 trace(evt, s_m, State_m.s4)
-                doFirstSnapshot(values)
+                try doFirstSnapshot(values)
                 s_m = .s4
             case .s4:
                 trace(evt, s_m, State_m.s4)
-                doSnapshot(values)
+                try doSnapshot(values)
                 s_m = .s4
             default:
                 break
@@ -101,9 +101,9 @@ class ItemCommand: ItemBase {
         fatalError()
     }
     
-    override func doUpdate(_ values: [Pos:FieldValue], snapshot: Bool) {
+    override func doUpdate(_ values: [Pos:FieldValue], snapshot: Bool) throws {
         let prevValues = currValues
-        currValues = applyUpatesToCurrentFields(prevValues, values)
+        currValues = try applyUpatesToCurrentFields(prevValues, values)
         let key = selectKey()
         
         key.evtUpdate(currValues, snapshot)

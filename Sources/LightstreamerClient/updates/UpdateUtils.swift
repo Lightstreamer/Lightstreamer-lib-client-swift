@@ -25,7 +25,7 @@ func currFieldValToString(_ val: CurrFieldVal?) -> String? {
     }
 }
 
-func applyUpatesToCurrentFields(_ currentValues: [Pos:CurrFieldVal?]?, _ incomingValues: [Pos:FieldValue]) -> [Pos:CurrFieldVal?] {
+func applyUpatesToCurrentFields(_ currentValues: [Pos:CurrFieldVal?]?, _ incomingValues: [Pos:FieldValue]) throws -> [Pos:CurrFieldVal?] {
     if let currentValues = currentValues {
         var newValues = [Pos:CurrFieldVal?]()
         for (f, fieldValue) in incomingValues {
@@ -41,16 +41,28 @@ func applyUpatesToCurrentFields(_ currentValues: [Pos:CurrFieldVal?]?, _ incomin
             case .jsonPatch(let patch):
                 switch currentValues[f]! {
                 case .jsonVal(let json):
-                    newValues.updateValue(.jsonVal(try! applyPatch(json, patch)), forKey: f)
-                    // TODO catch and rethrow exception
+                    do {
+                        newValues.updateValue(.jsonVal(try applyPatch(json, patch)), forKey: f)
+                    } catch {
+                        sessionLogger.error(error.localizedDescription)
+                        throw InternalException.IllegalStateException("Cannot apply the JSON Patch to the field \(f)")
+                    }
                 case .stringVal(let str):
-                    let json = try! newJson(str)
-                    // TODO catch and rethrow exception
-                    newValues.updateValue(.jsonVal(try! applyPatch(json, patch)), forKey: f)
-                    // TODO catch and rethrow exception
+                    let json: LsJson
+                    do {
+                        json = try newJson(str)
+                    } catch {
+                        sessionLogger.error(error.localizedDescription)
+                        throw InternalException.IllegalStateException("Cannot convert the field \(f) to JSON")
+                    }
+                    do {
+                        newValues.updateValue(.jsonVal(try applyPatch(json, patch)), forKey: f)
+                    } catch {
+                        sessionLogger.error(error.localizedDescription)
+                        throw InternalException.IllegalStateException("Cannot apply the JSON Patch to the field \(f)")
+                    }
                 case .none:
-                    break
-                    // TODO throw exception
+                    throw InternalException.IllegalStateException("Cannot apply the JSON patch to the field \(f) because the field is null")
                 }
             }
         }
@@ -66,11 +78,9 @@ func applyUpatesToCurrentFields(_ currentValues: [Pos:CurrFieldVal?]?, _ incomin
                     newValues.updateValue(.stringVal(value!), forKey: f)
                 }
             case .unchanged:
-                break
-                // TODO throw exception
+                throw InternalException.IllegalStateException("Cannot set the field \(f) because the first update is UNCHANGED")
             case .jsonPatch(_):
-                break
-                // TODO throw exception
+                throw InternalException.IllegalStateException("Cannot set the field \(f) because the first update is a JSONPatch")
             }
         }
         return newValues

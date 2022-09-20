@@ -32,6 +32,14 @@ class ModeStrategy {
         return block()
     }
     
+    func synchronized<T>(_ block: () throws -> T) throws -> T {
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+        return try block()
+    }
+    
     private func finalize() {
         // nothing to do
     }
@@ -92,12 +100,12 @@ class ModeStrategy {
         }
     }
     
-    func evtUpdate(_ itemIdx: Int, _ values: [Pos:FieldValue]) {
-        synchronized {
+    func evtUpdate(_ itemIdx: Int, _ values: [Pos:FieldValue]) throws {
+        try synchronized {
             let evt = "update"
             if s_m == .s2 {
                 trace(evt, s_m, State_m.s2)
-                doUpdate(itemIdx, values)
+                try doUpdate(itemIdx, values)
             }
         }
     }
@@ -171,9 +179,9 @@ class ModeStrategy {
         assert(subscription.fields != nil ? nFields == subscription.fields!.count : true)
     }
     
-    private func doUpdate(_ itemIdx: Int, _ values: [Pos:FieldValue]) {
+    private func doUpdate(_ itemIdx: Int, _ values: [Pos:FieldValue]) throws {
         let item = selectItem(itemIdx)
-        item.evtUpdate(values)
+        try item.evtUpdate(values)
     }
     
     private func doEOS(_ itemIdx: Int) {

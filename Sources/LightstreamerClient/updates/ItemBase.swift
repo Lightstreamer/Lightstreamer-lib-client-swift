@@ -24,11 +24,19 @@ class ItemBase {
         return block()
     }
     
+    func synchronized<T>(_ block: () throws -> T) throws -> T {
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+        return try block()
+    }
+    
     func finalize() {
         // nothing to do
     }
     
-    func evtUpdate(_ values: [Pos:FieldValue]) {
+    func evtUpdate(_ values: [Pos:FieldValue]) throws {
         fatalError()
     }
     
@@ -54,25 +62,25 @@ class ItemBase {
         fatalError("Unsupported operation")
     }
     
-    func doFirstUpdate(_ values: [Pos:FieldValue]) {
-        doUpdate(values, snapshot: false)
+    func doFirstUpdate(_ values: [Pos:FieldValue]) throws {
+        try doUpdate(values, snapshot: false)
     }
     
-    func doUpdate(_ values: [Pos:FieldValue]) {
-        doUpdate(values, snapshot: false)
+    func doUpdate(_ values: [Pos:FieldValue]) throws {
+        try doUpdate(values, snapshot: false)
     }
     
-    func doFirstSnapshot(_ values: [Pos:FieldValue]) {
-        doUpdate(values, snapshot: true)
+    func doFirstSnapshot(_ values: [Pos:FieldValue]) throws {
+        try doUpdate(values, snapshot: true)
     }
     
-    func doSnapshot(_ values: [Pos:FieldValue]) {
-        doUpdate(values, snapshot: true)
+    func doSnapshot(_ values: [Pos:FieldValue]) throws {
+        try doUpdate(values, snapshot: true)
     }
     
-    func doUpdate(_ values: [Pos:FieldValue], snapshot: Bool) {
+    func doUpdate(_ values: [Pos:FieldValue], snapshot: Bool) throws {
         let prevValues = currValues
-        currValues = applyUpatesToCurrentFields(prevValues, values)
+        currValues = try applyUpatesToCurrentFields(prevValues, values)
         let changedFields = findChangedFields(prev: prevValues, curr: currValues)
         let jsonPatches = computeJsonPatches(prevValues, values)
         let update = ItemUpdateBase(itemIdx, subscription, currValues, changedFields, snapshot, jsonPatches)
@@ -97,17 +105,17 @@ class ItemRaw: ItemBase {
     
     var s_m: State_m = .s1
 
-    override func evtUpdate(_ values: [Pos:FieldValue]) {
-        synchronized {
+    override func evtUpdate(_ values: [Pos:FieldValue]) throws {
+        try synchronized {
             let evt = "update"
             switch s_m {
             case .s1:
                 trace(evt, s_m, State_m.s2)
-                doFirstUpdate(values)
+                try doFirstUpdate(values)
                 s_m = .s2
             case .s2:
                 trace(evt, s_m, State_m.s2)
-                doUpdate(values)
+                try doUpdate(values)
                 s_m = .s2
             default:
                 break
@@ -142,27 +150,27 @@ class ItemMerge: ItemBase {
     
     var s_m: State_m = .s1
 
-    override func evtUpdate(_ values: [Pos:FieldValue]) {
-        synchronized {
+    override func evtUpdate(_ values: [Pos:FieldValue]) throws {
+        try synchronized {
             let evt = "update"
             switch s_m {
             case .s1:
                 if subscription.hasSnapshot() {
                     trace(evt, s_m, State_m.s2)
-                    doSnapshot(values)
+                    try doSnapshot(values)
                     s_m = .s2
                 } else {
                     trace(evt, s_m, State_m.s3)
-                    doFirstUpdate(values)
+                    try doFirstUpdate(values)
                     s_m = .s3
                 }
             case .s2:
                 trace(evt, s_m, State_m.s3)
-                doUpdate(values)
+                try doUpdate(values)
                 s_m = .s3
             case .s3:
                 trace(evt, s_m, State_m.s3)
-                doUpdate(values)
+                try doUpdate(values)
                 s_m = .s3
             default:
                 break
@@ -202,25 +210,25 @@ class ItemDistinct: ItemBase {
         super.init(itemIdx, sub, client, subId: subId)
     }
     
-    override func evtUpdate(_ values: [Pos:FieldValue]) {
-        synchronized {
+    override func evtUpdate(_ values: [Pos:FieldValue]) throws {
+        try synchronized {
             let evt = "update"
             switch s_m {
             case .s1:
                 trace(evt, s_m, State_m.s2)
-                doFirstUpdate(values)
+                try doFirstUpdate(values)
                 s_m = .s2
             case .s2:
                 trace(evt, s_m, State_m.s2)
-                doUpdate(values)
+                try doUpdate(values)
                 s_m = .s2
             case .s3:
                 trace(evt, s_m, State_m.s4)
-                doFirstSnapshot(values)
+                try doFirstSnapshot(values)
                 s_m = .s4
             case .s4:
                 trace(evt, s_m, State_m.s4)
-                doSnapshot(values)
+                try doSnapshot(values)
                 s_m = .s4
             default:
                 break

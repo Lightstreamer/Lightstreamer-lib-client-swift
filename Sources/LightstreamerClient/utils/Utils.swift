@@ -2,7 +2,11 @@ import Foundation
 
 let defaultQueue = DispatchQueue(label: "com.lightstreamer", qos: .userInteractive)
 
-func parseUpdate(_ message: String) -> (subId: Int, itemIdx: Int, values: [Pos:FieldValue]) {
+enum InternalException: Error {
+    case IllegalStateException(String)
+}
+
+func parseUpdate(_ message: String) throws -> (subId: Int, itemIdx: Int, values: [Pos:FieldValue]) {
     // message is either U,<table>,<item>,<filed_1>|...|<field_N>
     // or U,<table>,<item>,<field_1>|^<number of unchanged fields>|...|<field_N>
     
@@ -66,10 +70,14 @@ func parseUpdate(_ message: String) -> (subId: Int, itemIdx: Int, values: [Pos:F
         } else if value.first == "^" { // step D
             if value[value.index(value.startIndex, offsetBy: 1)] == "P" {
                 let unquoted = value.suffix(from: value.index(value.startIndex, offsetBy: 2)).removingPercentEncoding
-                let patch = try! newJsonPatch(unquoted!)
-                // TODO catch and rethrow exception
-                values[nextFieldIndex] = .jsonPatch(patch)
-                nextFieldIndex += 1
+                do {
+                    let patch = try newJsonPatch(unquoted!)
+                    values[nextFieldIndex] = .jsonPatch(patch)
+                    nextFieldIndex += 1
+                } catch {
+                    sessionLogger.error("Invalid JSON patch \(unquoted ?? "nil"): \(error.localizedDescription)")
+                    throw InternalException.IllegalStateException("The JSON Patch for the field \(nextFieldIndex) is not well-formed")
+                }
             } else {
                 let count = Int(value.dropFirst())!
                 for _ in 1...count {
