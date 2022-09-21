@@ -95,7 +95,7 @@ class Key1Level: ItemKey {
     
     func getCommandValue(_ fieldIdx: Pos) -> String? {
         synchronized {
-            currKeyValues != nil ? currFieldValToString(currKeyValues[fieldIdx] ?? nil) : nil
+            currKeyValues != nil ? toString(currKeyValues[fieldIdx] ?? nil) : nil
         }
     }
     
@@ -149,7 +149,7 @@ class Key1Level: ItemKey {
     }
     
     private func isDelete(_ keyValues: [Pos:CurrFieldVal?]) -> Bool {
-        currFieldValToString(keyValues[item.subscription.commandPosition!] ?? nil) == "DELETE"
+        toString(keyValues[item.subscription.commandPosition!] ?? nil) == "DELETE"
     }
     
     private func fireOnItemUpdate(_ update: ItemUpdate) {

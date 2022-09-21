@@ -116,7 +116,7 @@ class ItemCommand: ItemBase {
     }
     
     private func selectKey() -> ItemKey {
-        let keyName = currFieldValToString(currValues[subscription.keyPosition!] ?? nil)!
+        let keyName = toString(currValues[subscription.keyPosition!] ?? nil)!
         var key = keys[keyName]
         if key == nil {
             key = createKey(keyName)

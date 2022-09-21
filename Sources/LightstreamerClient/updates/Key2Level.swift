@@ -212,7 +212,7 @@ class Key2Level: ItemKey {
     func getCommandValue(_ fieldIdx: Pos) -> String? {
         synchronized {
             if let values = currKeyValues, let val = values[fieldIdx] {
-                return currFieldValToString(val)
+                return toString(val)
             } else if let values = currKey2Values,
                       let nFields = item.subscription.nFields,
                       let val = values[fieldIdx - nFields] {
@@ -255,7 +255,7 @@ class Key2Level: ItemKey {
             extKeyValues.updateValue(v == nil ? nil : .stringVal(v!), forKey: f + nFields)
         }
         var changedFields = Set<Int>()
-        if currFieldValToString(prevKeyValues[cmdIdx] ?? nil) != currFieldValToString(currKeyValues[cmdIdx] ?? nil) {
+        if toString(prevKeyValues[cmdIdx] ?? nil) != toString(currKeyValues[cmdIdx] ?? nil) {
             changedFields.insert(cmdIdx)
         }
         for (f, _) in update.changedFieldsByPositions {
@@ -286,7 +286,7 @@ class Key2Level: ItemKey {
         }
         var changedFields = Set<Int>()
         for f in 1...nFields {
-            if currFieldValToString(prevKeyValues[f] ?? nil) != currFieldValToString(extKeyValues[f] ?? nil) {
+            if toString(prevKeyValues[f] ?? nil) != toString(extKeyValues[f] ?? nil) {
                 changedFields.insert(f)
             }
         }
@@ -520,7 +520,7 @@ class Key2Level: ItemKey {
     }
     
     private func isDelete(_ keyValues: [Pos:CurrFieldVal?]) -> Bool {
-        currFieldValToString(keyValues[item.subscription.commandPosition!] ?? nil) == "DELETE"
+        toString(keyValues[item.subscription.commandPosition!] ?? nil) == "DELETE"
     }
     
     func trace(_ evt: String, _ from: State, _ to: State) {

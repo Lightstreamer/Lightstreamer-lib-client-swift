@@ -54,7 +54,7 @@ class ItemBase {
     
     func getValue(_ fieldIdx: Int) -> String? {
         synchronized {
-            currValues != nil ? currFieldValToString(currValues[fieldIdx] ?? nil) : nil
+            currValues != nil ? toString(currValues[fieldIdx] ?? nil) : nil
         }
     }
     

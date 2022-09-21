@@ -63,7 +63,7 @@ class ItemUpdateBase: ItemUpdate {
         }
         var res = [String:String?]()
         for fieldPos in m_changedFields {
-            res[fields[fieldPos]!] = currFieldValToString(m_newValues[fieldPos] ?? nil)
+            res[fields[fieldPos]!] = toString(m_newValues[fieldPos] ?? nil)
         }
         return res
     }
@@ -71,7 +71,7 @@ class ItemUpdateBase: ItemUpdate {
     var changedFieldsByPositions: [Int : String?] {
         var res = [Int:String?]()
         for fieldPos in m_changedFields {
-            res[fieldPos] = currFieldValToString(m_newValues[fieldPos] ?? nil)
+            res[fieldPos] = toString(m_newValues[fieldPos] ?? nil)
         }
         return res
     }
@@ -82,18 +82,18 @@ class ItemUpdateBase: ItemUpdate {
         }
         var res = [String:String?]()
         for (fieldPos, fieldName) in fields {
-            res[fieldName] = currFieldValToString(m_newValues[fieldPos] ?? nil)
+            res[fieldName] = toString(m_newValues[fieldPos] ?? nil)
         }
         return res
     }
     
     var fieldsByPositions: [Int : String?] {
-        m_newValues.mapValues { val in currFieldValToString(val) }
+        m_newValues.mapValues { val in toString(val) }
     }
     
     func value(withFieldPos fieldPos: Int) -> String? {
         precondition(1 <= fieldPos && fieldPos <= m_nFields, POS_OUT_BOUNDS)
-        return currFieldValToString(m_newValues[fieldPos] ?? nil)
+        return toString(m_newValues[fieldPos] ?? nil)
     }
     
     func value(withFieldName fieldName: String) -> String? {
@@ -103,7 +103,7 @@ class ItemUpdateBase: ItemUpdate {
         guard let fieldPos = findFirstIndex(fields, of: fieldName) else {
             preconditionFailure(UNKNOWN_FIELD_NAME)
         }
-        return currFieldValToString(m_newValues[fieldPos] ?? nil)
+        return toString(m_newValues[fieldPos] ?? nil)
     }
     
     func isValueChanged(withFieldPos fieldPos: Int) -> Bool {
@@ -146,7 +146,7 @@ class ItemUpdateBase: ItemUpdate {
         for i in 1...m_newValues.count {
             let val = m_newValues[i]!
             let fieldName = getFieldNameOrNilFromIdx(i) ?? "\(i)"
-            let fieldVal = currFieldValToString(val) ?? "nil"
+            let fieldVal = toString(val) ?? "nil"
             if i > 1 {
                 s += ","
             }
@@ -201,7 +201,7 @@ class ItemUpdate2Level: ItemUpdate {
         }
         var res = [String:String?]()
         for fieldPos in m_changedFields {
-            res[getFieldNameFromIdx(fieldPos)] = currFieldValToString(m_newValues[fieldPos] ?? nil)
+            res[getFieldNameFromIdx(fieldPos)] = toString(m_newValues[fieldPos] ?? nil)
         }
         return res
     }
@@ -209,7 +209,7 @@ class ItemUpdate2Level: ItemUpdate {
     var changedFieldsByPositions: [Int : String?] {
         var res = [Int:String?]()
         for fieldPos in m_changedFields {
-            res[fieldPos] = currFieldValToString(m_newValues[fieldPos] ?? nil)
+            res[fieldPos] = toString(m_newValues[fieldPos] ?? nil)
         }
         return res
     }
@@ -220,17 +220,17 @@ class ItemUpdate2Level: ItemUpdate {
         }
         var res = [String:String?]()
         for (f, v) in m_newValues {
-            res[getFieldNameFromIdx(f)] = currFieldValToString(v)
+            res[getFieldNameFromIdx(f)] = toString(v)
         }
         return res
     }
     
     var fieldsByPositions: [Int : String?] {
-        m_newValues.mapValues { val in currFieldValToString(val) }
+        m_newValues.mapValues { val in toString(val) }
     }
     
     func value(withFieldPos fieldPos: Int) -> String? {
-        currFieldValToString(m_newValues[fieldPos] ?? nil)
+        toString(m_newValues[fieldPos] ?? nil)
     }
     
     func value(withFieldName fieldName: String) -> String? {
@@ -240,7 +240,7 @@ class ItemUpdate2Level: ItemUpdate {
         guard let fieldPos = getFieldIdxFromName(fieldName) else {
             preconditionFailure(UNKNOWN_FIELD_NAME)
         }
-        return currFieldValToString(m_newValues[fieldPos] ?? nil)
+        return toString(m_newValues[fieldPos] ?? nil)
     }
     
     func isValueChanged(withFieldPos fieldPos: Int) -> Bool {
@@ -306,7 +306,7 @@ class ItemUpdate2Level: ItemUpdate {
         for i in 1...m_newValues.count {
             let val = m_newValues[i]!
             let fieldName = getFieldNameOrNilFromIdx(i) ?? "\(i)"
-            let fieldVal = currFieldValToString(val) ?? "nil"
+            let fieldVal = toString(val) ?? "nil"
             if i > 1 {
                 s += ","
             }

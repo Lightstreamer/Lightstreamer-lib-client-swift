@@ -14,7 +14,7 @@ enum CurrFieldVal {
     case jsonVal(LsJson)
 }
 
-func currFieldValToString(_ val: CurrFieldVal?) -> String? {
+func toString(_ val: CurrFieldVal?) -> String? {
     switch val {
     case .none:
         return nil
@@ -91,7 +91,7 @@ func findChangedFields(prev: [Pos:CurrFieldVal?]?, curr: [Pos:CurrFieldVal?]) ->
     if let prev = prev {
         var changedFields = Set<Pos>()
         for i in curr.keys {
-            if currFieldValToString(prev[i]!) != currFieldValToString(curr[i]!) {
+            if toString(prev[i]!) != toString(curr[i]!) {
                 changedFields.insert(i)
             }
         }
