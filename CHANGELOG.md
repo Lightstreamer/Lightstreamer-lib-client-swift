@@ -1,5 +1,20 @@
 # SDK for Swift Clients CHANGELOG
 
+## xxxxxxxxxx
+
+_Compatible with Lightstreamer Server since 7.3.0._<br>
+_Compatible with code developed for the previous versions._<br>
+_Released on xxxxxxxxxx._
+
+<!--21/9/2022-->
+Improved the "delta delivery" mechanism, by adding the support for value differences, as per the extension introduced in Server version 7.3.0.
+Currently only differences in JSON Patch format are supported.
+
+<!--21/9/2022-->
+Added the getValueAsJSONPatchIfAvailable function in the ItemUpdate class, to take advantage of the new support for JSON Patch differences, which may prove useful in some use cases.
+See the JSDocs for details.
+
+
 ## 5.0.0 beta 4
 
 _Compatible with Lightstreamer Server since 7.2.0._<br>
