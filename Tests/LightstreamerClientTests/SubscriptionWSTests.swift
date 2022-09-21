@@ -22,7 +22,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -54,7 +54,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -84,7 +84,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -116,7 +116,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 """, self.io.trace)
@@ -146,7 +146,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -183,7 +183,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -220,7 +220,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -258,7 +258,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -298,7 +298,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -339,7 +339,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -383,7 +383,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -429,7 +429,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -473,7 +473,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -515,7 +515,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -557,7 +557,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -599,7 +599,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -642,7 +642,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -682,7 +682,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -718,7 +718,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -751,7 +751,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -784,7 +784,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -819,7 +819,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -858,7 +858,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -893,7 +893,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -932,7 +932,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
@@ -963,7 +963,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,2
@@ -990,7 +990,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 SUBCMD,1,1,2,1,2
@@ -1017,7 +1017,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 CONF,1,unlimited,unfiltered
@@ -1044,7 +1044,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 U,1,1,a
@@ -1071,7 +1071,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 EOS,1,1
@@ -1098,7 +1098,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 CS,1,1
@@ -1125,7 +1125,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 OV,1,1,2
@@ -1155,7 +1155,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 OV,1,1,2
@@ -1186,7 +1186,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 OV,1,1,2
@@ -1217,7 +1217,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 OV,1,1,2

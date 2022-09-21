@@ -5,7 +5,7 @@ import XCTest
 final class BindWSPollingTests: BaseTestCase {
     let preamble = """
         http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-        LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
+        LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_cause=api
         CONOK,sid,70000,5000,*
         LOOP,0
         http.dispose
@@ -84,7 +84,7 @@ final class BindWSPollingTests: BaseTestCase {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 Foo=bar
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -127,7 +127,7 @@ final class BindWSPollingTests: BaseTestCase {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
                 Foo=bar
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -206,7 +206,7 @@ final class BindWSPollingTests: BaseTestCase {
                 CONERR,4,error
                 ws.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_old_session=sid&LS_cause=ws.conerr.4
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_cause=ws.conerr.4
                 CONOK,sid2,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -296,7 +296,7 @@ final class BindWSPollingTests: BaseTestCase {
                 END,41,error
                 ws.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_old_session=sid&LS_cause=ws.end.41
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_cause=ws.end.41
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 CONNECTED:WS-POLLING
@@ -368,7 +368,7 @@ final class BindWSPollingTests: BaseTestCase {
                 END,41,error
                 ws.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_old_session=sid&LS_cause=ws.end.41
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_cause=ws.end.41
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 DISCONNECTED:WILL-RETRY
@@ -479,7 +479,7 @@ final class BindWSPollingTests: BaseTestCase {
                 REQERR,1,20,error
                 ws.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_old_session=sid&LS_cause=ws.reqerr.20
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_cause=ws.reqerr.20
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 CONNECTED:WS-POLLING
@@ -758,7 +758,7 @@ final class BindWSPollingTests: BaseTestCase {
                 bind_session\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ws.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_old_session=sid&LS_cause=ws.error
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_cause=ws.error
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 DISCONNECTED:WILL-RETRY
@@ -871,7 +871,7 @@ final class BindWSPollingTests: BaseTestCase {
                 bind_session\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ws.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_old_session=sid&LS_cause=ws.idle.timeout
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_cause=ws.idle.timeout
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 DISCONNECTED:WILL-RETRY
@@ -911,7 +911,7 @@ final class BindWSPollingTests: BaseTestCase {
                 CONOK,sid,70000,5000,*
                 ws.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_old_session=sid&LS_cause=ws.idle.timeout
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_cause=ws.idle.timeout
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 CONNECTED:WS-POLLING
@@ -1047,7 +1047,7 @@ final class BindWSPollingTests: BaseTestCase {
                 PROG,100
                 ws.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_old_session=sid&LS_cause=prog.mismatch.100.0
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_cause=prog.mismatch.100.0
                 """, self.ws.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 CONNECTED:WS-POLLING

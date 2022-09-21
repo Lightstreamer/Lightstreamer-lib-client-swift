@@ -35,7 +35,7 @@ final class SendMessageBaseTests: BaseTestCase {
         ws.init http://server/lightstreamer
         wsok
         create_session\r
-        LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+        LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
         WSOK
         CONOK,sid,70000,5000,*
         
@@ -144,7 +144,7 @@ final class SendMessageBaseTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 ws.dispose
                 """, self.io.trace)
@@ -561,7 +561,7 @@ final class SendMessageBaseTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 ws.dispose
                 """, self.io.trace)

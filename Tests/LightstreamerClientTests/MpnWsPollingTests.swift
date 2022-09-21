@@ -5,7 +5,7 @@ import XCTest
 class MpnWsPollingTests: BaseTestCase {
     let preamble = """
         http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-        LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
+        LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_cause=api
         CONOK,sid,70000,5000,*
         LOOP,0
         http.dispose
@@ -183,7 +183,7 @@ class MpnWsPollingTests: BaseTestCase {
                 LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 ws.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_old_session=sid&LS_cause=ws.error
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_cause=ws.error
                 CONOK,sid2,70000,5000,*
                 LOOP,0
                 http.dispose

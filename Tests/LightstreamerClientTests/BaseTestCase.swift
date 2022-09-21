@@ -2,6 +2,8 @@ import Foundation
 import XCTest
 @testable import LightstreamerClient
 
+let LS_TEST_CID = LS_CID.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+
 class BaseTestCase: XCTestCase {
     let io = Trace()
     let ws = TestWSFactory()

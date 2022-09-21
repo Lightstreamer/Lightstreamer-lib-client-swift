@@ -27,7 +27,7 @@ final class CreateWSTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONERR,10,error
                 ws.dispose
@@ -59,13 +59,13 @@ final class CreateWSTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONERR,4,error
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=ws.conerr.4
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=ws.conerr.4
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -95,14 +95,14 @@ final class CreateWSTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONERR,5,error
                 ws.dispose
                 """, self.ws.trace)
             XCTAssertEqual("""
             http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-            LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.conerr.5
+            LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_cause=ws.conerr.5
             """, self.http.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -130,7 +130,7 @@ final class CreateWSTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 """, self.ws.trace)
@@ -160,7 +160,7 @@ final class CreateWSTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 END,10,error
@@ -197,14 +197,14 @@ final class CreateWSTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 END,41,error
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=ws.end.41
+                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=ws.end.41
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -238,7 +238,7 @@ final class CreateWSTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 ERROR,10,error
@@ -273,7 +273,7 @@ final class CreateWSTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 REQERR,1,65,error
@@ -310,14 +310,14 @@ final class CreateWSTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 REQERR,1,20,error
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=ws.reqerr.20
+                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=ws.reqerr.20
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -440,14 +440,14 @@ final class CreateWSTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 PROG,100
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=prog.mismatch.100.0
+                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=prog.mismatch.100.0
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -493,7 +493,7 @@ final class CreateWSTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 LOOP,0
@@ -530,7 +530,7 @@ final class CreateWSTests: BaseTestCase {
                 """, self.ws.trace)
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.unavailable
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_cause=ws.unavailable
                 """, self.http.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -555,12 +555,12 @@ final class CreateWSTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 ws.dispose
                 """, self.ws.trace)
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.unavailable
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_cause=ws.unavailable
                 """, self.http.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -588,12 +588,12 @@ final class CreateWSTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=ws.timeout
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=ws.timeout
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -624,7 +624,7 @@ final class CreateWSTests: BaseTestCase {
                 """, self.ws.trace)
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.unavailable
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_cause=ws.unavailable
                 """, self.http.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -649,12 +649,12 @@ final class CreateWSTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 ws.dispose
                 """, self.ws.trace)
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=ws.unavailable
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_cause=ws.unavailable
                 """, self.http.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -682,12 +682,12 @@ final class CreateWSTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=ws.error
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=ws.error
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -719,7 +719,7 @@ final class CreateWSTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 ws.dispose
@@ -760,7 +760,7 @@ final class CreateWSTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 ws.dispose
@@ -815,7 +815,7 @@ final class CreateWSTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 ws.dispose
                 """, self.ws.trace)
             XCTAssertEqual("""
@@ -842,7 +842,7 @@ final class CreateWSTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 ws.dispose
                 """, self.ws.trace)
@@ -871,7 +871,7 @@ final class CreateWSTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r\nLS_reqId=1&LS_op=destroy&LS_close_socket=true&LS_cause=api
@@ -906,7 +906,7 @@ final class CreateWSTests: BaseTestCase {
                 ws.init http://server/lightstreamer
                 wsok
                 create_session\r
-                LS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 ws.dispose
                 """, self.ws.trace)
@@ -946,7 +946,7 @@ final class CreateWSTests: BaseTestCase {
                 h1=v1
                 wsok
                 create_session\r
-                LS_keepalive_millis=10&LS_inactivity_millis=20&LS_requested_max_bandwidth=30.3&LS_adapter_set=adapter&LS_user=user&LS_cid=\(LS_CID)&LS_cause=api&LS_password=pwd
+                LS_keepalive_millis=10&LS_inactivity_millis=20&LS_requested_max_bandwidth=30.3&LS_adapter_set=adapter&LS_user=user&LS_cid=\(LS_TEST_CID)&LS_cause=api&LS_password=pwd
                 """, self.ws.trace)
             XCTAssertEqual("""
                 CONNECTING

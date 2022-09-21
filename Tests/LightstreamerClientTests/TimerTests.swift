@@ -19,7 +19,7 @@ final class TimerTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 ws.dispose
                 """, self.io.trace)
@@ -47,7 +47,7 @@ final class TimerTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_cause=api
                 http.dispose
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -81,7 +81,7 @@ final class TimerTests: BaseTestCase {
             XCTAssertEqual("""
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 LOOP,0
@@ -124,7 +124,7 @@ final class TimerTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose
@@ -171,7 +171,7 @@ final class TimerTests: BaseTestCase {
         asyncAssert {
             XCTAssertEqual("""
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_cause=api
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_cause=api
                 CONOK,sid,70000,5000,*
                 LOOP,0
                 http.dispose

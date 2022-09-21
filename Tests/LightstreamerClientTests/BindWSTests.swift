@@ -6,7 +6,7 @@ final class BindWSTests: BaseTestCase {
     let preamble = """
 ws.init http://server/lightstreamer
 wsok
-create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
 WSOK
 CONOK,sid,70000,5000,*
 LOOP,0
@@ -81,7 +81,7 @@ cancel keepalive.timeout
                 ws.init http://server/lightstreamer
                 Foo=bar
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 LOOP,0
@@ -124,7 +124,7 @@ cancel keepalive.timeout
                 ws.init http://server/lightstreamer
                 Foo=bar
                 wsok
-                create_session\r\nLS_cid=\(LS_CID)&LS_send_sync=false&LS_cause=api
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
                 WSOK
                 CONOK,sid,70000,5000,*
                 LOOP,0
@@ -199,7 +199,7 @@ cancel keepalive.timeout
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=ws.conerr.4
+                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=ws.conerr.4
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 DISCONNECTED:WILL-RETRY
@@ -273,7 +273,7 @@ cancel keepalive.timeout
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=ws.end.41
+                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=ws.end.41
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 DISCONNECTED:WILL-RETRY
@@ -343,7 +343,7 @@ cancel keepalive.timeout
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=ws.end.41
+                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=ws.end.41
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 DISCONNECTED:WILL-RETRY
@@ -451,7 +451,7 @@ cancel keepalive.timeout
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=ws.reqerr.20
+                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=ws.reqerr.20
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 DISCONNECTED:WILL-RETRY
@@ -681,7 +681,7 @@ cancel keepalive.timeout
                 bind_session\r\nLS_session=sid&LS_keepalive_millis=5000&LS_send_sync=false&LS_cause=ws.loop
                 ws.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_old_session=sid&LS_cause=ws.unavailable
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_cause=ws.unavailable
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 DISCONNECTED:WILL-RETRY
@@ -719,7 +719,7 @@ cancel keepalive.timeout
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=ws.timeout
+                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=ws.timeout
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 DISCONNECTED:WILL-RETRY
@@ -884,7 +884,7 @@ cancel keepalive.timeout
                 bind_session\r\nLS_session=sid&LS_keepalive_millis=5000&LS_send_sync=false&LS_cause=ws.loop
                 ws.dispose
                 http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_CID)&LS_old_session=sid&LS_cause=ws.unavailable
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_cause=ws.unavailable
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 DISCONNECTED:WILL-RETRY
@@ -922,7 +922,7 @@ cancel keepalive.timeout
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=ws.error
+                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=ws.error
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 DISCONNECTED:WILL-RETRY
@@ -962,7 +962,7 @@ cancel keepalive.timeout
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=ws.error
+                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=ws.error
                 """, self.io.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 DISCONNECTED:WILL-RETRY
@@ -1098,7 +1098,7 @@ cancel keepalive.timeout
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
-                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=prog.mismatch.100.0
+                create_session\r\nLS_keepalive_millis=5000&LS_cid=\(LS_TEST_CID)&LS_old_session=sid&LS_send_sync=false&LS_cause=prog.mismatch.100.0
                 """, self.ws.trace)
             XCTAssertEqual(self.delegatePreamble + """
                 DISCONNECTED:WILL-RETRY
