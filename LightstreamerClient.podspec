@@ -17,5 +17,5 @@ Pod::Spec.new do |s|
   
   s.dependency 'Starscream', '~> 4.0' # upToNextMajor
   s.dependency 'Alamofire', '~> 5.2' # upToNextMajor
-  s.dependency 'RMJSONPatch', '~> 1.0.4' # upToNextMinor
+  s.dependency 'RMJSONPatch', '~> 1.0' # upToNextMajor
 end
