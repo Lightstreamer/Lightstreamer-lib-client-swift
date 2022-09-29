@@ -4,20 +4,20 @@ import XCTest
 
 final class JsonPatchTests: BaseTestCase {
     
-    class JsonPatchDelegate: TestSubDelegate {
+    class MySubDelegate: TestSubDelegate {
         override func subscription(_ subscription: Subscription, didUpdateItem update: ItemUpdate) {
             addTrace("value \(update.value(withFieldPos: 1) ?? "null")")
             addTrace("patch \(update.valueAsJSONPatchIfAvailable(withFieldPos: 1) ?? "null")")
         }
     }
     
-    let jsonDelegate = JsonPatchDelegate()
+    let mySubDelegate = MySubDelegate()
     
     func updateTemplate(_ updates: [String], _ outputs: [String]) {
         client = newClient("http://server")
         let sub = Subscription(subscriptionMode: .MERGE, items: ["count"], fields: ["count"])
         sub.requestedSnapshot = .yes
-        sub.addDelegate(jsonDelegate)
+        sub.addDelegate(mySubDelegate)
         client.subscribe(sub)
         client.connect()
         
@@ -30,7 +30,7 @@ final class JsonPatchTests: BaseTestCase {
         }
         
         asyncAssert {
-            XCTAssertEqual("onSUB\n" + outputs.joined(separator: "\n"), self.jsonDelegate.trace)
+            XCTAssertEqual("onSUB\n" + outputs.joined(separator: "\n"), self.mySubDelegate.trace)
         }
     }
     
@@ -248,8 +248,8 @@ final class JsonPatchTests: BaseTestCase {
         client = newClient("http://server")
         let sub = Subscription(subscriptionMode: .MERGE, items: ["count"], fields: ["count"])
         sub.requestedSnapshot = .yes
-        let jsonDelegate = JsonPatchDelegate()
-        sub.addDelegate(jsonDelegate)
+        let mySubDelegate = JsonPatchDelegate()
+        sub.addDelegate(mySubDelegate)
         client.subscribe(sub)
         client.connect()
         
@@ -272,7 +272,7 @@ final class JsonPatchTests: BaseTestCase {
                             "changed true",
                             "value null",
                             "changed true"].joined(separator: "\n"),
-                           jsonDelegate.trace)
+                           mySubDelegate.trace)
         }
     }
     
@@ -294,8 +294,8 @@ final class JsonPatchTests: BaseTestCase {
         client = newClient("http://server")
         let sub = Subscription(subscriptionMode: .MERGE, items: ["count"], fields: ["count"])
         sub.requestedSnapshot = .yes
-        let jsonDelegate = JsonPatchDelegate()
-        sub.addDelegate(jsonDelegate)
+        let mySubDelegate = JsonPatchDelegate()
+        sub.addDelegate(mySubDelegate)
         client.subscribe(sub)
         client.connect()
         
@@ -321,7 +321,7 @@ final class JsonPatchTests: BaseTestCase {
                             "isChanged true value null",
                             "fields: count null",
                             "changed fields: count null"].joined(separator: "\n"),
-                           jsonDelegate.trace)
+                           mySubDelegate.trace)
         }
     }
     
@@ -336,8 +336,8 @@ final class JsonPatchTests: BaseTestCase {
         client = newClient("http://server")
         let sub = Subscription(subscriptionMode: .MERGE, items: ["count"], fields: ["count"])
         sub.requestedSnapshot = .yes
-        let jsonDelegate = JsonPatchDelegate()
-        sub.addDelegate(jsonDelegate)
+        let mySubDelegate = JsonPatchDelegate()
+        sub.addDelegate(mySubDelegate)
         client.subscribe(sub)
         client.connect()
         
@@ -354,7 +354,7 @@ final class JsonPatchTests: BaseTestCase {
                             "snapshot true",
                             "value bar",
                             "snapshot false"].joined(separator: "\n"),
-                           jsonDelegate.trace)
+                           mySubDelegate.trace)
         }
     }
     
