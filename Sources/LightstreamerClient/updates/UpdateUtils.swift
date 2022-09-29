@@ -5,6 +5,7 @@ enum FieldValue: Equatable {
     case unchanged
     case changed(String?)
     case jsonPatch(LsJsonPatch)
+    case diffPatch(DiffPatch)
 }
 
 typealias Pos = Int
@@ -64,6 +65,15 @@ func applyUpatesToCurrentFields(_ currentValues: [Pos:CurrFieldVal?]?, _ incomin
                 case .none:
                     throw InternalException.IllegalStateException("Cannot apply the JSON patch to the field \(f) because the field is null")
                 }
+            case .diffPatch(let patch):
+                switch currentValues[f]! {
+                case .stringVal(let str):
+                    newValues[f] = .stringVal(DiffDecoder.apply(str, patch))
+                case .none:
+                    throw InternalException.IllegalStateException("Cannot apply the TLCP-diff to the field \(f) because the field is null");
+                case .jsonVal(_):
+                    throw InternalException.IllegalStateException("Cannot apply the TLCP-diff to the field \(f) because the field is JSON");
+                }
             }
         }
         return newValues
@@ -81,6 +91,8 @@ func applyUpatesToCurrentFields(_ currentValues: [Pos:CurrFieldVal?]?, _ incomin
                 throw InternalException.IllegalStateException("Cannot set the field \(f) because the first update is UNCHANGED")
             case .jsonPatch(_):
                 throw InternalException.IllegalStateException("Cannot set the field \(f) because the first update is a JSONPatch")
+            case .diffPatch(_):
+                throw InternalException.IllegalStateException("Cannot set the field \(f) because the first update is a TLCP-diff")
             }
         }
         return newValues
