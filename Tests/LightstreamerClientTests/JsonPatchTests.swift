@@ -66,7 +66,7 @@ final class JsonPatchTests: BaseTestCase {
     func testRealServer() {
         client = LightstreamerClient(serverAddress: "http://localtest.me:8080", adapterSet: "TEST")
         let sub = Subscription(subscriptionMode: .MERGE, items: ["count"], fields: ["count"])
-        sub.requestedSnapshot = .yes
+        sub.requestedSnapshot = .no
         sub.dataAdapter = "JSON_COUNT"
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
@@ -80,6 +80,24 @@ final class JsonPatchTests: BaseTestCase {
             XCTAssertNotNil(patch[0]["value"])
             let value = try! newJson(u.value(withFieldPos: 1)!) as! [String:Int]
             XCTAssertNotNil(value["value"])
+        }
+    }
+    
+    func testRealServer_JsonAndTxt() {
+        client = LightstreamerClient(serverAddress: "http://localtest.me:8080", adapterSet: "TEST")
+        let sub = Subscription(subscriptionMode: .MERGE, items: ["count"], fields: ["count"])
+        sub.requestedMaxFrequency = .unfiltered
+        sub.requestedSnapshot = .no
+        sub.dataAdapter = "JSON_DIFF_COUNT"
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        client.connect()
+        
+        asyncAssert(after: 3) {
+            let updates = self.subDelegate.updates
+            XCTAssertNil(updates[0].valueAsJSONPatchIfAvailable(withFieldPos: 1))
+            XCTAssertNotNil(updates[1].valueAsJSONPatchIfAvailable(withFieldPos: 1))
+            XCTAssertNil(updates[2].valueAsJSONPatchIfAvailable(withFieldPos: 1))
         }
     }
     
