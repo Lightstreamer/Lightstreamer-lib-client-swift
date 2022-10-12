@@ -19,8 +19,8 @@ class DiffDecoder {
     var basePos: String.Index
     var buf = ""
     
-    public static func apply(_ base: String, _ diff: String) -> String {
-        return DiffDecoder(base, diff).decode()
+    public static func apply(_ base: String, _ diff: String) throws -> String {
+        return try DiffDecoder(base, diff).decode()
     }
     
     public init(_ base: String, _ diff: String) {
@@ -30,48 +30,48 @@ class DiffDecoder {
         self.basePos = base.startIndex
     }
     
-    public func decode() -> String {
+    public func decode() throws -> String {
         while (true) {
             if (diffPos == diff.endIndex) {
                 break
             }
-            applyCopy()
+            try applyCopy()
             if (diffPos == diff.endIndex) {
                 break
             }
-            applyAdd()
+            try applyAdd()
             if (diffPos == diff.endIndex) {
                 break
             }
-            applyDel()
+            try applyDel()
         }
         return buf
     }
     
-    func applyCopy() {
-        let count = decodeVarint()
+    func applyCopy() throws {
+        let count = try decodeVarint()
         if (count > 0) {
             appendToBuf(base, basePos, count)
             basePos = base.index(basePos, offsetBy: count)
         }
     }
     
-    func applyAdd() {
-        let count = decodeVarint()
+    func applyAdd() throws {
+        let count = try decodeVarint()
         if (count > 0) {
             appendToBuf(diff, diffPos, count)
             diffPos = diff.index(diffPos, offsetBy: count)
         }
     }
     
-    func applyDel() {
-        let count = decodeVarint()
+    func applyDel() throws {
+        let count = try decodeVarint()
         if (count > 0) {
             basePos = base.index(basePos, offsetBy: count)
         }
     }
     
-    func decodeVarint() -> Int {
+    func decodeVarint() throws -> Int {
         // the number is encoded with letters as digits
         var n = 0;
         while (true) {
@@ -81,8 +81,11 @@ class DiffDecoder {
                 // small letters used to mark the end of the number
                 return n * VARINT_RADIX + (c - a_CODE)
             } else {
-                //assert (c >= A_CODE && c < (A_CODE + VARINT_RADIX))
-                n = n * VARINT_RADIX + (c - A_CODE)
+                if (c >= A_CODE && c < (A_CODE + VARINT_RADIX)) {
+                    n = n * VARINT_RADIX + (c - A_CODE)
+                } else {
+                    throw InternalException.IllegalStateException("Bad TLCP-diff: the code point \(c) is not in the range A-Z")
+                }
             }
         }
     }

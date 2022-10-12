@@ -68,7 +68,7 @@ func applyUpatesToCurrentFields(_ currentValues: [Pos:CurrFieldVal?]?, _ incomin
             case .diffPatch(let patch):
                 switch currentValues[f]! {
                 case .stringVal(let str):
-                    newValues[f] = .stringVal(DiffDecoder.apply(str, patch))
+                    newValues[f] = .stringVal(try DiffDecoder.apply(str, patch))
                 case .none:
                     throw InternalException.IllegalStateException("Cannot apply the TLCP-diff to the field \(f) because the field is null");
                 case .jsonVal(_):
