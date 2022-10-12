@@ -61,6 +61,21 @@ final class DiffPatchTests: BaseTestCase {
         }
     }
     
+    func testRealServer() {
+        client = LightstreamerClient(serverAddress: "http://localtest.me:8080", adapterSet: "TEST")
+        let sub = Subscription(subscriptionMode: .MERGE, items: ["count"], fields: ["count"])
+        sub.requestedSnapshot = .no
+        sub.dataAdapter = "DIFF_COUNT"
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        client.connect()
+        
+        asyncAssert(after: 3) {
+            let u = self.subDelegate.updates[1]
+            XCTAssertNotNil(u.value(withFieldPos: 1)!.range(of: #"value=\d+"#, options: .regularExpression))
+        }
+    }
+    
     func testMultiplePatches() {
         updateTemplate([
             "foobar",
@@ -124,6 +139,20 @@ final class DiffPatchTests: BaseTestCase {
         errorTemplate([
             "^Tbaeb", // copy(1)add(0)del(4)copy(1)
         ], "61 - Cannot set the field 1 because the first update is a TLCP-diff")
+    }
+    
+    func _testBadDiff_OutOfRange() {
+        errorTemplate([
+            "foo",
+            "^Tz", // copy(25)
+        ], "61 - Bad TLCP-diff")
+    }
+    
+    func testBadDiff_InvalidChar() {
+        errorTemplate([
+            "foo",
+            "^T!",
+        ], "61 - Bad TLCP-diff: the code point 33 is not in the range A-Z")
     }
     
     func testIsChanged() {
