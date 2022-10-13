@@ -101,6 +101,24 @@ final class JsonPatchTests: BaseTestCase {
         }
     }
     
+    func testRealServer_LongJsonAndShortJson() {
+        client = LightstreamerClient(serverAddress: "http://localtest.me:8080", adapterSet: "TEST")
+        let sub = Subscription(subscriptionMode: .MERGE, items: ["count"], fields: ["count"])
+        sub.requestedMaxFrequency = .unfiltered
+        sub.requestedSnapshot = .no
+        sub.dataAdapter = "DIFF_JSON_COUNT"
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        client.connect()
+        
+        asyncAssert(after: 3) {
+            let updates = self.subDelegate.updates
+            XCTAssertNil(updates[0].valueAsJSONPatchIfAvailable(withFieldPos: 1))
+            XCTAssertNil(updates[1].valueAsJSONPatchIfAvailable(withFieldPos: 1))
+            XCTAssertNil(updates[2].valueAsJSONPatchIfAvailable(withFieldPos: 1))
+        }
+    }
+    
     func testPatches() {
         updateTemplate([#"{"baz":"qux","foo":"bar"}"#,
                         #"^P[{ "op": "replace", "path": "/baz", "value": "boo" }]"#,
