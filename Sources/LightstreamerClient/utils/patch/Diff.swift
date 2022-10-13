@@ -51,23 +51,23 @@ class DiffDecoder {
     func applyCopy() throws {
         let count = try decodeVarint()
         if (count > 0) {
-            appendToBuf(base, basePos, count)
-            basePos = base.index(basePos, offsetBy: count)
+            try appendToBuf(base, basePos, count)
+            basePos = try index(base, basePos, offsetBy: count)
         }
     }
     
     func applyAdd() throws {
         let count = try decodeVarint()
         if (count > 0) {
-            appendToBuf(diff, diffPos, count)
-            diffPos = diff.index(diffPos, offsetBy: count)
+            try appendToBuf(diff, diffPos, count)
+            diffPos = try index(diff, diffPos, offsetBy: count)
         }
     }
     
     func applyDel() throws {
         let count = try decodeVarint()
         if (count > 0) {
-            basePos = base.index(basePos, offsetBy: count)
+            basePos = try index(base, basePos, offsetBy: count)
         }
     }
     
@@ -75,8 +75,8 @@ class DiffDecoder {
         // the number is encoded with letters as digits
         var n = 0;
         while (true) {
-            let c = code(diff[diffPos])
-            diffPos = diff.index(diffPos, offsetBy: 1)
+            let c = try charAt(diff, diffPos)
+            diffPos = try index(diff, diffPos, offsetBy: 1)
             if (c >= a_CODE && c < (a_CODE + VARINT_RADIX)) {
                 // small letters used to mark the end of the number
                 return n * VARINT_RADIX + (c - a_CODE)
@@ -90,8 +90,22 @@ class DiffDecoder {
         }
     }
     
-    func appendToBuf(_ s: String, _ startIndex: String.Index, _ count: Int) {
-        let endIndex = s.index(startIndex, offsetBy: count)
+    func charAt(_ s: String, _ pos: String.Index) throws -> Int {
+        if pos == s.endIndex {
+            throw InternalException.IllegalStateException("Bad TLCP-diff: Index out of range: pos=\(pos) length=\(s.count)")
+        }
+        return code(s[pos])
+    }
+    
+    func index(_ s: String, _ pos: String.Index, offsetBy offset: Int) throws -> String.Index {
+        if let i = s.index(pos, offsetBy: offset, limitedBy: s.endIndex) {
+            return i
+        }
+        throw InternalException.IllegalStateException("Bad TLCP-diff: Index out of range: startIndex=\(pos) count=\(offset) length=\(s.count)")
+    }
+    
+    func appendToBuf(_ s: String, _ startIndex: String.Index, _ count: Int) throws {
+        let endIndex = try index(s, startIndex, offsetBy: count)
         buf.append(contentsOf: s[startIndex..<endIndex])
     }
 }
