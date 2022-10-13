@@ -141,11 +141,11 @@ final class DiffPatchTests: BaseTestCase {
         ], "61 - Cannot set the field 1 because the first update is a TLCP-diff")
     }
     
-    func _testBadDiff_OutOfRange() {
+    func testBadDiff_OutOfRange() {
         errorTemplate([
             "foo",
             "^Tz", // copy(25)
-        ], "61 - Bad TLCP-diff")
+        ], "61 - Bad TLCP-diff: Index out of range: startIndex=Index(_rawBits: 1) count=25 length=3")
     }
     
     func testBadDiff_InvalidChar() {
