@@ -1,5 +1,15 @@
 # SDK for Swift Clients CHANGELOG
 
+## XXXXXX
+
+_Compatible with Lightstreamer Server since 7.3.0._<br>
+_Compatible with code developed for the previous versions._<br>
+_Released on XXXXXX._
+
+<!-- 16/11/2022 -->
+Added new error code 70 to `ClientDelegate.client(_:didReceiveServerError:withMessage:)`, to report that an unusable port was configured on the server address; previously, a similar case was treated as a request syntax error.
+
+
 ## 5.0.0
 
 _Compatible with Lightstreamer Server since 7.3.0._<br>
