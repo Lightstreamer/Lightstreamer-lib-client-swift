@@ -9,6 +9,9 @@ _Released on XXXXXX._
 <!-- 16/11/2022 -->
 Added new error code 70 to `ClientDelegate.client(_:didReceiveServerError:withMessage:)`, to report that an unusable port was configured on the server address; previously, a similar case was treated as a request syntax error.
 
+<!-- 28/11/2022 -->
+Fixed the behavior of the listener `MPNDeviceDelegate.mpnDeviceDidUpdateSubscriptions(_)`: now the listener is fired as soon as the MPN device is registered to make available the list of pre-existing MPN subscriptions.
+
 
 ## 5.0.0
 
