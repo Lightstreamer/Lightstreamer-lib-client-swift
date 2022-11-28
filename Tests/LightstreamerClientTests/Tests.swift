@@ -79,4 +79,30 @@ final class Tests: XCTestCase {
             log.error("log exception", withException: error)
         }
     }
+    
+    func testRemovalDuringIteration() {
+        var ls = [0, 1, 2, 3]
+        var visited = [Int]()
+        for e in ls {
+            visited.append(e)
+            if e == 1 {
+                ls.remove(at: 1)
+            }
+        }
+        XCTAssertEqual([0, 1, 2, 3], visited)
+        XCTAssertEqual([0, 2, 3], ls)
+    }
+    
+    func testRemovalFromMapDuringIteration() {
+        var ls = OrderedDictionary(uniqueKeysWithValues: [0:"zero", 1:"one", 2:"two", 3:"three"])
+        var visited = [Int:String]()
+        for (i, e) in ls {
+            visited[i] = e
+            if i == 1 {
+                ls.removeValue(forKey: 1)
+            }
+        }
+        XCTAssertEqual([0:"zero", 1:"one", 2:"two", 3:"three"], visited)
+        XCTAssertEqual([0:"zero", 2:"two", 3:"three"], ls.unorderedDictionary)
+    }
 }
