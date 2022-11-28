@@ -1228,6 +1228,7 @@ final class MpnSubscriptionTests: BaseTestCase {
                 dev.onStatus REGISTERED 0
                 dev.onRegister
                 dev.onSubscriptionsUpdated
+                dev.onSubscriptionsUpdated
                 """, self.mpnDevDelegate.trace)
         }
     }
@@ -2671,6 +2672,7 @@ final class MpnSubscriptionTests: BaseTestCase {
             XCTAssertEqual("""
                 dev.onStatus REGISTERED 0
                 dev.onRegister
+                dev.onSubscriptionsUpdated
                 """, self.mpnDevDelegate.trace)
         }
     }
