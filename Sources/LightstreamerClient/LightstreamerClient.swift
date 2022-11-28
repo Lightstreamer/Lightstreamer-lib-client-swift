@@ -5889,6 +5889,7 @@ public class LightstreamerClient {
                 trace(evt, State_mpn_sbs.s421, State_mpn_sbs.s424)
                 s_mpn.sbs = .s424
                 genSUBS_EOS()
+                notifyOnSubscriptionsUpdated()
             } else if s_mpn.sbs == .s423 {
                 if mpn_snapshotSet.count > 0 {
                     trace(evt, State_mpn_sbs.s423, State_mpn_sbs.s424)
