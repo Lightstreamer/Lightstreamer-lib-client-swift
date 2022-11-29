@@ -303,6 +303,7 @@ public class ConnectionDetails: CustomStringConvertible {
             map["serverInstanceAddress"] = m_serverInstanceAddress
             map["serverSocketName"] = m_serverSocketName
             map["clientIp"] = m_clientIp
+            map["libVersion"] = LightstreamerClient.LIB_NAME + " " + LightstreamerClient.LIB_VERSION
             return String(describing: map)
         }
     }

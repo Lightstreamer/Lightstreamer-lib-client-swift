@@ -405,6 +405,7 @@ public class MPNDevice: CustomStringConvertible {
             map["deviceToken"] = deviceToken
             map["prevDeviceToken"] = previousDeviceToken
             map["applicationId"] = applicationId
+            map["platform"] = platform
             return String(describing: map)
         }
     }
