@@ -311,6 +311,7 @@ final class MpnTests: BaseTestCase {
                 dev.onStatus REGISTERED 0
                 dev.onRegister
                 """, self.mpnDevDelegate.trace)
+            XCTAssertEqual(0, self.client.subscriptions.count)
         }
     }
     
