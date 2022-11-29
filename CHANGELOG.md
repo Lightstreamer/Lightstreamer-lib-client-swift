@@ -12,6 +12,9 @@ Added new error code 70 to `ClientDelegate.client(_:didReceiveServerError:withMe
 <!-- 28/11/2022 -->
 Fixed the behavior of the listener `MPNDeviceDelegate.mpnDeviceDidUpdateSubscriptions(_)`: now the listener is fired as soon as the MPN device is registered to make available the list of pre-existing MPN subscriptions.
 
+<!-- 29/11/2022 -->
+Changed `LightstreamerClient.subscriptions` so that it doesn’t show special items subscribed by the client for internal purposes.
+
 
 ## 5.0.0
 
