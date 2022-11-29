@@ -6136,6 +6136,7 @@ public class LightstreamerClient {
         let deviceSub = Subscription(subscriptionMode: .MERGE)
         deviceSub.items = ["DEV-\(deviceId)"]
         deviceSub.fields = ["status", "status_timestamp"]
+        deviceSub.setInternal()
         deviceSub.dataAdapter = adapterName
         deviceSub.requestedMaxFrequency = .unfiltered
         deviceSub.addDelegate(mpn_deviceListener)
@@ -6145,6 +6146,7 @@ public class LightstreamerClient {
         let itemSub = Subscription(subscriptionMode: .COMMAND)
         itemSub.items = ["SUBS-\(deviceId)"]
         itemSub.fields = ["key", "command"]
+        itemSub.setInternal()
         itemSub.dataAdapter = adapterName
         itemSub.requestedMaxFrequency = .unfiltered
         itemSub.commandSecondLevelFields = [
