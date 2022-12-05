@@ -1,7 +1,7 @@
 # NB keep in sync with Package.swift
 Pod::Spec.new do |s|
   s.name             = 'LightstreamerClient'
-  s.version          = '5.0.0'
+  s.version          = '5.0.1'
   s.summary          = 'Lightstreamer Swift Client SDK'
   s.homepage         = 'https://github.com/Lightstreamer/Lightstreamer-lib-client-swift'
   s.license          = { :type => 'Apache 2.0', :file => 'LICENSE.md' }
