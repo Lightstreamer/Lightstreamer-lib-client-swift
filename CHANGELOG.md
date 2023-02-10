@@ -1,5 +1,14 @@
 # SDK for Swift Clients CHANGELOG
 
+## 5.0.2
+
+_Compatible with Lightstreamer Server since 7.3.2._<br>
+_Compatible with code developed for the previous versions._<br>
+_Released on 10 Feb 2023._
+
+Fixed a race condition that in some cases, when two or more LightstreamerClient instances were running concurrently, could have caused a deadlock among the clients.
+
+
 ## 5.0.1
 
 _Compatible with Lightstreamer Server since 7.3.0._<br>
