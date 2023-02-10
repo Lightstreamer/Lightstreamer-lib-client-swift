@@ -1,20 +1,20 @@
 import Foundation
 import Starscream
 
-typealias WSFactoryService = (String,
+typealias WSFactoryService = (NSRecursiveLock, String,
             String,
             [String:String],
             @escaping (LsWebsocketClient) -> Void,
             @escaping (LsWebsocketClient, String) -> Void,
             @escaping (LsWebsocketClient, String) -> Void) -> LsWebsocketClient
 
-func createWS(_ url: String,
+func createWS(_ lock: NSRecursiveLock, _ url: String,
                       protocols: String,
                       headers: [String:String],
                       onOpen: @escaping (LsWebsocketClient) -> Void,
                       onText: @escaping (LsWebsocketClient, String) -> Void,
                       onError: @escaping (LsWebsocketClient, String) -> Void) -> LsWebsocketClient {
-    return LsWebsocket(url,
+    return LsWebsocket(lock, url,
                        protocols: protocols,
                        headers: headers,
                        onOpen: onOpen,
@@ -29,19 +29,20 @@ protocol LsWebsocketClient: AnyObject {
 }
 
 class LsWebsocket: LsWebsocketClient {
-    let lock = NSRecursiveLock()
+    let lock: NSRecursiveLock
     let socket: WebSocket
     let onOpen: (LsWebsocket) -> Void
     let onText: (LsWebsocket, String) -> Void
     let onError: (LsWebsocket, String) -> Void
     var m_disposed = false
   
-    init(_ url: String,
+    init(_ lock: NSRecursiveLock, _ url: String,
          protocols: String,
          headers: [String:String] = [:],
          onOpen: @escaping (LsWebsocket) -> Void,
          onText: @escaping (LsWebsocket, String) -> Void,
          onError: @escaping (LsWebsocket, String) -> Void) {
+        self.lock = lock
         self.onOpen = onOpen
         self.onText = onText
         self.onError = onError

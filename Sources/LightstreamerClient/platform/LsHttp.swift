@@ -1,20 +1,20 @@
 import Foundation
 import Alamofire
 
-typealias HTTPFactoryService = (String,
+typealias HTTPFactoryService = (NSRecursiveLock, String,
                                 String,
                                 [String:String],
                                 @escaping (LsHttpClient, String) -> Void,
                                 @escaping (LsHttpClient, String) -> Void,
                                 @escaping (LsHttpClient) -> Void) -> LsHttpClient
 
-func createHTTP(_ url: String,
+func createHTTP(_ lock: NSRecursiveLock, _ url: String,
                 body: String,
                 headers: [String:String],
                 onText: @escaping (LsHttpClient, String) -> Void,
                 onError: @escaping (LsHttpClient, String) -> Void,
                 onDone: @escaping (LsHttpClient) -> Void) -> LsHttpClient {
-    return LsHttp(url,
+    return LsHttp(lock, url,
                   body: body,
                   headers: headers,
                   onText: onText,
@@ -28,7 +28,7 @@ protocol LsHttpClient: AnyObject {
 }
 
 class LsHttp: LsHttpClient {
-    let lock = NSRecursiveLock()
+    let lock: NSRecursiveLock
     let request: DataStreamRequest
     let assembler = LineAssembler()
     let onText: (LsHttp, String) -> Void
@@ -36,12 +36,13 @@ class LsHttp: LsHttpClient {
     let onDone: (LsHttp) -> Void
     var m_disposed = false
   
-    init(_ url: String,
+    init(_ lock: NSRecursiveLock, _ url: String,
          body: String,
          headers: [String:String] = [:],
          onText: @escaping (LsHttp, String) -> Void,
          onError: @escaping (LsHttp, String) -> Void,
          onDone: @escaping (LsHttp) -> Void) {
+        self.lock = lock
         self.onText = onText
         self.onError = onError
         self.onDone = onDone

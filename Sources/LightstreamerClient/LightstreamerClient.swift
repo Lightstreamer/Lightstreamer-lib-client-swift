@@ -6399,7 +6399,7 @@ public class LightstreamerClient {
     }
     
     private func openWS(_ url: String, _ headers: [String:String]?) -> LsWebsocketClient {
-        return wsFactory(url,
+        return wsFactory(lock, url,
                          FULL_TLCP_VERSION,
                          headers ?? [:],
                          { [weak self] wsClient in
@@ -6561,7 +6561,7 @@ public class LightstreamerClient {
     }
     
     private func sendHttpRequest(_ url: String, _ req: LsRequestBuilder, _ headers: [String:String]?) -> LsHttpClient {
-        return httpFactory(url,
+        return httpFactory(lock, url,
                            req.encodedString,
                            headers ?? [:],
                            { [weak self] httpClient, line in
@@ -7732,7 +7732,7 @@ public class LightstreamerClient {
             URLQueryItem(name: "LS_session", value: sessionId)
         ])
         let headers = getHeadersForRequestOtherThanCreate()
-        ctrl_http = ctrlFactory(url,
+        ctrl_http = ctrlFactory(lock, url,
                            body,
                            headers ?? [:],
                            { [weak self] httpClient, line in
