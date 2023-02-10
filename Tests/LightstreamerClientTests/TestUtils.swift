@@ -78,7 +78,7 @@ class TestWSFactory: LsWebsocketClient {
         addTrace("ws.dispose")
     }
     
-    func createWS(_ url: String, _ protocols: String, _ headers: [String:String],
+    func createWS(_ lock: NSRecursiveLock, _ url: String, _ protocols: String, _ headers: [String:String],
                    _ onOpen: @escaping (LsWebsocketClient) -> Void,
                    _ onText: @escaping (LsWebsocketClient, String) -> Void,
                    _ onError: @escaping (LsWebsocketClient, String) -> Void) -> LsWebsocketClient {
@@ -136,7 +136,7 @@ class TestHTTPFactory: LsHttpClient {
         addTrace("\(prefix).dispose")
     }
     
-    func createHTTP(_ url: String, _ body: String, _ headers: [String:String],
+    func createHTTP(_ lock: NSRecursiveLock, _ url: String, _ body: String, _ headers: [String:String],
                      onText: @escaping (LsHttpClient, String) -> Void,
                      onError: @escaping (LsHttpClient, String) -> Void,
                      onDone: @escaping (LsHttpClient) -> Void) -> LsHttpClient {
