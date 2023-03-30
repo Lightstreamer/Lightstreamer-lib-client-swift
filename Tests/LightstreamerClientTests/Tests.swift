@@ -4,6 +4,18 @@ import XCTest
 
 final class Tests: XCTestCase {
     
+    func testUnquote() {
+        func unquote(_ s: String) -> String {
+            return s.removingPercentEncoding!
+        }
+        XCTAssertEqual("", unquote(""))
+        XCTAssertEqual("☺", unquote("☺")) // unicode code point U+263A
+        XCTAssertEqual("☺", unquote("%E2%98%BA"))
+        XCTAssertEqual("baràè", unquote("baràè"))
+        XCTAssertEqual("baràè%", unquote("bar%c3%a0%C3%A8%25"))
+        XCTAssertEqual("http://via.placeholder.com/256/cbf1a2/61c73f?text=nick+242+Iñtërnâtiônàlizætiøn☃", unquote("http://via.placeholder.com/256/cbf1a2/61c73f?text=nick+242+I%C3%B1t%C3%ABrn%C3%A2ti%C3%B4n%C3%A0liz%C3%A6ti%C3%B8n%E2%98%83"))
+    }
+    
     func testCompleteControlLink() {
         XCTAssertEqual("http://foo.com", completeControlLink("foo.com", baseAddress: "http://base.it"))
         XCTAssertEqual("https://foo.com", completeControlLink("foo.com", baseAddress: "https://base.it"))
