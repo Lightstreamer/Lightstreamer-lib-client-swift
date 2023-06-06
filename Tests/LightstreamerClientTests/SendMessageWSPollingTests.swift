@@ -39,14 +39,14 @@ final class SendMessageWSPollingTests: BaseTestCase {
         
         simulateCreation()
         client.sendMessage("foo", withSequence: "seq", delegate: msgDelegate)
-        ws.onText("MSGDONE,seq,1")
+        ws.onText("MSGDONE,seq,1,")
         XCTAssertEqual(0, client.messageManagers.count)
 
         asyncAssert {
             XCTAssertEqual(self.preamble + """
                 msg\r
                 LS_reqId=1&LS_message=foo&LS_sequence=seq&LS_msg_prog=1
-                MSGDONE,seq,1
+                MSGDONE,seq,1,
                 """, self.io.trace)
             XCTAssertEqual("""
                 didProcessMessage foo
@@ -113,7 +113,7 @@ final class SendMessageWSPollingTests: BaseTestCase {
         client.sendMessage("foo", withSequence: "seq", delegate: msgDelegate)
         ws.onText("REQOK,1")
         XCTAssertEqual(.s12, client.messageManagers[0].s_m)
-        ws.onText("MSGDONE,seq,1")
+        ws.onText("MSGDONE,seq,1,")
         XCTAssertEqual(0, client.messageManagers.count)
 
         asyncAssert {
@@ -121,7 +121,7 @@ final class SendMessageWSPollingTests: BaseTestCase {
                 msg\r
                 LS_reqId=1&LS_message=foo&LS_sequence=seq&LS_msg_prog=1
                 REQOK,1
-                MSGDONE,seq,1
+                MSGDONE,seq,1,
                 """, self.io.trace)
             XCTAssertEqual("""
                 didProcessMessage foo

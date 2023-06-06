@@ -924,7 +924,7 @@ cancel recovery.timeout
         ws.onText("WSOK")
         ws.onText("CONOK,sid,70000,5000,*")
         client.sendMessage("foo", delegate: msgDelegate)
-        ws.onText("MSGDONE,*,1")
+        ws.onText("MSGDONE,*,1,")
         XCTAssertEqual(1, client.rec_serverProg)
         XCTAssertEqual(1, client.rec_clientProg)
         ws.onError()
@@ -940,7 +940,7 @@ cancel recovery.timeout
                 CONOK,sid,70000,5000,*
                 msg\r
                 LS_reqId=1&LS_message=foo&LS_msg_prog=1
-                MSGDONE,*,1
+                MSGDONE,*,1,
                 ws.dispose
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=1&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
@@ -966,7 +966,7 @@ cancel recovery.timeout
         http.onText("PROG,0")
         XCTAssertEqual(0, client.rec_serverProg)
         XCTAssertEqual(0, client.rec_clientProg)
-        http.onText("MSGDONE,*,1")
+        http.onText("MSGDONE,*,1,")
         XCTAssertEqual(1, client.rec_serverProg)
         XCTAssertEqual(1, client.rec_clientProg)
         http.onText("LOOP,0")
@@ -986,7 +986,7 @@ cancel recovery.timeout
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 CONOK,sid,70000,5000,*
                 PROG,0
-                MSGDONE,*,1
+                MSGDONE,*,1,
                 LOOP,0
                 http.dispose
                 ws.init http://server/lightstreamer
@@ -1006,7 +1006,7 @@ cancel recovery.timeout
         ws.onText("WSOK")
         ws.onText("CONOK,sid,70000,5000,*")
         client.sendMessage("foo", delegate: msgDelegate)
-        ws.onText("MSGDONE,*,1")
+        ws.onText("MSGDONE,*,1,")
         XCTAssertEqual(1, client.rec_serverProg)
         XCTAssertEqual(1, client.rec_clientProg)
         ws.onError()
@@ -1015,7 +1015,7 @@ cancel recovery.timeout
         http.onText("PROG,0")
         XCTAssertEqual(0, client.rec_serverProg)
         XCTAssertEqual(1, client.rec_clientProg)
-        http.onText("MSGDONE,*,1")
+        http.onText("MSGDONE,*,1,")
         XCTAssertEqual(1, client.rec_serverProg)
         XCTAssertEqual(1, client.rec_clientProg)
         http.onText("LOOP,0")
@@ -1030,13 +1030,13 @@ cancel recovery.timeout
                 CONOK,sid,70000,5000,*
                 msg\r
                 LS_reqId=1&LS_message=foo&LS_msg_prog=1
-                MSGDONE,*,1
+                MSGDONE,*,1,
                 ws.dispose
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=1&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 CONOK,sid,70000,5000,*
                 PROG,0
-                MSGDONE,*,1
+                MSGDONE,*,1,
                 LOOP,0
                 http.dispose
                 ws.init http://server/lightstreamer

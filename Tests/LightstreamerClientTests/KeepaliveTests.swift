@@ -775,7 +775,7 @@ final class KeepaliveTests: BaseTestCase {
         ws.onText("REQOK,1")
         ws.onText("REQERR,1,-5,error")
         
-        ws.onText("MSGDONE,seq,1")
+        ws.onText("MSGDONE,seq,1,")
         ws.onText("MSGFAIL,seq,1,-5,error")
         
         ws.onText("SUBOK,1,1,1")
@@ -873,7 +873,7 @@ final class KeepaliveTests: BaseTestCase {
         ws.onText("REQOK,1")
         ws.onText("REQERR,1,-5,error")
         
-        ws.onText("MSGDONE,seq,1")
+        ws.onText("MSGDONE,seq,1,")
         ws.onText("MSGFAIL,seq,1,-5,error")
         
         ws.onText("SUBOK,1,1,1")
@@ -971,7 +971,7 @@ final class KeepaliveTests: BaseTestCase {
         http.onText("NOOP,foo")
         http.onText("SYNC,0")
         
-        http.onText("MSGDONE,seq,1")
+        http.onText("MSGDONE,seq,1,")
         http.onText("MSGFAIL,seq,1,-5,error")
         
         http.onText("SUBOK,1,1,1")

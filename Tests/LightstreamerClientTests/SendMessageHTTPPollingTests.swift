@@ -34,14 +34,14 @@ final class SendMessageHTTPPollingTests: BaseTestCase {
         
         simulateCreation()
         client.sendMessage("foo", withSequence: "seq", delegate: msgDelegate)
-        http.onText("MSGDONE,seq,1")
+        http.onText("MSGDONE,seq,1,")
         XCTAssertEqual(0, client.messageManagers.count)
 
         asyncAssert {
             XCTAssertEqual(self.preamble + """
                 ctrl.send http://server/lightstreamer/msg.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
                 LS_reqId=1&LS_message=foo&LS_sequence=seq&LS_msg_prog=1
-                MSGDONE,seq,1
+                MSGDONE,seq,1,
                 """, self.io.trace)
             XCTAssertEqual("""
                 didProcessMessage foo
@@ -118,7 +118,7 @@ final class SendMessageHTTPPollingTests: BaseTestCase {
         ctrl.onText("REQOK,1")
         ctrl.onDone()
         XCTAssertEqual(.s12, client.messageManagers[0].s_m)
-        http.onText("MSGDONE,seq,1")
+        http.onText("MSGDONE,seq,1,")
         XCTAssertEqual(0, client.messageManagers.count)
 
         asyncAssert {
@@ -127,7 +127,7 @@ final class SendMessageHTTPPollingTests: BaseTestCase {
                 LS_reqId=1&LS_message=foo&LS_sequence=seq&LS_msg_prog=1
                 REQOK,1
                 ctrl.dispose
-                MSGDONE,seq,1
+                MSGDONE,seq,1,
                 """, self.io.trace)
             XCTAssertEqual("""
                 didProcessMessage foo
