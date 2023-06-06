@@ -2162,7 +2162,7 @@ public class LightstreamerClient {
                 if line == "REQOK" {
                     evtREQOK()
                 } else {
-                    let args = line.split(separator: ",")
+                    let args = line.split(separator: ",", omittingEmptySubsequences: false)
                     let reqId = Int(args[1])!
                     evtREQOK(reqId)
                 }
@@ -2170,12 +2170,12 @@ public class LightstreamerClient {
                 evtPROBE()
             } else if line.starts(with: "LOOP") {
                 // LOOP,<delay [ms]>
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let pollingMs = Millis(args[1])!
                 evtLOOP(pollingMs)
             } else if line.starts(with: "CONOK") {
                 // CONOK,<session id>,<request limit>,<keepalive/idle timeout [ms]>,(*|<control link>)
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let sessionId = String(args[1])
                 let reqLimit = Int(args[2])!
                 let keepalive = Millis(args[3])!
@@ -2184,16 +2184,16 @@ public class LightstreamerClient {
             } else if line.starts(with: "WSOK") {
                 evtWSOK()
             } else if line.starts(with: "SERVNAME") {
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let serverName = String(args[1])
                 evtSERVNAME(serverName)
             } else if line.starts(with: "CLIENTIP") {
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let ip = String(args[1])
                 evtCLIENTIP(ip)
             } else if line.starts(with: "CONS") {
                 // CONS,(unmanaged|unlimited|<bandwidth>)
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let bw = String(args[1])
                 switch bw {
                 case "unlimited":
@@ -2217,7 +2217,7 @@ public class LightstreamerClient {
                 evtMSGDONE(seq, prog, resp)
             } else if line.starts(with: "MSGFAIL") {
                 // MSGFAIL,(*|<sequence>),<prog>,<code>,<message>
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 var seq = String(args[1])
                 if seq == "*" {
                     seq = "UNORDERED_MESSAGES"
@@ -2228,26 +2228,26 @@ public class LightstreamerClient {
                 evtMSGFAIL(seq, prog, errorCode: errorCode, errorMsg: errorMsg)
             } else if line.starts(with: "REQERR") {
                 // REQERR,<request id>,<code>,<message>
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let reqId = Int(args[1])!
                 let code = Int(args[2])!
                 let msg = args[3].removingPercentEncoding!
                 evtREQERR(reqId, code, msg)
             } else if line.starts(with: "PROG") {
                 // PROG,<prog>
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let prog = Int(args[1])!
                 evtPROG(prog)
             } else if line.starts(with: "SUBOK") {
                 // SUBOK,<subscription id>,<total items>,<total fields>
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let subId = Int(args[1])!
                 let nItems = Int(args[2])!
                 let nFields = Int(args[3])!
                 evtSUBOK(subId, nItems, nFields)
             } else if line.starts(with: "SUBCMD") {
                 // SUBCMD,<subscription id>,<total items>,<total fields>,<key index>,<command index>
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let subId = Int(args[1])!
                 let nItems = Int(args[2])!
                 let nFields = Int(args[3])!
@@ -2256,12 +2256,12 @@ public class LightstreamerClient {
                 evtSUBCMD(subId, nItems, nFields, keyIdx, cmdIdx)
             } else if line.starts(with: "UNSUB") {
                 // UNSUB,<subscription id>
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let subId = Int(args[1])!
                 evtUNSUB(subId)
             } else if line.starts(with: "CONF") {
                 // CONF,<subscription id>,(unlimited|<frequency>),(filtered|unfiltered)
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let subId = Int(args[1])!
                 if args[2] == "unlimited" {
                     evtCONF(subId, .unlimited)
@@ -2271,19 +2271,19 @@ public class LightstreamerClient {
                 }
             } else if line.starts(with: "EOS") {
                 // EOS,<subscription id>,<item index>
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let subId = Int(args[1])!
                 let itemIdx = Int(args[2])!
                 evtEOS(subId, itemIdx)
             } else if line.starts(with: "CS") {
                 // CS,<subscription id>,<item index>
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let subId = Int(args[1])!
                 let itemIdx = Int(args[2])!
                 evtCS(subId, itemIdx)
             } else if line.starts(with: "OV") {
                 // OV,<subscription id>,<item index>,<lost updates>
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let subId = Int(args[1])!
                 let itemIdx = Int(args[2])!
                 let lostUpdates = Int(args[3])!
@@ -2292,52 +2292,52 @@ public class LightstreamerClient {
                 evtNOOP()
             } else if line.starts(with: "CONERR") {
                 // CONERR,<code>,<message>
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let code = Int(args[1])!
                 let msg = args[2].removingPercentEncoding!
                 evtCONERR(code, msg)
             } else if line.starts(with: "END") {
                 // END,<code>,<message>
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let code = Int(args[1])!
                 let msg = args[2].removingPercentEncoding!
                 evtEND(code, msg)
             } else if line.starts(with: "ERROR") {
                 // ERROR,<code>,<message>
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let code = Int(args[1])!
                 let msg = args[2].removingPercentEncoding!
                 evtERROR(code, msg)
             } else if line.starts(with: "SYNC") {
                 // SYNC,<elapsed time [sec]>
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let seconds = UInt64(args[1])!
                 evtSYNC(seconds)
             } else if line.starts(with: "MPNREG") {
                 // MPNREG,<device id>,<adapter name>
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let deviceId = String(args[1])
                 let adapterName = String(args[2])
                 evtMPNREG(deviceId, adapterName)
             } else if line.starts(with: "MPNZERO") {
                 // MPNZERO,<device id>
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let deviceId = String(args[1])
                 evtMPNZERO(deviceId)
             } else if line.starts(with: "MPNOK") {
                 // MPNOK,<subscription id>, <mpn subscription id>
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let subId = Int(args[1])!
                 let mpnSubId = String(args[2])
                 evtMPNOK(subId, mpnSubId)
             } else if line.starts(with: "MPNDEL") {
                 // MPNDEL,<mpn subscription id>
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let mpnSubId = String(args[1])
                 evtMPNDEL(mpnSubId)
             } else if line.starts(with: "MPNCONF") {
                 // MPNCONF,<mpn subscription id>
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let mpnSubId = String(args[1])
                 evtMPNCONF(mpnSubId)
             }
@@ -2350,20 +2350,20 @@ public class LightstreamerClient {
             if line == "REQOK" {
                 evtREQOK()
             } else {
-                let args = line.split(separator: ",")
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 let reqId = Int(args[1])!
                 evtREQOK(reqId)
             }
         } else if line.starts(with: "REQERR") {
             // REQERR,<request id>,<code>,<message>
-            let args = line.split(separator: ",")
+            let args = line.split(separator: ",", omittingEmptySubsequences: false)
             let reqId = Int(args[1])!
             let code = Int(args[2])!
             let msg = args[3].removingPercentEncoding!
             evtREQERR(reqId, code, msg)
         } else if line.starts(with: "ERROR") {
             // ERROR,<code>,<message>
-            let args = line.split(separator: ",")
+            let args = line.split(separator: ",", omittingEmptySubsequences: false)
             let code = Int(args[1])!
             let msg = args[2].removingPercentEncoding!
             evtERROR(code, msg)
