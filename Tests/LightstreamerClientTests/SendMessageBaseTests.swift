@@ -25,8 +25,12 @@ class TestMsgDelegate: ClientMessageDelegate {
         addTrace("didFailMessage \(originalMessage)")
     }
     
-    func client(_ client: LightstreamerClient, didProcessMessage originalMessage: String) {
-        addTrace("didProcessMessage \(originalMessage)")
+    func client(_ client: LightstreamerClient, didProcessMessage originalMessage: String, withResponse response: String) {
+        if (response == "") {
+            addTrace("didProcessMessage \(originalMessage)")
+        } else {
+            addTrace("didProcessMessage \(originalMessage) \(response)")
+        }
     }
 }
 
@@ -313,17 +317,41 @@ final class SendMessageBaseTests: BaseTestCase {
         ws.onText("WSOK")
         ws.onText("CONOK,sid,70000,5000,*")
         client.sendMessage("foo", withSequence: "seq", delegate: msgDelegate)
-        ws.onText("MSGDONE,seq,1")
+        ws.onText("MSGDONE,seq,1,")
         XCTAssertEqual(0, client.messageManagers.count)
 
         asyncAssert {
             XCTAssertEqual(self.preamble + """
                 msg\r
                 LS_reqId=1&LS_message=foo&LS_sequence=seq&LS_msg_prog=1
-                MSGDONE,seq,1
+                MSGDONE,seq,1,
                 """, self.io.trace)
             XCTAssertEqual("""
                 didProcessMessage foo
+                """, self.msgDelegate.trace)
+        }
+    }
+    
+    func testMSGDONEWithResponse() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        client.connect()
+        
+        ws.onOpen()
+        ws.onText("WSOK")
+        ws.onText("CONOK,sid,70000,5000,*")
+        client.sendMessage("foo", withSequence: "seq", delegate: msgDelegate)
+        ws.onText("MSGDONE,seq,1,result:ok")
+        XCTAssertEqual(0, client.messageManagers.count)
+
+        asyncAssert {
+            XCTAssertEqual(self.preamble + """
+                msg\r
+                LS_reqId=1&LS_message=foo&LS_sequence=seq&LS_msg_prog=1
+                MSGDONE,seq,1,result:ok
+                """, self.io.trace)
+            XCTAssertEqual("""
+                didProcessMessage foo result:ok
                 """, self.msgDelegate.trace)
         }
     }
@@ -338,8 +366,8 @@ final class SendMessageBaseTests: BaseTestCase {
         ws.onText("CONOK,sid,70000,5000,*")
         client.sendMessage("foo", withSequence: nil, delegate: msgDelegate)
         client.sendMessage("bar", withSequence: nil, delegate: msgDelegate)
-        ws.onText("MSGDONE,*,1")
-        ws.onText("MSGDONE,*,2")
+        ws.onText("MSGDONE,*,1,")
+        ws.onText("MSGDONE,*,2,")
         XCTAssertEqual(0, client.messageManagers.count)
 
         asyncAssert {
@@ -348,8 +376,8 @@ final class SendMessageBaseTests: BaseTestCase {
                 LS_reqId=1&LS_message=foo&LS_msg_prog=1
                 msg\r
                 LS_reqId=2&LS_message=bar&LS_msg_prog=2
-                MSGDONE,*,1
-                MSGDONE,*,2
+                MSGDONE,*,1,
+                MSGDONE,*,2,
                 """, self.io.trace)
             XCTAssertEqual("""
                 didProcessMessage foo
@@ -459,7 +487,7 @@ final class SendMessageBaseTests: BaseTestCase {
         client.sendMessage("foo", withSequence: "seq", delegate: msgDelegate)
         ws.onText("REQOK,1")
         XCTAssertEqual(.s12, client.messageManagers[0].s_m)
-        ws.onText("MSGDONE,seq,1")
+        ws.onText("MSGDONE,seq,1,")
         XCTAssertEqual(0, client.messageManagers.count)
 
         asyncAssert {
@@ -467,7 +495,7 @@ final class SendMessageBaseTests: BaseTestCase {
                 msg\r
                 LS_reqId=1&LS_message=foo&LS_sequence=seq&LS_msg_prog=1
                 REQOK,1
-                MSGDONE,seq,1
+                MSGDONE,seq,1,
                 """, self.io.trace)
             XCTAssertEqual("""
                 didProcessMessage foo
