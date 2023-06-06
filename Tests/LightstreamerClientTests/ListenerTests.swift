@@ -1,7 +1,7 @@
 import XCTest
 @testable import LightstreamerClient
 
-final class ClientTests: BaseTestCase, ClientDelegate {
+final class ListenerTests: BaseTestCase, ClientDelegate {
     
     var actualClient: LightstreamerClient?
     var actualEvents = ""
