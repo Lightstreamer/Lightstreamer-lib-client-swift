@@ -72,7 +72,7 @@ class MessageManager: Encodable, CustomStringConvertible {
         }
     }
     
-    func evtMSGDONE() {
+    func evtMSGDONE(_ response: String) {
         let evt = "MSGDONE"
         switch s_m {
         case .s10:
@@ -81,12 +81,12 @@ class MessageManager: Encodable, CustomStringConvertible {
             s_m = .s13
         case .s11:
             trace(evt, State_m.s11, State_m.s13)
-            doMSGDONE()
+            doMSGDONE(response)
             finalize()
             s_m = .s13
         case .s12:
             trace(evt, State_m.s12, State_m.s13)
-            doMSGDONE()
+            doMSGDONE(response)
             finalize()
             s_m = .s13
         default:
@@ -219,8 +219,8 @@ class MessageManager: Encodable, CustomStringConvertible {
         return String(describing: map)
     }
     
-    private func doMSGDONE() {
-        fireOnProcessed()
+    private func doMSGDONE(_ response: String) {
+        fireOnProcessed(response)
     }
     
     private func doMSGFAIL(_ code: Int, _ msg: String) {
@@ -295,12 +295,12 @@ class MessageManager: Encodable, CustomStringConvertible {
         return req.encodedString
     }
     
-    private func fireOnProcessed() {
+    private func fireOnProcessed(_ response: String) {
         if messageLogger.isInfoEnabled {
             messageLogger.info("Message \(sequence):\(prog) processed")
         }
         client.callbackQueue.async {
-            self.delegate?.client(self.client, didProcessMessage: self.txt)
+            self.delegate?.client(self.client, didProcessMessage: self.txt, withResponse: response)
         }
     }
     

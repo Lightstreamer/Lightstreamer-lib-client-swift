@@ -12,5 +12,5 @@ let LS_CID = "oqVfhw.i6 37e64DHfDprfc85DN4O86b"
 let LS_LIB_NAME = "swift_client"
 let LS_LIB_VERSION = "5.0.2"
 
-let TLCP_VERSION = "TLCP-2.4.0"
+let TLCP_VERSION = "TLCP-2.5.0"
 let FULL_TLCP_VERSION = TLCP_VERSION + ".lightstreamer.com"

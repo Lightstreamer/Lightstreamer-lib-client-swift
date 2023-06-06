@@ -284,8 +284,10 @@ public protocol ClientMessageDelegate: AnyObject {
      - Parameter client: The `LightstreamerClient` instance.
 
      - Parameter originalMessage: The message to which this notification is related.
+     
+     - Parameter response: The response from the Metadata Adapter. If not supplied (i.e. supplied as nil), an empty message is received here.
      */
-    func client(_ client: LightstreamerClient, didProcessMessage originalMessage: String)
+    func client(_ client: LightstreamerClient, didProcessMessage originalMessage: String, withResponse response: String)
 }
 
 protocol Encodable {
@@ -2203,14 +2205,16 @@ public class LightstreamerClient {
                     evtCONS(.limited(n))
                 }
             } else if line.starts(with: "MSGDONE") {
-                // MSGDONE,(*|<sequence>),<prog>
-                let args = line.split(separator: ",")
+                // MSGDONE,(*|<sequence>),<prog>,<response>
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
                 var seq = String(args[1])
                 if seq == "*" {
                     seq = "UNORDERED_MESSAGES"
                 }
                 let prog = Int(args[2])!
-                evtMSGDONE(seq, prog)
+                let rawResp = args[3]
+                let resp = rawResp == "" ? "" : rawResp.removingPercentEncoding!
+                evtMSGDONE(seq, prog, resp)
             } else if line.starts(with: "MSGFAIL") {
                 // MSGFAIL,(*|<sequence>),<prog>,<code>,<message>
                 let args = line.split(separator: ",")
@@ -4275,16 +4279,16 @@ public class LightstreamerClient {
         }
     }
     
-    func evtMSGDONE(_ sequence: String, _ prog: Int) {
+    func evtMSGDONE(_ sequence: String, _ prog: Int, _ response: String) {
         synchronized {
             let evt = "MSGDONE"
             if protocolLogger.isDebugEnabled {
-                protocolLogger.debug("\(evt) \(sequence) \(prog)")
+                protocolLogger.debug("\(evt) \(sequence) \(prog) \(response)")
             }
             if inPushing() {
                 if isFreshData() {
                     trace(evt)
-                    doMSGDONE(sequence, prog)
+                    doMSGDONE(sequence, prog, response)
                     if inStreaming() {
                         evtRestartKeepalive()
                     }
@@ -7010,12 +7014,12 @@ public class LightstreamerClient {
         rec_serverProg = prog
     }
     
-    private func doMSGDONE(_ sequence: String, _ prog: Int) {
+    private func doMSGDONE(_ sequence: String, _ prog: Int, _ response: String) {
         onFreshData()
         let messages = messageManagers.filter({ $0.sequence == sequence && $0.prog == prog })
         assert(messages.count <= 1)
         for msg in messages {
-            msg.evtMSGDONE()
+            msg.evtMSGDONE(response)
         }
     }
     
