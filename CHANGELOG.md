@@ -1,5 +1,14 @@
 # SDK for Swift Clients CHANGELOG
 
+## 5.0.3
+
+_Compatible with Lightstreamer Server since 7.3.2._<br>
+_Compatible with code developed for the previous versions._<br>
+_Released on 14 Jun 2023._
+
+Fixed the validation check of the setter `items` of the classes `Subscription` and `MPNSubscription` in order to accept item names that start with a digit but contain non-digit characters too.
+
+
 ## 5.0.2
 
 _Compatible with Lightstreamer Server since 7.3.2._<br>
