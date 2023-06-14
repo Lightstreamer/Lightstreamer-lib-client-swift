@@ -20,7 +20,7 @@ class BaseTestCase: XCTestCase {
     var client: LightstreamerClient!
     
     override class func setUp() {
-        LightstreamerClient.setLoggerProvider(ConsoleLoggerProvider(level: .debug))
+        LightstreamerClient.setLoggerProvider(ConsoleLoggerProvider(level: .warn))
     }
     
     func newClient(_ url: String, adapterSet: String? = nil) -> LightstreamerClient {

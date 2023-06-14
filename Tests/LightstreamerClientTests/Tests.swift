@@ -4,6 +4,16 @@ import XCTest
 
 final class Tests: XCTestCase {
     
+    func testItemNames() {
+        let sub = Subscription(subscriptionMode: .MERGE)
+        sub.items = ["i123"]
+        sub.items = ["123i"]
+        
+        let mpn = MPNSubscription(subscriptionMode: .MERGE)
+        mpn.items = ["i123"]
+        mpn.items = ["123i"]
+    }
+    
     func testUnquote() {
         func unquote(_ s: String) -> String {
             return s.removingPercentEncoding!
