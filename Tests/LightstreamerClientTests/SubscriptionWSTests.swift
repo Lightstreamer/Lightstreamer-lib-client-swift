@@ -196,6 +196,201 @@ final class SubscriptionWSTests: BaseTestCase {
         }
     }
     
+    func testSUBOK_ItemMismatch() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        client.connect()
+        
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        XCTAssertEqual(true, sub.isActive)
+        XCTAssertEqual(1, client.subscriptionManagers.count)
+        
+        ws.onOpen()
+        ws.onText("WSOK")
+        ws.onText("CONOK,sid,70000,5000,*")
+        ws.onText("SUBOK,1,10,2")
+        XCTAssertEqual(false, sub.isActive)
+        XCTAssertEqual(0, client.subscriptions.count)
+        
+        asyncAssert {
+            XCTAssertEqual("""
+                ws.init http://server/lightstreamer
+                wsok
+                create_session\r
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
+                WSOK
+                CONOK,sid,70000,5000,*
+                control\r
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                SUBOK,1,10,2
+                control\r
+                LS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false
+                """, self.io.trace)
+            XCTAssertEqual("""
+                onError 61 Expected 1 items but got 10
+                """, self.subDelegate.trace)
+        }
+    }
+    
+    func testSUBOK_ItemMismatch_REQOK() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        client.connect()
+        
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        XCTAssertEqual(true, sub.isActive)
+        XCTAssertEqual(1, client.subscriptionManagers.count)
+        
+        ws.onOpen()
+        ws.onText("WSOK")
+        ws.onText("CONOK,sid,70000,5000,*")
+        ws.onText("REQOK,1")
+        ws.onText("SUBOK,1,10,2")
+        XCTAssertEqual(false, sub.isActive)
+        XCTAssertEqual(0, client.subscriptions.count)
+        
+        asyncAssert {
+            XCTAssertEqual("""
+                ws.init http://server/lightstreamer
+                wsok
+                create_session\r
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
+                WSOK
+                CONOK,sid,70000,5000,*
+                control\r
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                REQOK,1
+                SUBOK,1,10,2
+                control\r
+                LS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false
+                """, self.io.trace)
+            XCTAssertEqual("""
+                onError 61 Expected 1 items but got 10
+                """, self.subDelegate.trace)
+        }
+    }
+    
+    func testSUBOK_FieldMismatch() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        client.connect()
+        
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        XCTAssertEqual(true, sub.isActive)
+        XCTAssertEqual(1, client.subscriptionManagers.count)
+        
+        ws.onOpen()
+        ws.onText("WSOK")
+        ws.onText("CONOK,sid,70000,5000,*")
+        ws.onText("SUBOK,1,1,20")
+        XCTAssertEqual(false, sub.isActive)
+        XCTAssertEqual(0, client.subscriptions.count)
+        
+        asyncAssert {
+            XCTAssertEqual("""
+                ws.init http://server/lightstreamer
+                wsok
+                create_session\r
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
+                WSOK
+                CONOK,sid,70000,5000,*
+                control\r
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                SUBOK,1,1,20
+                control\r
+                LS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false
+                """, self.io.trace)
+            XCTAssertEqual("""
+                onError 61 Expected 2 fields but got 20
+                """, self.subDelegate.trace)
+        }
+    }
+    
+    func testSUBOK_FieldMismatch_REQOK() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        client.connect()
+        
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        XCTAssertEqual(true, sub.isActive)
+        XCTAssertEqual(1, client.subscriptionManagers.count)
+        
+        ws.onOpen()
+        ws.onText("WSOK")
+        ws.onText("CONOK,sid,70000,5000,*")
+        ws.onText("REQOK,1")
+        ws.onText("SUBOK,1,1,20")
+        XCTAssertEqual(false, sub.isActive)
+        XCTAssertEqual(0, client.subscriptions.count)
+        
+        asyncAssert {
+            XCTAssertEqual("""
+                ws.init http://server/lightstreamer
+                wsok
+                create_session\r
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
+                WSOK
+                CONOK,sid,70000,5000,*
+                control\r
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                REQOK,1
+                SUBOK,1,1,20
+                control\r
+                LS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false
+                """, self.io.trace)
+            XCTAssertEqual("""
+                onError 61 Expected 2 fields but got 20
+                """, self.subDelegate.trace)
+        }
+    }
+    
+    func testSUBOK_ItemGroupAndFieldSchema() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        client.connect()
+        
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
+        sub.itemGroup = "ig"
+        sub.fieldSchema = "fs"
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        XCTAssertEqual(true, sub.isActive)
+        XCTAssertEqual(1, client.subscriptionManagers.count)
+        
+        ws.onOpen()
+        ws.onText("WSOK")
+        ws.onText("CONOK,sid,70000,5000,*")
+        ws.onText("SUBOK,1,10,20")
+        XCTAssertEqual(true, sub.isActive)
+        XCTAssertEqual(true, sub.isSubscribed)
+        XCTAssertEqual(1, client.subscriptionManagers.count)
+        
+        asyncAssert {
+            XCTAssertEqual("""
+                ws.init http://server/lightstreamer
+                wsok
+                create_session\r
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
+                WSOK
+                CONOK,sid,70000,5000,*
+                control\r
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=ig&LS_schema=fs&LS_ack=false
+                SUBOK,1,10,20
+                """, self.io.trace)
+            XCTAssertEqual("""
+                onSUB
+                """, self.subDelegate.trace)
+        }
+    }
+    
     func testSUBCMD() {
         client = newClient("http://server")
         client.addDelegate(delegate)
@@ -229,6 +424,162 @@ final class SubscriptionWSTests: BaseTestCase {
                 """, self.io.trace)
             XCTAssertEqual("""
                 onSUB
+                """, self.subDelegate.trace)
+        }
+    }
+    
+    func testSUBCMD_ItemMismatch() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        client.connect()
+        
+        let sub = Subscription(subscriptionMode: .COMMAND, item: "item", fields: ["key", "command"])
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        XCTAssertEqual(true, sub.isActive)
+        XCTAssertEqual(1, client.subscriptions.count)
+        
+        ws.onOpen()
+        ws.onText("WSOK")
+        ws.onText("CONOK,sid,70000,5000,*")
+        ws.onText("SUBCMD,1,10,2,1,2")
+        XCTAssertEqual(false, sub.isActive)
+        XCTAssertEqual(0, client.subscriptions.count)
+        
+        asyncAssert {
+            XCTAssertEqual("""
+                ws.init http://server/lightstreamer
+                wsok
+                create_session\r
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
+                WSOK
+                CONOK,sid,70000,5000,*
+                control\r
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true&LS_ack=false
+                SUBCMD,1,10,2,1,2
+                control\r
+                LS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false
+                """, self.io.trace)
+            XCTAssertEqual("""
+                onError 61 Expected 1 items but got 10
+                """, self.subDelegate.trace)
+        }
+    }
+    
+    func testSUBCMD_ItemMismatch_REQOK() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        client.connect()
+        
+        let sub = Subscription(subscriptionMode: .COMMAND, item: "item", fields: ["key", "command"])
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        XCTAssertEqual(true, sub.isActive)
+        XCTAssertEqual(1, client.subscriptions.count)
+        
+        ws.onOpen()
+        ws.onText("WSOK")
+        ws.onText("CONOK,sid,70000,5000,*")
+        ws.onText("REQOK,1")
+        ws.onText("SUBCMD,1,10,2,1,2")
+        XCTAssertEqual(false, sub.isActive)
+        XCTAssertEqual(0, client.subscriptions.count)
+        
+        asyncAssert {
+            XCTAssertEqual("""
+                ws.init http://server/lightstreamer
+                wsok
+                create_session\r
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
+                WSOK
+                CONOK,sid,70000,5000,*
+                control\r
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true&LS_ack=false
+                REQOK,1
+                SUBCMD,1,10,2,1,2
+                control\r
+                LS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false
+                """, self.io.trace)
+            XCTAssertEqual("""
+                onError 61 Expected 1 items but got 10
+                """, self.subDelegate.trace)
+        }
+    }
+    
+    func testSUBCMD_FieldMismatch() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        client.connect()
+        
+        let sub = Subscription(subscriptionMode: .COMMAND, item: "item", fields: ["key", "command"])
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        XCTAssertEqual(true, sub.isActive)
+        XCTAssertEqual(1, client.subscriptions.count)
+        
+        ws.onOpen()
+        ws.onText("WSOK")
+        ws.onText("CONOK,sid,70000,5000,*")
+        ws.onText("SUBCMD,1,1,20,1,2")
+        XCTAssertEqual(false, sub.isActive)
+        XCTAssertEqual(0, client.subscriptions.count)
+        
+        asyncAssert {
+            XCTAssertEqual("""
+                ws.init http://server/lightstreamer
+                wsok
+                create_session\r
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
+                WSOK
+                CONOK,sid,70000,5000,*
+                control\r
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true&LS_ack=false
+                SUBCMD,1,1,20,1,2
+                control\r
+                LS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false
+                """, self.io.trace)
+            XCTAssertEqual("""
+                onError 61 Expected 2 fields but got 20
+                """, self.subDelegate.trace)
+        }
+    }
+    
+    func testSUBCMD_FieldMismatch_REQOK() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        client.connect()
+        
+        let sub = Subscription(subscriptionMode: .COMMAND, item: "item", fields: ["key", "command"])
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        XCTAssertEqual(true, sub.isActive)
+        XCTAssertEqual(1, client.subscriptions.count)
+        
+        ws.onOpen()
+        ws.onText("WSOK")
+        ws.onText("CONOK,sid,70000,5000,*")
+        ws.onText("REQOK,1")
+        ws.onText("SUBCMD,1,1,20,1,2")
+        XCTAssertEqual(false, sub.isActive)
+        XCTAssertEqual(0, client.subscriptions.count)
+        
+        asyncAssert {
+            XCTAssertEqual("""
+                ws.init http://server/lightstreamer
+                wsok
+                create_session\r
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
+                WSOK
+                CONOK,sid,70000,5000,*
+                control\r
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true&LS_ack=false
+                REQOK,1
+                SUBCMD,1,1,20,1,2
+                control\r
+                LS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false
+                """, self.io.trace)
+            XCTAssertEqual("""
+                onError 61 Expected 2 fields but got 20
                 """, self.subDelegate.trace)
         }
     }

@@ -172,6 +172,52 @@ final class SubscriptionWSPollingTests: BaseTestCase {
         }
     }
     
+    func testSUBOK_CountMismatch() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        client.connect()
+        
+        http.onText("CONOK,sid,70000,5000,*")
+        http.onText("LOOP,0")
+        
+        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        XCTAssertEqual(true, sub.isActive)
+        XCTAssertEqual(1, client.subscriptionManagers.count)
+        
+        ws.onOpen()
+        ws.onText("WSOK")
+        ws.onText("CONOK,sid,70000,5000,*")
+        ws.onText("SUBOK,1,1,20")
+        XCTAssertEqual(false, sub.isActive)
+        XCTAssertEqual(0, client.subscriptions.count)
+        
+        asyncAssert {
+            XCTAssertEqual("""
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_cause=api
+                CONOK,sid,70000,5000,*
+                LOOP,0
+                http.dispose
+                ws.init http://server/lightstreamer
+                wsok
+                WSOK
+                bind_session\r
+                LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
+                control\r
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                CONOK,sid,70000,5000,*
+                SUBOK,1,1,20
+                control\r
+                LS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false
+                """, self.io.trace)
+            XCTAssertEqual("""
+                onError 61 Expected 2 fields but got 20
+                """, self.subDelegate.trace)
+        }
+    }
+    
     func testSUBCMD() {
         client = newClient("http://server")
         client.addDelegate(delegate)
