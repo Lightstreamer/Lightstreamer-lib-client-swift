@@ -226,25 +226,40 @@ class SubscriptionManagerLiving: SubscriptionManager {
         }
     }
     
+    private func checkItems(_ expItems: Int?, _ nItems: Int) -> Bool {
+        return expItems != nil ? expItems == nItems : true;
+    }
+
+    private func checkFields(_ expFields: Int?, _ nFields: Int) -> Bool {
+        return expFields != nil ? expFields == nFields : true;
+    }
+
+    private func checkItemsAndFields(_ expItems: Int?, _ expFields: Int?, _ nItems: Int, _ nFields: Int) -> Bool {
+        return checkItems(expItems, nItems) && checkFields(expFields, nFields);
+    }
+    
     func evtSUBOK(nItems: Int, nFields: Int) {
         synchronized {
             let evt = "SUBOK"
-            if s_m == .s2 {
-                trace(evt, State_m.s2, State_m.s4)
-                doSUBOK(nItems, nFields)
-                notifyOnSubscription()
-                s_m = .s4
-                s_s = .s10
-                s_c = .s20
-                evtCheckFrequency()
-            } else if s_m == .s3 {
-                trace(evt, State_m.s3, State_m.s4)
-                doSUBOK(nItems, nFields)
-                notifyOnSubscription()
-                s_m = .s4
-                s_s = .s10
-                s_c = .s20
-                evtCheckFrequency()
+            if s_m == .s2 || s_m == .s3 {
+                let expItems = m_subscription.items?.count
+                let expFields = m_subscription.fields?.count
+                if (checkItemsAndFields(expItems, expFields, nItems, nFields)) {
+                    trace(evt, s_m, State_m.s4)
+                    doSUBOK(nItems, nFields)
+                    notifyOnSubscription()
+                    s_m = .s4
+                    s_s = .s10
+                    s_c = .s20
+                    evtCheckFrequency()
+                } else {
+                    trace(evt, s_m, State_m.s5)
+                    doUnsubscribe()
+                    doSetInactive()
+                    notifyOnSubscriptionError_CountMismatch(expItems, expFields, nItems, nFields)
+                    s_m = .s5
+                    genSendControl()
+                }
             }
         }
     }
@@ -252,22 +267,25 @@ class SubscriptionManagerLiving: SubscriptionManager {
     func evtSUBCMD(nItems: Int, nFields: Int, keyIdx: Int, cmdIdx: Int) {
         synchronized {
             let evt = "SUBCMD"
-            if s_m == .s2 {
-                trace(evt, State_m.s2, State_m.s4)
-                doSUBCMD(nItems, nFields, cmdIdx: cmdIdx, keyIdx: keyIdx)
-                notifyOnSubscription()
-                s_m = .s4
-                s_s = .s10
-                s_c = .s20
-                evtCheckFrequency()
-            } else if s_m == .s3 {
-                trace(evt, State_m.s3, State_m.s4)
-                doSUBCMD(nItems, nFields, cmdIdx: cmdIdx, keyIdx: keyIdx)
-                notifyOnSubscription()
-                s_m = .s4
-                s_s = .s10
-                s_c = .s20
-                evtCheckFrequency()
+            if s_m == .s2 || s_m == .s3 {
+                let expItems = m_subscription.items?.count
+                let expFields = m_subscription.fields?.count
+                if (checkItemsAndFields(expItems, expFields, nItems, nFields)) {
+                    trace(evt, s_m, State_m.s4)
+                    doSUBCMD(nItems, nFields, cmdIdx: cmdIdx, keyIdx: keyIdx)
+                    notifyOnSubscription()
+                    s_m = .s4
+                    s_s = .s10
+                    s_c = .s20
+                    evtCheckFrequency()
+                } else {
+                    trace(evt, s_m, State_m.s5)
+                    doUnsubscribe()
+                    doSetInactive()
+                    notifyOnSubscriptionError_CountMismatch(expItems, expFields, nItems, nFields)
+                    s_m = .s5
+                    genSendControl()
+                }
             }
         }
     }
@@ -551,6 +569,14 @@ class SubscriptionManagerLiving: SubscriptionManager {
     private func notifyOnSubscriptionError(_ code: Int, _ msg: String) {
         m_subscription.fireOnSubscriptionError(subId: m_subId, code, msg)
     }
+    
+    private func notifyOnSubscriptionError_CountMismatch(_ expItems: Int?, _ expFields: Int?, _ nItems: Int, _ nFields: Int) {
+        if !checkItems(expItems, nItems) {
+            m_subscription.fireOnSubscriptionError(subId: m_subId, 61, "Expected \(expItems!) items but got \(nItems)");
+        } else {
+            m_subscription.fireOnSubscriptionError(subId: m_subId, 61, "Expected \(expFields!) fields but got \(nFields)");
+        }
+      }
     
     private func doConfigure() {
         m_reqMaxFrequency = m_subscription.requestedMaxFrequency

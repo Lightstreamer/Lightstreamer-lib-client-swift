@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-Added a third argument to the delegate `ClientMessageDelegate.client(_:didProcessMessage:withResponse)` carrying the response, from the Metadata Adapter of a Lightstreamer Server, to a message sent by the Client through the method `LightstreamerClient.sendMessage`.
+Added a third argument to the delegate `ClientMessageDelegate.client(_:didProcessMessage:withResponse:)` carrying the response, from the Metadata Adapter of a Lightstreamer Server, to a message sent by the Client through the method `LightstreamerClient.sendMessage`.
+
+Added this check: when a `Subscription` is configured by means of an ItemList or a FieldList, the client checks that the number of items and fields returned by the server coincides with the number of elements in the ItemList and the FieldList, and if the numbers are different, the client deletes the subscription and fires the delegate `SubscriptionDelegate.subscription(_:didFailWithErrorCode:message:)` with the error code 61.
 
 
 ## 5.0.3

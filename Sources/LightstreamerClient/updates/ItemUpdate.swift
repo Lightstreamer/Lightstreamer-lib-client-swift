@@ -35,10 +35,14 @@ class ItemUpdateBase: ItemUpdate {
     let m_jsonPatches: [Pos:LsJsonPatch]
     
     init(_ itemIdx: Pos, _ sub: Subscription, _ newValues: [Pos:CurrFieldVal?], _ changedFields: Set<Pos>, _ isSnapshot: Bool, _ jsonPatches: [Pos:LsJsonPatch]) {
+        let fields = sub.fields
         self.m_itemIdx = itemIdx
         self.m_items = toMap(sub.items)
         self.m_nFields = sub.nFields!
-        self.m_fields = toMap(sub.fields)
+        self.m_fields = toMap(fields)
+        if let fields = fields, fields.count != m_nFields {
+             subscriptionLogger.error("Expected \(m_nFields) field names but got \(fields.count): \(fields)");
+           }
         self.m_newValues = newValues
         self.m_changedFields = changedFields
         self.m_isSnapshot = isSnapshot
@@ -63,7 +67,9 @@ class ItemUpdateBase: ItemUpdate {
         }
         var res = [String:String?]()
         for fieldPos in m_changedFields {
-            res[fields[fieldPos]!] = toString(m_newValues[fieldPos] ?? nil)
+            if let fieldName = fields[fieldPos] {
+                res[fieldName] = toString(m_newValues[fieldPos] ?? nil)
+            } // else branch should never happen: see the check in the ctor
         }
         return res
     }
@@ -201,7 +207,9 @@ class ItemUpdate2Level: ItemUpdate {
         }
         var res = [String:String?]()
         for fieldPos in m_changedFields {
-            res[getFieldNameFromIdx(fieldPos)] = toString(m_newValues[fieldPos] ?? nil)
+            if let fieldName = getFieldNameFromIdx(fieldPos) {
+                res[fieldName] = toString(m_newValues[fieldPos] ?? nil)
+            } // else branch should never happen
         }
         return res
     }
@@ -220,7 +228,9 @@ class ItemUpdate2Level: ItemUpdate {
         }
         var res = [String:String?]()
         for (f, v) in m_newValues {
-            res[getFieldNameFromIdx(f)] = toString(v)
+            if let fieldName = getFieldNameFromIdx(f) {
+                res[fieldName] = toString(v)
+            } // else branch should never happen
         }
         return res
     }
@@ -273,14 +283,14 @@ class ItemUpdate2Level: ItemUpdate {
         return val != nil ? val! : nil
     }
     
-    private func getFieldNameFromIdx(_ fieldIdx: Pos) -> String {
+    private func getFieldNameFromIdx(_ fieldIdx: Pos) -> String? {
         guard let fields = m_fields, let fields2 = m_fields2 else {
             preconditionFailure()
         }
         if fieldIdx <= m_nFields {
-            return fields[fieldIdx]!
+            return fields[fieldIdx]
         } else {
-            return fields2[fieldIdx - m_nFields]!
+            return fields2[fieldIdx - m_nFields]
         }
     }
     
