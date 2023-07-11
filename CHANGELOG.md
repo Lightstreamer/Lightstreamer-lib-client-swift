@@ -1,6 +1,9 @@
 # SDK for Swift Clients CHANGELOG
 
-## Unreleased
+## 6.0.0
+_Compatible with Lightstreamer Server since 7.4.0._<br>
+_Not compatible with code developed for the previous version._<br>
+_Released on 11 Jul 2023._
 
 Added a third argument to the delegate `ClientMessageDelegate.client(_:didProcessMessage:withResponse:)` carrying the response, from the Metadata Adapter of a Lightstreamer Server, to a message sent by the Client through the method `LightstreamerClient.sendMessage`.
 
