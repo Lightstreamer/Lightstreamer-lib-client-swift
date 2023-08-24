@@ -223,6 +223,6 @@ class LsRequestBuilder: CustomStringConvertible {
     var encodedString: String {
         var components = URLComponents()
         components.queryItems = params
-        return components.percentEncodedQuery ?? ""
+        return components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B") ?? ""
     }
 }

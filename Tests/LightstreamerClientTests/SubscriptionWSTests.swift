@@ -30,6 +30,33 @@ final class SubscriptionWSTests: BaseTestCase {
                 """, self.io.trace)
         }
     }
+  
+  func testSubscribeFieldWithPlus() {
+      client = newClient("http://server")
+      client.addDelegate(delegate)
+      client.connect()
+      
+      let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1+f2"])
+      sub.addDelegate(subDelegate)
+      client.subscribe(sub)
+      
+      ws.onOpen()
+      ws.onText("WSOK")
+      ws.onText("CONOK,sid,70000,5000,*")
+      
+      asyncAssert {
+          XCTAssertEqual("""
+              ws.init http://server/lightstreamer
+              wsok
+              create_session\r
+              LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
+              WSOK
+              CONOK,sid,70000,5000,*
+              control\r
+              LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%2Bf2&LS_ack=false
+              """, self.io.trace)
+      }
+  }
     
     func testSubscribe_adapter_schema_group_selector_buffer() {
         client = newClient("http://server")
