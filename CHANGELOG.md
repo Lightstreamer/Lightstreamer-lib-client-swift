@@ -1,5 +1,13 @@
 # SDK for Swift Clients CHANGELOG
 
+## 6.0.1
+_Compatible with Lightstreamer Server since 7.4.0._<br>
+_Compatible with code developed for the previous version._<br>
+_Released on 24 Aug 2023._
+
+Fixed the url-encoding of request parameters that could cause misbehaviors on the Server when the values of some parameters contained the character `+`.
+
+
 ## 6.0.0
 _Compatible with Lightstreamer Server since 7.4.0._<br>
 _Not compatible with code developed for the previous version._<br>
