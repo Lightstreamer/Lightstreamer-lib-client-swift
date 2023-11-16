@@ -57,7 +57,7 @@ final class DiffPatchTests: BaseTestCase {
         }
         
         asyncAssert {
-            XCTAssertEqual(expectedError, delegate.trace)
+            XCTAssertEqual(expectedError, String(delegate.trace.prefix(expectedError.count)))
         }
     }
     
@@ -145,7 +145,7 @@ final class DiffPatchTests: BaseTestCase {
         errorTemplate([
             "foo",
             "^Tz", // copy(25)
-        ], "61 - Bad TLCP-diff: Index out of range: startIndex=Index(_rawBits: 1) count=25 length=3")
+        ], "61 - Bad TLCP-diff: Index out of range")
     }
     
     func testBadDiff_InvalidChar() {

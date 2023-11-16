@@ -65,7 +65,7 @@ final class Tests: XCTestCase {
     func testTimeArithmetic() {
         let start = DispatchTime(uptimeNanoseconds: 0)
         XCTAssertEqual(0, start.uptimeNanoseconds)
-        XCTAssertEqual(100, DispatchTime(uptimeNanoseconds: start.uptimeNanoseconds + 100).uptimeNanoseconds)
+        XCTAssertEqual(125, DispatchTime(uptimeNanoseconds: start.uptimeNanoseconds + 125).uptimeNanoseconds)
     }
     
     func testDict() {

@@ -132,7 +132,7 @@ final class ListenerTests: BaseTestCase, ClientDelegate {
     
     func testServerAddress() {
         XCTAssertEqual(.failure(.malformed), parseServerAddress(""))
-        XCTAssertEqual(.failure(.malformed), parseServerAddress("%&/"))
+        XCTAssertEqual(.failure(.malformed), parseServerAddress("http://%&/"))
         XCTAssertEqual(.failure(.wrongScheme), parseServerAddress("host"))
         XCTAssertEqual(.failure(.wrongScheme), parseServerAddress("ws://host"))
         XCTAssertEqual(.failure(.wrongQuery), parseServerAddress("http://host/?q"))
