@@ -6,10 +6,10 @@ import PackageDescription
 let package = Package(
     name: "LightstreamerClient",
     platforms: [
-        .iOS(SupportedPlatform.IOSVersion.v10),
-        .macOS(SupportedPlatform.MacOSVersion.v10_12),
-        .watchOS(SupportedPlatform.WatchOSVersion.v3),
-        .tvOS(SupportedPlatform.TVOSVersion.v10)
+        .iOS(SupportedPlatform.IOSVersion.v11),
+        .macOS(SupportedPlatform.MacOSVersion.v10_13),
+        .watchOS(SupportedPlatform.WatchOSVersion.v5),
+        .tvOS(SupportedPlatform.TVOSVersion.v12)
     ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
@@ -21,8 +21,8 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
         // NB keep in sync with LightstreamerClient.podspec
-        .package(url: "https://github.com/daltoniam/Starscream.git", .upToNextMajor(from: "4.0.4")),
-        .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.2.0")),
+        .package(url: "https://github.com/daltoniam/Starscream.git", .upToNextMajor(from: "4.0.6")),
+        .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.8.1")),
         .package(url: "https://github.com/raymccrae/swift-jsonpatch.git", .upToNextMajor(from: "1.0.4")),
     ],
     targets: [
