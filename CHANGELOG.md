@@ -1,5 +1,20 @@
 # SDK for Swift Clients CHANGELOG
 
+## XXXXX
+_Compatible with Lightstreamer Server since 7.4.0._<br>
+_May not be compatible with code developed for the previous version._<br>
+_Released on XXXXX._
+
+Added support for visionOS 1.0.
+
+Increased the minimum requirements for the following platforms:
+
+- iOS: from version 10 to 11
+- macOS: from version 10.12 to 10.13
+- watchOS: from version 3 to 5
+- tvOS: from version 10 to 12
+
+
 ## 6.0.1
 _Compatible with Lightstreamer Server since 7.4.0._<br>
 _Compatible with code developed for the previous version._<br>

@@ -1,7 +1,8 @@
 # Lightstreamer Swift Client SDK
 
 [![Swift](https://img.shields.io/badge/Swift-5.1_5.2_5.3_5.4-orange?style=flat-square)](https://img.shields.io/badge/Swift-5.1_5.2_5.3_5.4-Orange?style=flat-square)
-[![Platforms](https://img.shields.io/badge/Platforms-macOS_iOS_tvOS_watchOS_Linux_Windows-yellowgreen?style=flat-square)](https://img.shields.io/badge/Platforms-macOS_iOS_tvOS_watchOS_Linux_Windows-Green?style=flat-square)
+[![Platforms](https://img.shields.io/badge/Platforms-macOS_iOS_tvOS_watchOS_visionOS-yellowgreen?style=flat-square)](https://img.shields.io/badge/Platforms-macOS_iOS_tvOS_watchOS_visionOS-Green?style=flat-square)
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/LightstreamerClient.svg?style=flat-square)](https://img.shields.io/cocoapods/v/LightstreamerClient.svg)
 [![Swift Package Manager](https://img.shields.io/badge/Swift_Package_Manager-compatible-orange?style=flat-square)](https://img.shields.io/badge/Swift_Package_Manager-compatible-orange?style=flat-square)
 
 Lightstreamer Swift Client SDK enables any Swift application to communicate bidirectionally with a **Lightstreamer Server**. The API allows to subscribe to real-time data pushed by the server and to send any message to the server.
@@ -16,7 +17,7 @@ This SDK is also meant to replace and evolve all the Client SDKs targeted to the
 
 | Platform | Minimum Swift Version | Installation | Status |
 | --- | --- | --- | --- |
-| iOS 10.0+ / macOS 10.12+ / tvOS 10.0+ / watchOS 3.0+ | 5.1 | [Swift Package Manager](#swift-package-manager), [Manual](#manually),[CocoaPods](#cocoapods) | Fully Tested |
+| iOS 11.0+ / macOS 10.13+ / tvOS 12.0+ / watchOS 5.0+ / visionOS 1.0+ | 5.1 | [Swift Package Manager](#swift-package-manager), [Manual](#manually),[CocoaPods](#cocoapods) | Fully Tested |
 
 ## Installation
 
@@ -28,7 +29,7 @@ Once you have your Swift package set up, adding Lightstreamer Swift Client SDK a
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/Lightstreamer/Lightstreamer-lib-client-swift.git", from: "6.0.1")
+    .package(url: "https://github.com/Lightstreamer/Lightstreamer-lib-client-swift.git", from: "6.1.0")
 ]
 ```
 
@@ -71,7 +72,7 @@ If you prefer not to use any of the aforementioned dependency managers, you can 
 
 ## Quickstart
 
-To connect to a Lightstreamer Server, a [LightstreamerClient](https://lightstreamer.com/api/ls-swift-client/6.0.1/Classes/LightstreamerClient.html) object has to be created, configured, and instructed to connect to the Lightstreamer Server. 
+To connect to a Lightstreamer Server, a [LightstreamerClient](https://lightstreamer.com/api/ls-swift-client/6.1.0/Classes/LightstreamerClient.html) object has to be created, configured, and instructed to connect to the Lightstreamer Server. 
 A minimal version of the code that creates a LightstreamerClient and connects to the Lightstreamer Server on *https://push.lightstreamer.com* will look like this:
 
 ```swift
@@ -79,7 +80,7 @@ let client = LightstreamerClient(serverAddress: "https://push.lightstreamer.com/
 client.connect()
 ```
 
-For each subscription to be subscribed to a Lightstreamer Server a [Subscription](https://lightstreamer.com/api/ls-swift-client/6.0.1/Classes/Subscription.html) instance is needed.
+For each subscription to be subscribed to a Lightstreamer Server a [Subscription](https://lightstreamer.com/api/ls-swift-client/6.1.0/Classes/Subscription.html) instance is needed.
 A simple Subscription containing three items and two fields to be subscribed in *MERGE* mode is easily created (see [Lightstreamer General Concepts](https://www.lightstreamer.com/docs/ls-server/latest/General%20Concepts.pdf)):
 
 ```swift
@@ -91,7 +92,7 @@ sub.requestedSnapshot = .yes
 client.subscribe(sub)
 ```
 
-Before sending the subscription to the server, usually at least one [SubscriptionDelegate](https://lightstreamer.com/api/ls-swift-client/6.0.1/Protocols/SubscriptionDelegate.html) is attached to the Subscription instance in order to consume the real-time updates. The following code shows the values of the fields *stock_name* and *last_price* each time a new update is received for the subscription:
+Before sending the subscription to the server, usually at least one [SubscriptionDelegate](https://lightstreamer.com/api/ls-swift-client/6.1.0/Protocols/SubscriptionDelegate.html) is attached to the Subscription instance in order to consume the real-time updates. The following code shows the values of the fields *stock_name* and *last_price* each time a new update is received for the subscription:
 
 ```swift
 class SubscriptionDelegateImpl: SubscriptionDelegate {
@@ -112,7 +113,7 @@ Before you can use MPN services, you need to
 - register your app with APNs (read carefully the documentation about [Setting Up a Remote Notification Server](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server));
 - configure the Lightstreamer MPN module (read carefully the section *5 Mobile and Web Push Notifications* in the [General Concepts guide](https://lightstreamer.com/docs/ls-server/7.4.0/General%20Concepts.pdf)).
 
-After you have an APNs account, you can create a [MPN device](https://lightstreamer.com/api/ls-swift-client/6.0.1/Classes/MPNDevice.html), which represents a specific app running on a specific mobile device.
+After you have an APNs account, you can create a [MPN device](https://lightstreamer.com/api/ls-swift-client/6.1.0/Classes/MPNDevice.html), which represents a specific app running on a specific mobile device.
 
 The following snippet shows a sample implementation of the iOS app delegate methods needed to register for remote notifications and receive the corresponding token.
 
@@ -135,7 +136,7 @@ func application(_ application: UIApplication,
 }
 ```
 
-To receive notifications, you need to subscribe to a [MPN subscription](https://lightstreamer.com/api/ls-swift-client/6.0.1/Classes/MPNSubscription.html): it contains subscription details and the listener needed to monitor its status. Real-time data is routed via native push notifications.
+To receive notifications, you need to subscribe to a [MPN subscription](https://lightstreamer.com/api/ls-swift-client/6.1.0/Classes/MPNSubscription.html): it contains subscription details and the listener needed to monitor its status. Real-time data is routed via native push notifications.
 
 ```swift
 let builder = MPNBuilder()
@@ -161,7 +162,7 @@ The optional  trigger expression  lets you specify  when to send  the notificati
 
 ## Logging
 
-To enable the internal client logger, create an instance of [LoggerProvider](https://lightstreamer.com/api/ls-swift-client/6.0.1/Protocols/LSLoggerProvider.html) and set it as the default provider of [LightstreamerClient](https://lightstreamer.com/api/ls-swift-client/6.0.1/Classes/LightstreamerClient.html).
+To enable the internal client logger, create an instance of [LoggerProvider](https://lightstreamer.com/api/ls-swift-client/6.1.0/Protocols/LSLoggerProvider.html) and set it as the default provider of [LightstreamerClient](https://lightstreamer.com/api/ls-swift-client/6.1.0/Classes/LightstreamerClient.html).
 
 ```swift
 let loggerProvider = ConsoleLoggerProvider(level: .debug)
@@ -175,7 +176,7 @@ Compatible with Lightstreamer Server since version 7.4.0.
 
 - [Live demos](https://demos.lightstreamer.com/?p=lightstreamer&t=client&lclient=apple&sclientapple=ios&sclientapple=macos&sclientapple=tvos&sclientapple=watchos)
 
-- [API Reference](https://lightstreamer.com/api/ls-swift-client/6.0.1/index.html)
+- [API Reference](https://lightstreamer.com/api/ls-swift-client/6.1.0/index.html)
 
 - [Lightstreamer General Concepts](https://lightstreamer.com/docs/ls-server/7.4.0/General%20Concepts.pdf)
 
