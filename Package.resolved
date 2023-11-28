@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/raymccrae/swift-jsonpatch.git",
         "state": {
           "branch": null,
-          "revision": "65edda8a5a756985418e53968491f25d5dc4a217",
-          "version": "1.0.4"
+          "revision": "e6d643765ffec0ad57945921f0e1a57b97584e69",
+          "version": "1.0.5"
         }
       }
     ]
