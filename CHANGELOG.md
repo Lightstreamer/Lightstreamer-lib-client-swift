@@ -1,9 +1,9 @@
 # SDK for Swift Clients CHANGELOG
 
-## XXXXX
+## 6.1.0
 _Compatible with Lightstreamer Server since 7.4.0._<br>
 _May not be compatible with code developed for the previous version._<br>
-_Released on XXXXX._
+_Released on 28 Nov 2023._
 
 Added support for visionOS 1.0.
 
