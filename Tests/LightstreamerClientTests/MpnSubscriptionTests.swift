@@ -79,6 +79,39 @@ final class MpnSubscriptionTests: BaseTestCase {
         UserDefaults.standard.removeObject(forKey: "LS_deviceToken")
     }
     
+    func testSnapshot_EarlyDeletion() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        client.connect()
+        
+        simulateCreation()
+        ws.onText("SUBCMD,2,1,2,1,2")
+        ws.onText("U,2,1,SUB-sub3|ADD")
+        
+        async(after: 0.2) {
+            self.ws.onText("EOS,2,1")
+            self.ws.onText("U,2,1,SUB-sub3|DELETE")
+        }
+        
+        asyncAssert(after: 0.5) {
+            XCTAssertEqual(0, self.client.MPNSubscriptions.count)
+            
+            XCTAssertEqual(self.preamble + """
+                SUBCMD,2,1,2,1,2
+                U,2,1,SUB-sub3|ADD
+                control\r
+                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                EOS,2,1
+                U,2,1,SUB-sub3|DELETE
+                """, self.io.trace)
+            XCTAssertEqual("""
+                dev.onStatus REGISTERED 0
+                dev.onRegister
+                dev.onSubscriptionsUpdated
+                """, self.mpnDevDelegate.trace)
+        }
+    }
+    
     func testSubscribe_NotActive() {
         client = newClient("http://server")
         client.addDelegate(delegate)

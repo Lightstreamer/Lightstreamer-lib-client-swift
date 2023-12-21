@@ -646,7 +646,7 @@ enum State_mpn_tk: Int, State {
 }
 
 enum State_mpn_sbs: Int, State {
-    case s420 = 420, s421 = 421, s422 = 422, s423 = 423, s424 = 424, s425 = 425
+    case s420 = 420, s421 = 421, s422 = 422, s423 = 423, s424 = 424
 
     var id: Int {
         self.rawValue
@@ -5867,20 +5867,47 @@ public class LightstreamerClient {
                     s_mpn.sbs = .s423
                     genSUBS_update(mpnSubId, update)
                 }
-            } else if s_mpn.sbs == .s424 && command != "DELETE" && status != nil && !exists(mpnSubId: mpnSubId) {
-                if mpn_snapshotSet.count == 0 || (mpn_snapshotSet.count == 1 && mpn_snapshotSet.contains(mpnSubId)) {
-                    trace(evt, cond: "empty", State_mpn_sbs.s424, State_mpn_sbs.s424)
-                    doRemoveFromMpnSnapshot(mpnSubId)
-                    doAddMpnSubscription(mpnSubId)
-                    s_mpn.sbs = .s424
-                    genSUBS_update(mpnSubId, update)
-                    notifyOnSubscriptionsUpdated()
-                } else if (mpn_snapshotSet.count == 1 && !mpn_snapshotSet.contains(mpnSubId)) || mpn_snapshotSet.count > 1 {
-                    trace(evt, cond: "not empty", State_mpn_sbs.s424, State_mpn_sbs.s424)
-                    doRemoveFromMpnSnapshot(mpnSubId)
-                    doAddMpnSubscription(mpnSubId)
-                    s_mpn.sbs = .s424
-                    genSUBS_update(mpnSubId, update)
+            } else if s_mpn.sbs == .s424 && !exists(mpnSubId: mpnSubId) {
+                trace(evt, State_mpn_sbs.s424, State_mpn_sbs.s424)
+                if (command == "DELETE") {
+                    if (mpn_snapshotSet.contains(mpnSubId)) {
+                        if (mpn_snapshotSet.count == 1) {
+                            doRemoveFromMpnSnapshot(mpnSubId);
+                            s_mpn.sbs = .s424
+                            notifyOnSubscriptionsUpdated();
+                        } else {
+                            doRemoveFromMpnSnapshot(mpnSubId);
+                            s_mpn.sbs = .s424
+                        }
+                    }
+                } else {
+                    if (status != nil) {
+                        if (mpn_snapshotSet.contains(mpnSubId)) {
+                            if (mpn_snapshotSet.count == 1) {
+                                doRemoveFromMpnSnapshot(mpnSubId);
+                                doAddMpnSubscription(mpnSubId);
+                                s_mpn.sbs = .s424
+                                genSUBS_update(mpnSubId, update);
+                                notifyOnSubscriptionsUpdated();
+                            } else {
+                                doRemoveFromMpnSnapshot(mpnSubId);
+                                doAddMpnSubscription(mpnSubId);
+                                s_mpn.sbs = .s424
+                                genSUBS_update(mpnSubId, update);
+                            }
+                        } else {
+                            if (mpn_snapshotSet.count == 0) {
+                                doAddMpnSubscription(mpnSubId);
+                                s_mpn.sbs = .s424
+                                genSUBS_update(mpnSubId, update);
+                                notifyOnSubscriptionsUpdated();
+                            } else {
+                                doAddMpnSubscription(mpnSubId);
+                                s_mpn.sbs = .s424
+                                genSUBS_update(mpnSubId, update);
+                            }
+                        }
+                    }
                 }
             }
         }
