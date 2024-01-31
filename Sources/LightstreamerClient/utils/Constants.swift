@@ -1,18 +1,18 @@
 import Foundation
 
 #if os(macOS)
-let LS_CID = "scFuxkwp1ltvcC4CJ4Ji kOj2DK6P873mi"
+let LS_CID = "scFuxkwp1ltvcC4CJ5Ji kOj2DK6Q775gf"
 #elseif os(tvOS)
-let LS_CID = "zxRyen2m uz.l56AK1x-onG37BM7N879m"
+let LS_CID = "zxRyen2m uz.l56AL1x-onG37BM8M893j"
 #elseif os(watchOS)
-let LS_CID = ".cWimz9dysogQz2HJ5L73dXoqoH6M993g7Cn"
+let LS_CID = ".cWimz9dysogQz2HJ5L83dXoqoH6M9A2g96k"
 #elseif os(visionOS)
-let LS_CID = "-kVoty5wvjrkHty8Q3N66.E nwx1O785g76Ir"
+let LS_CID = "-kVoty5wvjrkHty8Q3N67.E nwx1O786f78Co"
 #else // iOS
-let LS_CID = "oqVfhw.i6 38e74BHfDprfc85DN5N8Di"
+let LS_CID = "oqVfhw.i6 38e74CHfDprfc85DO4NA7f"
 #endif
 let LS_LIB_NAME = "swift_client"
-let LS_LIB_VERSION = "6.1.0"
+let LS_LIB_VERSION = "6.1.1"
 
 let TLCP_VERSION = "TLCP-2.5.0"
 let FULL_TLCP_VERSION = TLCP_VERSION + ".lightstreamer.com"
