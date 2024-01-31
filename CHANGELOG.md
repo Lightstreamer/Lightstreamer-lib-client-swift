@@ -1,5 +1,13 @@
 # SDK for Swift Clients CHANGELOG
 
+## 6.1.1
+_Compatible with Lightstreamer Server since 7.4.0._<br>
+_Compatible with code developed for the previous version._<br>
+_Released on 31 Jan 2024._
+
+Fixed a bug that could prevent the `mpnDeviceDidUpdateSubscriptions` event of `MPNDeviceDelegate` from firing when the `unsubscribeMultipleMPN` method of `LightstreamerClient` was invoked while registering an `MPNDevice`.
+
+
 ## 6.1.0
 _Compatible with Lightstreamer Server since 7.4.0._<br>
 _May not be compatible with code developed for the previous version._<br>
