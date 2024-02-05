@@ -95,6 +95,9 @@ public class ConnectionDetails: CustomStringConvertible {
                         break
                     }
                 }
+                if (newValue == m_serverAddress) {
+                    return
+                }
                 if actionLogger.isInfoEnabled {
                     actionLogger.info("serverAddress changed: \(newValue ?? "nil")")
                 }
@@ -127,6 +130,9 @@ public class ConnectionDetails: CustomStringConvertible {
         }
         set {
             client.synchronized {
+                if (newValue == m_adapterSet) {
+                    return
+                }
                 if actionLogger.isInfoEnabled {
                     actionLogger.info("adapterSet changed: \(newValue ?? "nil")")
                 }
@@ -155,6 +161,9 @@ public class ConnectionDetails: CustomStringConvertible {
         }
         set {
             client.synchronized {
+                if (newValue == m_user) {
+                    return
+                }
                 if actionLogger.isInfoEnabled {
                     actionLogger.info("user changed: \(newValue ?? "nil")")
                 }
@@ -181,6 +190,9 @@ public class ConnectionDetails: CustomStringConvertible {
      */
     public func setPassword(_ password: String) {
         client.synchronized {
+            if (password == m_password) {
+                return
+            }
             if actionLogger.isInfoEnabled {
                 actionLogger.info("password changed")
             }
@@ -192,7 +204,7 @@ public class ConnectionDetails: CustomStringConvertible {
     /**
      ID associated by the server to this client session.
      
-     **Lifecycle:** the value of this property is meaningful only when a session is currently active.
+     **Lifecycle:**  If a session is not currently active, nil is returned; soon after a session is established, the value will become available.
      
      **Related notifications:** a change to this setting will be notified through a call to `ClientDelegate.client(_:didChangeProperty:)` with argument `sessionId` on any `ClientDelegate` listening to the related `LightstreamerClient`.
      */
@@ -204,8 +216,11 @@ public class ConnectionDetails: CustomStringConvertible {
         }
     }
 
-    func setSessionId(_ sessionId: String) {
+    func setSessionId(_ sessionId: String?) {
         client.synchronized {
+            if (sessionId == m_sessionId) {
+                return
+            }
             m_sessionId = sessionId
             client.fireDidChangeProperty("sessionId")
         }
@@ -220,7 +235,7 @@ public class ConnectionDetails: CustomStringConvertible {
      
      **Edition note:** server clustering is an optional feature, available depending on Edition and License Type. To know what features are enabled by your license, please see the License tab of the Monitoring Dashboard (by default, available at &#47;dashboard).
 
-     **Lifecycle:** the value of this property is meaningful only when a session is currently active.
+     **Lifecycle:** If a session is not currently active, nil is returned; soon after a session is established, the value may become available.
      
      **Related notifications:** a change to this setting will be notified through a call to `ClientDelegate.client(_:didChangeProperty:)` with argument `serverInstanceAddress` on any `ClientDelegate` listening to the related `LightstreamerClient`.
      */
@@ -232,8 +247,11 @@ public class ConnectionDetails: CustomStringConvertible {
         }
     }
 
-    func setServerInstanceAddress(_ serverInstanceAddress: String) {
+    func setServerInstanceAddress(_ serverInstanceAddress: String?) {
         client.synchronized {
+            if (serverInstanceAddress == m_serverInstanceAddress) {
+                return
+            }
             m_serverInstanceAddress = serverInstanceAddress
             client.fireDidChangeProperty("serverInstanceAddress")
         }
@@ -248,7 +266,7 @@ public class ConnectionDetails: CustomStringConvertible {
      
      **Edition note:** server clustering is an optional feature, available depending on Edition and License Type. To know what features are enabled by your license, please see the License tab of the Monitoring Dashboard (by default, available at &#47;dashboard).
 
-     **Lifecycle:** if a session is not currently active, nil is returned; soon after a session is established, the value will become available.
+     **Lifecycle:** If a session is not currently active, nil is returned; soon after a session is established, the value will become available.
      
      **Related notifications:** a change to this setting will be notified through a call to `ClientDelegate.client(_:didChangeProperty:)` with argument `serverSocketName` on any `ClientDelegate` listening to the related `LightstreamerClient`.
      */
@@ -260,8 +278,11 @@ public class ConnectionDetails: CustomStringConvertible {
         }
     }
 
-    func setServerSocketName(_ serverSocketName: String) {
+    func setServerSocketName(_ serverSocketName: String?) {
         client.synchronized {
+            if (serverSocketName == m_serverSocketName) {
+                return
+            }
             m_serverSocketName = serverSocketName
             client.fireDidChangeProperty("serverSocketName")
         }
@@ -274,7 +295,7 @@ public class ConnectionDetails: CustomStringConvertible {
      
      Note that in case of polling or in case rebind requests are needed, subsequent requests related to the same session may, in principle, expose a different IP address to the Server; these changes would not be reported.
      
-     **Lifecycle:** if a session is not currently active, nil is returned; soon after a session is established, the value may become available; but it is possible that this information is not provided by the Server and that it will never be available.
+     **Lifecycle:** if a session is not currently active, nil is returned; soon after a session is established, the value may become available.
      
      **Related notifications:** a change to this setting will be notified through a call to `ClientDelegate.client(_:didChangeProperty:)` with argument `clientIp` on any `ClientDelegate` listening to the related `LightstreamerClient`.
      */
@@ -286,8 +307,11 @@ public class ConnectionDetails: CustomStringConvertible {
         }
     }
 
-    func setClientIp(_ clientIp: String) {
+    func setClientIp(_ clientIp: String?) {
         client.synchronized {
+            if (clientIp == m_clientIp) {
+                return
+            }
             m_clientIp = clientIp
             client.fireDidChangeProperty("clientIp")
         }

@@ -1,5 +1,13 @@
 # SDK for Swift Clients CHANGELOG
 
+## XXXXXX
+_Compatible with Lightstreamer Server since 7.4.0._<br>
+_May not be compatible with code developed for the previous version._<br>
+_Released on XXXXXX._
+
+Changed the behavior of the delegate `ClientDelegate.client(_:didChangeProperty:)` to be called whenever the value of a property is changed by the server or by the user through a property setter.
+
+
 ## 6.1.1
 _Compatible with Lightstreamer Server since 7.4.0._<br>
 _Compatible with code developed for the previous version._<br>

@@ -128,6 +128,9 @@ public class ConnectionOptions: CustomStringConvertible {
         set {
             precondition(newValue > 0, "contentLength must be greater than zero")
             client.synchronized {
+                if (newValue == m_contentLength) {
+                    return
+                }
                 if actionLogger.isInfoEnabled {
                     actionLogger.info("contentLength changed: \(newValue)")
                 }
@@ -161,6 +164,9 @@ public class ConnectionOptions: CustomStringConvertible {
         set {
             precondition(newValue > 0, "firstRetryMaxDelay must be greater than zero")
             client.synchronized {
+                if (newValue == m_firstRetryMaxDelay) {
+                    return
+                }
                 if actionLogger.isInfoEnabled {
                     actionLogger.info("firstRetryMaxDelay changed: \(newValue)")
                 }
@@ -200,6 +206,9 @@ public class ConnectionOptions: CustomStringConvertible {
         }
         set {
             client.synchronized {
+                if (newValue == m_forcedTransport) {
+                    return
+                }
                 if actionLogger.isInfoEnabled {
                     actionLogger.info("forcedTransport changed: \(newValue?.rawValue ?? "nil")")
                 }
@@ -233,6 +242,9 @@ public class ConnectionOptions: CustomStringConvertible {
         }
         set {
             client.synchronized {
+                if (newValue == m_HTTPExtraHeaders) {
+                    return
+                }
                 if actionLogger.isInfoEnabled {
                     actionLogger.info("httpExtraHeaders changed: \(newValue ?? [:])")
                 }
@@ -269,6 +281,9 @@ public class ConnectionOptions: CustomStringConvertible {
         set {
             precondition(newValue >= 0, "idleTimeout must be greater than or equal to zero")
             client.synchronized {
+                if (newValue == m_idleTimeout) {
+                    return
+                }
                 if actionLogger.isInfoEnabled {
                     if newValue != m_idleTimeout {
                         actionLogger.info("idleTimeout changed: \(newValue)")
@@ -309,10 +324,11 @@ public class ConnectionOptions: CustomStringConvertible {
         set {
             precondition(newValue >= 0, "keepaliveInterval must be greater than or equal to zero")
             client.synchronized {
+                if (newValue == m_keepaliveInterval) {
+                    return
+                }
                 if actionLogger.isInfoEnabled {
-                    if newValue != m_keepaliveInterval {
-                        actionLogger.info("keepaliveInterval changed: \(newValue)")
-                    }
+                    actionLogger.info("keepaliveInterval changed: \(newValue)")
                 }
                 m_keepaliveInterval = newValue
                 client.fireDidChangeProperty("keepaliveInterval")
@@ -364,6 +380,9 @@ public class ConnectionOptions: CustomStringConvertible {
                 break
             }
             client.synchronized {
+                if (newValue == m_requestedMaxBandwidth) {
+                    return
+                }
                 if actionLogger.isInfoEnabled {
                     actionLogger.info("requestedMaxBandwidth changed: \(newValue)")
                 }
@@ -381,7 +400,7 @@ public class ConnectionOptions: CustomStringConvertible {
      
      **Format:** a decimal number (e.g. `5.0`), or `unlimited`.
      
-     **Lifecycle:** if a connection to Lightstreamer Server is not currently active, nil is returned; soon after the connection is established, the value becomes available, as notified by a call to `ClientDelegate.client(_:didChangeProperty:)` with argument `realMaxBandwidth`.
+     **Lifecycle:**  If a session is not currently active, nil is returned; soon after a session is established, the value will become available.
      
      **Related notifications:** when the value becomes available, a notification is sent with call to `ClientDelegate.client(_:didChangeProperty:)` with argument `realMaxBandwidth` on any `ClientDelegate` listening to the related `LightstreamerClient`.
      
@@ -395,6 +414,9 @@ public class ConnectionOptions: CustomStringConvertible {
 
     func setRealMaxBandwidth(_ newValue: RealMaxBandwidth?) {
         client.synchronized {
+            if (newValue == m_realMaxBandwidth) {
+                return
+            }
             m_realMaxBandwidth = newValue
             client.fireDidChangeProperty("realMaxBandwidth")
         }
@@ -436,10 +458,11 @@ public class ConnectionOptions: CustomStringConvertible {
         set {
             precondition(newValue >= 0, "pollingInterval must be greater than or equal to zero")
             client.synchronized {
+                if (newValue == m_pollingInterval) {
+                    return
+                }
                 if actionLogger.isInfoEnabled {
-                    if newValue != m_pollingInterval {
-                        actionLogger.info("pollingInterval changed: \(newValue)")
-                    }
+                    actionLogger.info("pollingInterval changed: \(newValue)")
                 }
                 m_pollingInterval = newValue
                 client.fireDidChangeProperty("pollingInterval")
@@ -474,6 +497,9 @@ public class ConnectionOptions: CustomStringConvertible {
         set {
             precondition(newValue > 0, "reconnectTimeout must be greater than zero")
             client.synchronized {
+                if (newValue == m_reconnectTimeout) {
+                    return
+                }
                 if actionLogger.isInfoEnabled {
                     actionLogger.info("reconnectTimeout changed: \(newValue)")
                 }
@@ -526,6 +552,9 @@ public class ConnectionOptions: CustomStringConvertible {
         set {
             precondition(newValue > 0, "retryDelay must be greater than zero")
             client.synchronized {
+                if (newValue == m_retryDelay) {
+                    return
+                }
                 if actionLogger.isInfoEnabled {
                     actionLogger.info("retryDelay changed: \(newValue)")
                 }
@@ -571,6 +600,9 @@ public class ConnectionOptions: CustomStringConvertible {
         set {
             precondition(newValue >= 0, "reverseHeartbeatInterval must be greater than or equal to zero")
             client.synchronized {
+                if (newValue == m_reverseHeartbeatInterval) {
+                    return
+                }
                 if actionLogger.isInfoEnabled {
                     actionLogger.info("reverseHeartbeatInterval changed: \(newValue)")
                 }
@@ -609,6 +641,9 @@ public class ConnectionOptions: CustomStringConvertible {
         set {
             precondition(newValue >= 0, "sessionRecoveryTimeout must be greater than or equal to zero")
             client.synchronized {
+                if (newValue == m_sessionRecoveryTimeout) {
+                    return
+                }
                 if actionLogger.isInfoEnabled {
                     actionLogger.info("sessionRecoveryTimeout changed: \(newValue)")
                 }
@@ -642,6 +677,9 @@ public class ConnectionOptions: CustomStringConvertible {
         set {
             precondition(newValue > 0, "stalledTimeout must be greater than zero")
             client.synchronized {
+                if (newValue == m_stalledTimeout) {
+                    return
+                }
                 if actionLogger.isInfoEnabled {
                     actionLogger.info("stalledTimeout changed: \(newValue)")
                 }
@@ -672,6 +710,9 @@ public class ConnectionOptions: CustomStringConvertible {
         }
         set {
             client.synchronized {
+                if (newValue == m_HTTPExtraHeadersOnSessionCreationOnly) {
+                    return
+                }
                 if actionLogger.isInfoEnabled {
                     actionLogger.info("httpExtraHeadersOnSessionCreationOnly changed: \(newValue)")
                 }
@@ -706,6 +747,9 @@ public class ConnectionOptions: CustomStringConvertible {
         }
         set {
             client.synchronized {
+                if (newValue == m_serverInstanceAddressIgnored) {
+                    return
+                }
                 if actionLogger.isInfoEnabled {
                     actionLogger.info("serverInstanceAddressIgnored changed: \(newValue)")
                 }
@@ -741,6 +785,9 @@ public class ConnectionOptions: CustomStringConvertible {
         }
         set {
             client.synchronized {
+                if (newValue == m_slowingEnabled) {
+                    return
+                }
                 if actionLogger.isInfoEnabled {
                     actionLogger.info("slowingEnabled changed: \(newValue)")
                 }

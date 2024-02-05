@@ -164,54 +164,32 @@ public protocol ClientDelegate: AnyObject {
      Properties of these objects can be modified by direct calls to them or by server sent events. Possible property names are the following:
 
      - `adapterSet`
-
      - `serverAddress`
-
      - `user`
-
      - `password`
-
-     - `serverInstanceAddress`
-
-     - `serverSocketName`
-
-     - `clientIp`
-
-     - `sessionId`
-
      - `contentLength`
-
-     - `idleTimeout`
-
-     - `keepaliveInterval`
-
      - `requestedMaxBandwidth`
-
-     - `realMaxBandwidth`
-
-     - `pollingInterval`
-
-     - `reconnectTimeout`
-
-     - `stalledTimeout`
-
-     - `retryDelay`
-
-     - `firstRetryMaxDelay`
-
-     - `slowingEnabled`
-
-     - `forcedTransport`
-
-     - `serverInstanceAddressIgnored`
-
      - `reverseHeartbeatInterval`
-
-     - `earlyWSOpenEnabled`
-
-     - `HTTPExtraHeaders`
-
-     - `HTTPExtraHeadersOnSessionCreationOnly`
+     - `httpExtraHeaders`
+     - `httpExtraHeadersOnSessionCreationOnly`
+     - `forcedTransport`
+     - `retryDelay`
+     - `firstRetryMaxDelay`
+     - `sessionRecoveryTimeout`
+     - `stalledTimeout`
+     - `reconnectTimeout`
+     - `slowingEnabled`
+     - `serverInstanceAddressIgnored`
+     - `cookieHandlingRequired`
+     - `proxy`
+     - `serverInstanceAddress`
+     - `serverSocketName`
+     - `clientIp`
+     - `sessionId`
+     - `realMaxBandwidth`
+     - `idleTimeout`
+     - `keepaliveInterval`
+     - `pollingInterval`
 
      - Parameter client: The `LightstreamerClient` instance.
 
@@ -944,11 +922,11 @@ public class LightstreamerClient {
         disposeHTTP()
         disposeCtrl()
         
-        m_details.m_serverInstanceAddress = nil
-        m_details.m_serverSocketName = nil
-        m_details.m_clientIp = nil
-        m_details.m_sessionId = nil
-        m_options.m_realMaxBandwidth = nil
+        m_details.setServerInstanceAddress(nil)
+        m_details.setSessionId(nil)
+        m_details.setServerSocketName(nil)
+        m_details.setClientIp(nil)
+        m_options.setRealMaxBandwidth(nil)
         
         lastKnownClientIp = nil
         
