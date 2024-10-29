@@ -1898,11 +1898,11 @@ func notEmpty(_ newValue: [String]?) -> Bool {
 }
 
 func isValidItem(_ item: String) -> Bool {
-    !item.isEmpty && !item.contains(where: { $0.isWhitespace }) && !CharacterSet(charactersIn: item).isSubset(of: CharacterSet(charactersIn: "0123456789"))
+    !item.isEmpty && !item.contains(where: { $0 == " " }) && !CharacterSet(charactersIn: item).isSubset(of: CharacterSet(charactersIn: "0123456789"))
 }
 
 func isValidField(_ field: String) -> Bool {
-    !field.isEmpty && !field.contains(where: { $0.isWhitespace })
+    !field.isEmpty && !field.contains(where: { $0 == " " })
 }
 
 func allValidFields(_ newValue: [String]?) -> Bool {
