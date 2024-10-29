@@ -1,11 +1,19 @@
 # SDK for Swift Clients CHANGELOG
 
-## XXXXXX
+## 6.2.0
 _Compatible with Lightstreamer Server since 7.4.0._<br>
 _May not be compatible with code developed for the previous version._<br>
-_Released on XXXXXX._
+_Released on 29 Oct 2024._
+
+Changed the references to `ClientDelegate`, `ClientMessageDelegate`, `SubscriptionDelegate`, `MPNDeviceDelegate`, and `MPNSubscriptionDelegate` instances from weak to strong references.
 
 Changed the behavior of the delegate `ClientDelegate.client(_:didChangeProperty:)` to be called whenever the value of a property is changed by the server or by the user through a property setter.
+
+Increased the minimum iOS compatibility to version 12.0.
+
+Fix the signature of the `ConnectionDetails.setPassword` method.
+
+Relaxed the validity constraints on the item and field names. They can now contain characters such as `\r` and `\n`.
 
 
 ## 6.1.1
