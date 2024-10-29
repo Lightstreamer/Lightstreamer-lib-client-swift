@@ -11,6 +11,7 @@ let messageLogger = LogManager.getLogger("lightstreamer.messages")
 let mpnDeviceLogger = LogManager.getLogger("lightstreamer.mpn.device")
 let mpnSubscriptionLogger = LogManager.getLogger("lightstreamer.mpn.subscriptions")
 
+/// :nodoc:
 public class LogManager {
     static let lock = NSLock()
     static var logInstances = [String:LSLog]()
