@@ -11,7 +11,7 @@ let messageLogger = LogManager.getLogger("lightstreamer.messages")
 let mpnDeviceLogger = LogManager.getLogger("lightstreamer.mpn.device")
 let mpnSubscriptionLogger = LogManager.getLogger("lightstreamer.mpn.subscriptions")
 
-class LogManager {
+public class LogManager {
     static let lock = NSLock()
     static var logInstances = [String:LSLog]()
     static var currentLoggerProvider: LSLoggerProvider?
@@ -33,7 +33,7 @@ class LogManager {
         }
     }
     
-    static func getLogger(_ category: String) -> LSLog {
+    public static func getLogger(_ category: String) -> LSLogger {
         synchronized {
             if let log = logInstances[category] {
                 return log
