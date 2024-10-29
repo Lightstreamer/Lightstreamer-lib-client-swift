@@ -188,7 +188,7 @@ public class ConnectionDetails: CustomStringConvertible {
      
      - SeeAlso: user
      */
-    public func setPassword(_ password: String) {
+    public func setPassword(_ password: String?) {
         client.synchronized {
             if (password == m_password) {
                 return
