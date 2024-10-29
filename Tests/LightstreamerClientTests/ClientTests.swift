@@ -1,5 +1,6 @@
 import Foundation
 import XCTest
+import JSONPatch
 @testable import LightstreamerClient
 
 final class ClientTests: XCTestCase {
@@ -15,6 +16,29 @@ final class ClientTests: XCTestCase {
     
     override func tearDown() {
         client.disconnect()
+    }
+  
+    func testJsonPatch() {
+      expectation.expectedFulfillmentCount = 2
+      
+      let sub = Subscription(subscriptionMode: .MERGE, items: ["count"], fields: ["count"])
+      sub.requestedSnapshot = .no
+      sub.dataAdapter = "JSON_COUNT"
+      let subListener = TestSubDelegate()
+      subListener.onItemUpdate = { _ in
+        self.expectation.fulfill()
+      }
+      sub.addDelegate(subListener)
+      client.subscribe(sub)
+      client.connect()
+      
+      wait(for: [expectation], timeout: 3)
+      let u = subListener.updates[1]
+      let patch = u.valueAsJSONPatchIfAvailable(withFieldPos: 1)!
+      XCTAssertTrue(patch.contains(#""op":"replace""#))
+      XCTAssertTrue(patch.contains(#""path":"\/value""#))
+      XCTAssertTrue(patch.contains(try! Regex(#""value":\d+"#)))
+      XCTAssertNotNil(u.value(withFieldPos: 1))
     }
     
     func testRoundTrip() {
