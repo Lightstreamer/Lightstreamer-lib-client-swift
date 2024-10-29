@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "LightstreamerClient",
     platforms: [
-        .iOS(SupportedPlatform.IOSVersion.v11),
+        .iOS(SupportedPlatform.IOSVersion.v12),
         .macOS(SupportedPlatform.MacOSVersion.v10_13),
         .watchOS(SupportedPlatform.WatchOSVersion.v5),
         .tvOS(SupportedPlatform.TVOSVersion.v12)

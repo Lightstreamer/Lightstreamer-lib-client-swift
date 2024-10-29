@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.author           = { 'Lightstreamer' => 'support@lightstreamer.com' }
   s.source           = { :git => 'https://github.com/Lightstreamer/Lightstreamer-lib-client-swift.git', :tag => s.version.to_s }
   #s.source           = { :git => 'https://github.com/Lightstreamer/Lightstreamer-lib-client-swift.git', :branch => 'cocoapds' }
-  s.ios.deployment_target = '11.0'
+  s.ios.deployment_target = '12.0'
   s.macos.deployment_target = '10.13'
   s.watchos.deployment_target = '5.0'
   s.tvos.deployment_target = '12.0'
