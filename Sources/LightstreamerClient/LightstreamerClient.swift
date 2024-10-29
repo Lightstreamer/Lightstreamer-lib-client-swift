@@ -1196,7 +1196,7 @@ public class LightstreamerClient {
 
      **Lifecycle:** a delegate can be added at any time. A call to add a delegate already present will be ignored.
 
-     - Parameter delegate: An object that will receive the events as documented in the `ClientDelegate` interface. Note: delegates are stored with weak references: make sure you keep a strong reference to your delegates or they may be released prematurely.
+     - Parameter delegate: An object that will receive the events as documented in the `ClientDelegate` interface.
 
      - SeeAlso: `removeDelegate(_:)`
      */
@@ -1340,8 +1340,7 @@ public class LightstreamerClient {
      - Parameter delayTimeout: A timeout, expressed in milliseconds. If higher than the Server configured timeout  on missing messages, the latter will be used instead. The parameter is optional; if a negative value is supplied, the Server configured timeout on missing messages will be applied. This timeout is ignored for the special `UNORDERED_MESSAGES` sequence, although a server-side timeout on missing messages still applies.
      
      - Parameter delegate: An object suitable for receiving notifications about the processing outcome. The parameter is optional; if not supplied,
-     no notification will be available. Note: delegates are stored with weak references: make sure you keep a strong reference to your delegates or
-     they may be released prematurely.
+     no notification will be available.
 
      - Parameter enqueueWhileDisconnected: If this flag is set to `true`, and the client is in a disconnected status when the provided message is handled, then the message is not aborted right away but is queued waiting for a new session. Note that the message can still be aborted later when a new session is established.
      */

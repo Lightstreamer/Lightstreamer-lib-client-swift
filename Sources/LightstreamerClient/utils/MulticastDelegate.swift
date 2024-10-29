@@ -8,7 +8,7 @@ import Foundation
 class MulticastDelegate<T> {
     
     /// The delegates hash table.
-    let delegates: NSHashTable<AnyObject> = NSHashTable<AnyObject>.weakObjects()
+    let delegates: NSHashTable<AnyObject> = NSHashTable<AnyObject>()
     
     /**
      *  Use the property to check if no delegates are contained there.

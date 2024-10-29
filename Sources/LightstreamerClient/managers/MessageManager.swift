@@ -17,7 +17,7 @@ class MessageManager: Encodable, CustomStringConvertible {
     let sequence: String
     let prog: Int
     let maxWait: Int
-    weak var delegate: ClientMessageDelegate?
+    let delegate: ClientMessageDelegate?
     let enqueueWhileDisconnected: Bool
     unowned let client: LightstreamerClient
     var lastReqId: Int!

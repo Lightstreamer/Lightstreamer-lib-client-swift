@@ -236,7 +236,6 @@ public class MPNDevice: CustomStringConvertible {
      **Lifecycle:** a delegate can be added at any time. A call to add a delegate already present will be ignored.
      
      - Parameter delegate: An object that will receive the events as documented in the `MPNDeviceDelegate` interface.
-     Note: delegates are stored with weak references: make sure you keep a strong reference to your delegates or they may be released prematurely.
      
      - SeeAlso: `removeDelegate(_:)`
      */
