@@ -1,5 +1,10 @@
 # SDK for Swift Clients CHANGELOG
 
+## [unreleased]
+
+Changed HTTP `Content-Type` header to use `text/plain` instead of `application/x-www-form-urlencoded`.
+
+
 ## 6.2.0
 _Compatible with Lightstreamer Server since 7.4.0._<br>
 _May not be compatible with code developed for the previous version._<br>

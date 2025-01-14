@@ -46,6 +46,8 @@ class LsHttp: LsHttpClient {
         self.onText = onText
         self.onError = onError
         self.onDone = onDone
+        var headers = headers
+        headers["Content-Type"] = "text/plain; charset=utf-8"
         if streamLogger.isDebugEnabled {
             if headers.isEmpty {
                 streamLogger.debug("HTTP sending: \(url) \(String(reflecting: body))")

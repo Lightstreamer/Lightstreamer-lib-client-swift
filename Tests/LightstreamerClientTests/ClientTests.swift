@@ -18,6 +18,17 @@ final class ClientTests: XCTestCase {
         client.disconnect()
     }
   
+    func testConnectHTTP() {
+        client.connectionOptions.forcedTransport = .HTTP
+        clientDelegate.onStatusChange = { status in
+            if status == .CONNECTED_HTTP_STREAMING {
+                self.expectation.fulfill()
+            }
+        }
+        client.connect()
+        wait(for: [expectation], timeout: 3)
+    }
+  
     func testJsonPatch() {
       expectation.expectedFulfillmentCount = 2
       
@@ -132,6 +143,7 @@ final class ClientTests: XCTestCase {
 
 class TestClientDelegate: ClientDelegate {
     var onPropertyChange: ((String) -> Void)!
+    var onStatusChange: ((LightstreamerClient.Status) -> Void)!
     
     func clientDidRemoveDelegate(_ client: LightstreamerClient) {}
     
@@ -139,7 +151,9 @@ class TestClientDelegate: ClientDelegate {
     
     func client(_ client: LightstreamerClient, didReceiveServerError errorCode: Int, withMessage errorMessage: String) {}
     
-    func client(_ client: LightstreamerClient, didChangeStatus status: LightstreamerClient.Status) {}
+    func client(_ client: LightstreamerClient, didChangeStatus status: LightstreamerClient.Status) {
+        onStatusChange?(status)
+    }
     
     func client(_ client: LightstreamerClient, didChangeProperty property: String) {
         onPropertyChange?(property)
