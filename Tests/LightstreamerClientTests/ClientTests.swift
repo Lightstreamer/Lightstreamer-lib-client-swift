@@ -48,7 +48,9 @@ final class ClientTests: XCTestCase {
       let patch = u.valueAsJSONPatchIfAvailable(withFieldPos: 1)!
       XCTAssertTrue(patch.contains(#""op":"replace""#))
       XCTAssertTrue(patch.contains(#""path":"\/value""#))
-      XCTAssertTrue(patch.contains(try! Regex(#""value":\d+"#)))
+      if #available(iOS 16.0, *) {
+        XCTAssertTrue(patch.contains(try! Regex(#""value":\d+"#)))
+      }
       XCTAssertNotNil(u.value(withFieldPos: 1))
     }
     
