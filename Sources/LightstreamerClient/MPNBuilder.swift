@@ -136,7 +136,7 @@ public class MPNBuilder {
     }
     
     /**
-     Sets the `aps.alert` field with an int value.
+     Sets the `aps.badge` field with an int value.
      
      - Parameter badge: An int to be used for the `aps.badge` field value.
      */
