@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 import Foundation
-import Alamofire
 
 typealias HTTPFactoryService = (NSRecursiveLock, String,
                                 String,
@@ -42,9 +41,9 @@ protocol LsHttpClient: AnyObject {
     func dispose()
 }
 
-class LsHttp: LsHttpClient {
+class LsHttp: LsHttpClient, LsHttpTaskDelegate {
     let lock: NSRecursiveLock
-    let request: DataStreamRequest
+    let request: LsHttpTask
     let assembler = LineAssembler()
     let onText: (LsHttp, String) -> Void
     let onError: (LsHttp, String) -> Void
@@ -70,10 +69,15 @@ class LsHttp: LsHttpClient {
                 streamLogger.debug("HTTP sending: \(url) \(String(reflecting: body)) \(headers)")
             }
         }
-        request = AF.streamRequest(url, method: .post, headers: HTTPHeaders(headers)) { urlRequest in
-            urlRequest.httpBody = Data(body.utf8)
+        var urlRequest = URLRequest(url: URL(string: url)!)
+        urlRequest.httpMethod = "POST"
+        for (key, val) in headers {
+            urlRequest.setValue(val, forHTTPHeaderField: key)
         }
-        request.validate().responseStreamString(on: defaultQueue, stream: { [weak self] e in self?.onEvent(e) })
+        urlRequest.httpBody = Data(body.utf8)
+        self.request = LsSession.shared.createHttpTask(with: urlRequest)
+        request.setDelegate(self)
+        request.open()
     }
     
     var disposed: Bool {
@@ -92,41 +96,26 @@ class LsHttp: LsHttpClient {
         }
     }
     
-    private func onEvent(_ stream: DataStreamRequest.Stream<String, Never>) {
-        synchronized {
-            guard !m_disposed else {
-                return
+    func onTaskText(_ chunk: String) {
+        defaultQueue.async { [weak self] in
+            guard let self = self else { return }
+            for line in self.assembler.process(chunk) {
+                onText(self, line)
             }
-            if streamLogger.isDebugEnabled {
-                switch stream.event {
-                case let .stream(result):
-                    switch result {
-                    case let .success(chunk):
-                        streamLogger.debug("HTTP event: text(\(String(reflecting: chunk)))")
-                    }
-                case let .complete(completion):
-                    if let error = completion.error {
-                        streamLogger.debug("HTTP event: error(\(error.errorDescription ?? "unknown error"))")
-                    } else {
-                        streamLogger.debug("HTTP event: complete")
-                    }
-                }
-            }
-            switch stream.event {
-            case let .stream(result):
-                switch result {
-                case let .success(chunk):
-                    for line in self.assembler.process(chunk) {
-                        onText(self, line)
-                    }
-                }
-            case let .complete(completion):
-                if let error = completion.error {
-                    onError(self, error.localizedDescription)
-                } else {
-                    onDone(self)
-                }
-            }
+        }
+    }
+    
+    func onTaskError(_ error: String) {
+        defaultQueue.async { [weak self] in
+            guard let self = self else { return }
+            onError(self, error)
+        }
+    }
+    
+    func onTaskDone() {
+        defaultQueue.async { [weak self] in
+            guard let self = self else { return }
+            onDone(self)
         }
     }
     

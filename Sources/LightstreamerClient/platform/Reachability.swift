@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import Foundation
-import Alamofire
+//import Alamofire
 
 typealias ReachabilityServiceFactory = (String) -> ReachabilityService
 
@@ -39,25 +39,25 @@ class ReachabilityManager: ReachabilityService {
 }
 #else
 class ReachabilityManager: ReachabilityService {
-    let manager: NetworkReachabilityManager?
+//    let manager: NetworkReachabilityManager?
     
     init(host: String) {
-        manager = NetworkReachabilityManager(host: host)
+//        manager = NetworkReachabilityManager(host: host)
     }
     
     func startListening(_ onUpdatePerforming: @escaping (ReachabilityStatus) -> Void) {
-        manager?.startListening(onUpdatePerforming: { status in
-            switch status {
-            case .notReachable, .unknown:
-                onUpdatePerforming(.notReachable)
-            case .reachable(_):
-                onUpdatePerforming(.reachable)
-            }
-        })
+//        manager?.startListening(onUpdatePerforming: { status in
+//            switch status {
+//            case .notReachable, .unknown:
+//                onUpdatePerforming(.notReachable)
+//            case .reachable(_):
+//                onUpdatePerforming(.reachable)
+//            }
+//        })
     }
     
     func stopListening() {
-        manager?.stopListening()
+//        manager?.stopListening()
     }
 }
 #endif

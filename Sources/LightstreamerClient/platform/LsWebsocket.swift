@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 import Foundation
-import Starscream
 
 typealias WSFactoryService = (NSRecursiveLock, String,
             String,
@@ -43,9 +42,9 @@ protocol LsWebsocketClient: AnyObject {
     func dispose()
 }
 
-class LsWebsocket: LsWebsocketClient {
+class LsWebsocket: LsWebsocketClient, LsWebSocketTaskDelegate {
     let lock: NSRecursiveLock
-    let socket: WebSocket
+    let socket: LsWebsocketTask
     let onOpen: (LsWebsocket) -> Void
     let onText: (LsWebsocket, String) -> Void
     let onError: (LsWebsocket, String) -> Void
@@ -67,13 +66,10 @@ class LsWebsocket: LsWebsocketClient {
             request.setValue(val, forHTTPHeaderField: key)
         }
         if streamLogger.isDebugEnabled {
-            streamLogger.debug("WS connecting: \(request) \(request.headers)")
+            streamLogger.debug("WS connecting: \(request) \(request.allHTTPHeaderFields ?? [:])")
         }
-        socket = WebSocket(request: request)
-        socket.callbackQueue = defaultQueue
-        socket.onEvent = { [weak self] e in
-            self?.onEvent(e)
-        }
+        self.socket = LsSession.shared.createWsTask(with: request)
+        socket.setDelegate(self)
         socket.connect()
     }
     
@@ -102,42 +98,24 @@ class LsWebsocket: LsWebsocketClient {
         }
     }
     
-    private func onEvent(_ event: WebSocketEvent) {
-        synchronized {
-            guard !m_disposed else {
-                return
-            }
-            if streamLogger.isDebugEnabled {
-                streamLogger.debug("WS event: \(event)")
-            }
-            switch event {
-            case .connected(_):
-                onOpen(self)
-            case .text(let chunk):
-                for line in chunk.split(separator: "\r\n") {
-                    onText(self, String(line))
-                }
-            case .error(let error):
-                onError(self, error?.localizedDescription ?? "n.a.")
-            case .cancelled:
-                onError(self, "unexpected cancellation")
-            case let .disconnected(reason, code):
-                onError(self, "unexpected disconnection: \(code) - \(reason)")
-            default:
-                break
-            /*
-            case .binary(let data):
-                break
-            case .ping(_):
-                break
-            case .pong(_):
-                break
-            case .viabilityChanged(_):
-                break
-            case .reconnectSuggested(_):
-                break
-            */
-            }
+    func onTaskOpen() {
+        defaultQueue.async { [weak self] in
+            guard let self = self else { return }
+            onOpen(self)
+        }
+    }
+    
+    func onTaskText(_ text: String) {
+        defaultQueue.async { [weak self] in
+            guard let self = self else { return }
+            onText(self, text)
+        }
+    }
+    
+    func onTaskError(_ error: String) {
+        defaultQueue.async { [weak self] in
+            guard let self = self else { return }
+            onError(self, error)
         }
     }
 
