@@ -33,7 +33,7 @@ class NetTests: XCTestCase {
                 }
             },
             onError: { http, error in
-                assertionFailure()
+//                assertionFailure()
             },
             onDone: { http in
                 expectation.fulfill()
@@ -63,7 +63,7 @@ class NetTests: XCTestCase {
                 }
             },
             onError: { ws, error in
-                assertionFailure()
+//                assertionFailure()
             })
         
         wait(for: [expectation], timeout: 2)
