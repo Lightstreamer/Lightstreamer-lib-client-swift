@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 import Foundation
-import JSONPatch
 
 enum FieldValue: Equatable {
     case unchanged
     case changed(String?)
+#if LS_JSON_PATCH
     case jsonPatch(LsJsonPatch)
+#endif
     case diffPatch(DiffPatch)
 }
 
@@ -27,7 +28,9 @@ typealias Pos = Int
 
 enum CurrFieldVal {
     case stringVal(String)
+#if LS_JSON_PATCH
     case jsonVal(LsJson)
+#endif
 }
 
 func toString(_ val: CurrFieldVal?) -> String? {
@@ -36,8 +39,10 @@ func toString(_ val: CurrFieldVal?) -> String? {
         return nil
     case .stringVal(let str):
         return str
+#if LS_JSON_PATCH
     case .jsonVal(let json):
         return jsonToString(json)
+#endif
     }
 }
 
@@ -54,6 +59,7 @@ func applyUpatesToCurrentFields(_ currentValues: [Pos:CurrFieldVal?]?, _ incomin
                 } else {
                     newValues.updateValue(.stringVal(value!), forKey: f)
                 }
+#if LS_JSON_PATCH
             case .jsonPatch(let patch):
                 switch currentValues[f]! {
                 case .jsonVal(let json):
@@ -80,14 +86,17 @@ func applyUpatesToCurrentFields(_ currentValues: [Pos:CurrFieldVal?]?, _ incomin
                 case .none:
                     throw InternalException.IllegalStateException("Cannot apply the JSON patch to the field \(f) because the field is null")
                 }
+#endif
             case .diffPatch(let patch):
                 switch currentValues[f]! {
                 case .stringVal(let str):
                     newValues[f] = .stringVal(try DiffDecoder.apply(str, patch))
                 case .none:
                     throw InternalException.IllegalStateException("Cannot apply the TLCP-diff to the field \(f) because the field is null");
+#if LS_JSON_PATCH
                 case .jsonVal(_):
                     throw InternalException.IllegalStateException("Cannot apply the TLCP-diff to the field \(f) because the field is JSON");
+#endif
                 }
             }
         }
@@ -104,8 +113,10 @@ func applyUpatesToCurrentFields(_ currentValues: [Pos:CurrFieldVal?]?, _ incomin
                 }
             case .unchanged:
                 throw InternalException.IllegalStateException("Cannot set the field \(f) because the first update is UNCHANGED")
+#if LS_JSON_PATCH
             case .jsonPatch(_):
                 throw InternalException.IllegalStateException("Cannot set the field \(f) because the first update is a JSONPatch")
+#endif
             case .diffPatch(_):
                 throw InternalException.IllegalStateException("Cannot set the field \(f) because the first update is a TLCP-diff")
             }
@@ -128,6 +139,7 @@ func findChangedFields(prev: [Pos:CurrFieldVal?]?, curr: [Pos:CurrFieldVal?]) ->
     }
 }
 
+#if LS_JSON_PATCH
 func computeJsonPatches(_ currentValues: [Pos:CurrFieldVal?]?, _ incomingValues: [Pos:FieldValue]) -> [Pos:LsJsonPatch] {
     if let currentValues = currentValues {
         var res = [Pos:LsJsonPatch]()
@@ -154,3 +166,4 @@ func computeJsonPatches(_ currentValues: [Pos:CurrFieldVal?]?, _ incomingValues:
         return [:]
     }
 }
+#endif

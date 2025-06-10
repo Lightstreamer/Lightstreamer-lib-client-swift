@@ -512,6 +512,7 @@ public protocol ItemUpdate: AnyObject, CustomStringConvertible {
      - SeeAlso: `Subscription.fields`
      */
     func isValueChanged(withFieldName fieldName: String) -> Bool
+#if LS_JSON_PATCH
     /**
      Inquiry method that gets the difference between the new value and the previous one
      as a JSON Patch structure, provided that the Server has used the JSON Patch format
@@ -572,6 +573,7 @@ public protocol ItemUpdate: AnyObject, CustomStringConvertible {
      - SeeAlso: `value(...)`
      */
     func valueAsJSONPatchIfAvailable(withFieldPos fieldPos: Int) -> String?
+#endif
 }
 
 /**

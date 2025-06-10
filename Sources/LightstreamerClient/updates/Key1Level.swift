@@ -120,7 +120,11 @@ class Key1Level: ItemKey {
         currKeyValues = keyValues
         currKeyValues[cmdIdx] = .stringVal("ADD")
         let changedFields = Set(1...nFields)
+#if LS_JSON_PATCH
         let update = ItemUpdateBase(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot, [:])
+#else
+        let update = ItemUpdateBase(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot)
+#endif
         
         fireOnItemUpdate(update)
     }
@@ -131,7 +135,11 @@ class Key1Level: ItemKey {
         currKeyValues = keyValues
         currKeyValues[cmdIdx] = .stringVal("UPDATE")
         let changedFields = findChangedFields(prev: prevKeyValues, curr: currKeyValues)
+#if LS_JSON_PATCH
         let update = ItemUpdateBase(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot, [:])
+#else
+        let update = ItemUpdateBase(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot)
+#endif
         
         fireOnItemUpdate(update)
     }
@@ -139,7 +147,11 @@ class Key1Level: ItemKey {
     private func doLightDelete(_ keyValues: [Pos:CurrFieldVal?], _ snapshot: Bool) {
         currKeyValues = nil
         let changedFields = Set(keyValues.keys)
+#if LS_JSON_PATCH
         let update = ItemUpdateBase(item.itemIdx, item.subscription, nullify(keyValues), changedFields, snapshot, [:])
+#else
+        let update = ItemUpdateBase(item.itemIdx, item.subscription, nullify(keyValues), changedFields, snapshot)
+#endif
         item.unrelate(from: keyName)
         
         fireOnItemUpdate(update)
@@ -148,7 +160,11 @@ class Key1Level: ItemKey {
     private func doDelete(_ keyValues: [Pos:CurrFieldVal?], _ snapshot: Bool) {
         currKeyValues = nil
         let changedFields = Set(keyValues.keys).subtracting([item.subscription.keyPosition!])
+#if LS_JSON_PATCH
         let update = ItemUpdateBase(item.itemIdx, item.subscription, nullify(keyValues), changedFields, snapshot, [:])
+#else
+        let update = ItemUpdateBase(item.itemIdx, item.subscription, nullify(keyValues), changedFields, snapshot)
+#endif
         item.unrelate(from: keyName)
         
         fireOnItemUpdate(update)

@@ -47,8 +47,11 @@ class ItemUpdateBase: ItemUpdate {
     let m_newValues: [Pos:CurrFieldVal?]
     let m_changedFields: Set<Pos>
     let m_isSnapshot: Bool
+#if LS_JSON_PATCH
     let m_jsonPatches: [Pos:LsJsonPatch]
+#endif
     
+#if LS_JSON_PATCH
     init(_ itemIdx: Pos, _ sub: Subscription, _ newValues: [Pos:CurrFieldVal?], _ changedFields: Set<Pos>, _ isSnapshot: Bool, _ jsonPatches: [Pos:LsJsonPatch]) {
         let fields = sub.fields
         self.m_itemIdx = itemIdx
@@ -63,6 +66,21 @@ class ItemUpdateBase: ItemUpdate {
         self.m_isSnapshot = isSnapshot
         self.m_jsonPatches = jsonPatches
     }
+#else
+    init(_ itemIdx: Pos, _ sub: Subscription, _ newValues: [Pos:CurrFieldVal?], _ changedFields: Set<Pos>, _ isSnapshot: Bool) {
+        let fields = sub.fields
+        self.m_itemIdx = itemIdx
+        self.m_items = toMap(sub.items)
+        self.m_nFields = sub.nFields!
+        self.m_fields = toMap(fields)
+        if let fields = fields, fields.count != m_nFields {
+             subscriptionLogger.error("Expected \(m_nFields) field names but got \(fields.count): \(fields)");
+           }
+        self.m_newValues = newValues
+        self.m_changedFields = changedFields
+        self.m_isSnapshot = isSnapshot
+    }
+#endif
     
     var itemName: String? {
         m_items?[m_itemIdx]
@@ -142,6 +160,7 @@ class ItemUpdateBase: ItemUpdate {
         return m_changedFields.contains(fieldPos)
     }
     
+#if LS_JSON_PATCH
     func valueAsJSONPatchIfAvailable(withFieldName fieldName: String) -> String? {
         guard let fields = m_fields else {
             preconditionFailure(NO_FIELDS)
@@ -157,6 +176,7 @@ class ItemUpdateBase: ItemUpdate {
         let val = m_jsonPatches[fieldPos]
         return val != nil ? jsonPatchToString(val!) : nil
     }
+#endif
     
     private func getFieldNameOrNilFromIdx(_ fieldIdx: Pos) -> String? {
         m_fields?[fieldIdx]
@@ -178,7 +198,9 @@ class ItemUpdateBase: ItemUpdate {
     }
 }
 
+#if LS_JSON_PATCH
 typealias JsonPatchTypeAsReturnedByGetPatch = String
+#endif
 
 class ItemUpdate2Level: ItemUpdate {
     
@@ -190,8 +212,11 @@ class ItemUpdate2Level: ItemUpdate {
     let m_newValues: [Pos:CurrFieldVal?]
     let m_changedFields: Set<Pos>
     let m_isSnapshot: Bool
+#if LS_JSON_PATCH
     let m_jsonPatches: [Pos:JsonPatchTypeAsReturnedByGetPatch]
+#endif
     
+#if LS_JSON_PATCH
     init(_ itemIdx: Pos, _ sub: Subscription, _ newValues: [Pos:CurrFieldVal?], _ changedFields: Set<Pos>, _ isSnapshot: Bool, _ jsonPatches: [Pos:JsonPatchTypeAsReturnedByGetPatch]) {
         self.m_itemIdx = itemIdx
         self.m_items = toMap(sub.items)
@@ -203,6 +228,18 @@ class ItemUpdate2Level: ItemUpdate {
         self.m_isSnapshot = isSnapshot
         self.m_jsonPatches = jsonPatches
     }
+#else
+    init(_ itemIdx: Pos, _ sub: Subscription, _ newValues: [Pos:CurrFieldVal?], _ changedFields: Set<Pos>, _ isSnapshot: Bool) {
+        self.m_itemIdx = itemIdx
+        self.m_items = toMap(sub.items)
+        self.m_nFields = sub.nFields!
+        self.m_fields = toMap(sub.fields)
+        self.m_fields2 = toMap(sub.commandSecondLevelFields)
+        self.m_newValues = newValues
+        self.m_changedFields = changedFields
+        self.m_isSnapshot = isSnapshot
+    }
+#endif
     
     var itemName: String? {
         m_items?[m_itemIdx]
@@ -282,6 +319,7 @@ class ItemUpdate2Level: ItemUpdate {
         return m_changedFields.contains(fieldPos)
     }
     
+#if LS_JSON_PATCH
     func valueAsJSONPatchIfAvailable(withFieldName fieldName: String) -> String? {
         guard m_fields != nil || m_fields2 != nil else {
             preconditionFailure(NO_FIELDS)
@@ -297,6 +335,7 @@ class ItemUpdate2Level: ItemUpdate {
         let val = m_jsonPatches[fieldPos]
         return val != nil ? val! : nil
     }
+#endif
     
     private func getFieldNameFromIdx(_ fieldIdx: Pos) -> String? {
         guard let fields = m_fields, let fields2 = m_fields2 else {

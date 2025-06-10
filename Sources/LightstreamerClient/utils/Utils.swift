@@ -87,6 +87,7 @@ func parseUpdate(_ message: String) throws -> (subId: Int, itemIdx: Int, values:
         } else if value.first == "^" { // step D
             let fieldType = value[value.index(value.startIndex, offsetBy: 1)]
             if fieldType == "P" {
+#if LS_JSON_PATCH
                 let unquoted = value.suffix(from: value.index(value.startIndex, offsetBy: 2)).removingPercentEncoding
                 do {
                     let patch = try newJsonPatch(unquoted!)
@@ -96,6 +97,9 @@ func parseUpdate(_ message: String) throws -> (subId: Int, itemIdx: Int, values:
                     sessionLogger.error("Invalid JSON patch \(unquoted ?? "nil"): \(error.localizedDescription)")
                     throw InternalException.IllegalStateException("The JSON Patch for the field \(nextFieldIndex) is not well-formed")
                 }
+#else
+                throw InternalException.IllegalStateException("JSONPatch compression is not supported by the client")
+#endif
             } else if fieldType == "T" {
                 let unquoted = value.suffix(from: value.index(value.startIndex, offsetBy: 2)).removingPercentEncoding
                 let patch = unquoted!

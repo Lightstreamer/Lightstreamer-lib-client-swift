@@ -243,7 +243,11 @@ class Key2Level: ItemKey {
         currKeyValues = keyValues
         currKeyValues[cmdIdx] = .stringVal("ADD")
         let changedFields = findChangedFields(prev: nil, curr: currKeyValues)
+#if LS_JSON_PATCH
         let update = ItemUpdate2Level(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot, [:])
+#else
+        let update = ItemUpdate2Level(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot)
+#endif
         
         fireOnItemUpdate(update)
     }
@@ -254,7 +258,11 @@ class Key2Level: ItemKey {
         currKeyValues = keyValues
         currKeyValues[cmdIdx] = .stringVal("UPDATE")
         let changedFields = findChangedFields(prev: prevKeyValues, curr: currKeyValues)
+#if LS_JSON_PATCH
         let update = ItemUpdate2Level(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot, [:])
+#else
+        let update = ItemUpdate2Level(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot)
+#endif
         
         fireOnItemUpdate(update)
     }
@@ -277,6 +285,7 @@ class Key2Level: ItemKey {
             changedFields.insert(f + nFields)
         }
         let snapshot = update.isSnapshot
+#if LS_JSON_PATCH
         var jsonPatches = [Pos:JsonPatchTypeAsReturnedByGetPatch]()
         for (f, _) in currKey2Values {
             let u = update.valueAsJSONPatchIfAvailable(withFieldPos: f);
@@ -285,6 +294,9 @@ class Key2Level: ItemKey {
             }
         }
         let extUpdate = ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot, jsonPatches)
+#else
+        let extUpdate = ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot)
+#endif
         
         fireOnItemUpdate(extUpdate)
     }
@@ -305,7 +317,11 @@ class Key2Level: ItemKey {
                 changedFields.insert(f)
             }
         }
+#if LS_JSON_PATCH
         let extUpdate = ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot, [:])
+#else
+        let extUpdate = ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot)
+#endif
         
         fireOnItemUpdate(extUpdate)
     }
@@ -322,7 +338,11 @@ class Key2Level: ItemKey {
         }
         extKeyValues[keyIdx] = .stringVal(keyName)
         extKeyValues[cmdIdx] = .stringVal("DELETE")
+#if LS_JSON_PATCH
         let update = ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot, [:])
+#else
+        let update = ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot)
+#endif
         
         item.unrelate(from: keyName)
         
@@ -350,7 +370,11 @@ class Key2Level: ItemKey {
         }
         extKeyValues[keyIdx] = .stringVal(keyName)
         extKeyValues[cmdIdx] = .stringVal("DELETE")
+#if LS_JSON_PATCH
         let update = ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot, [:])
+#else
+        let update = ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot)
+#endif
         
         item.unrelate(from: keyName)
         
@@ -376,7 +400,11 @@ class Key2Level: ItemKey {
         }
         values[keyIdx] = keyValues[keyIdx]
         values[cmdIdx] = keyValues[cmdIdx]
+#if LS_JSON_PATCH
         let update = ItemUpdate2Level(item.itemIdx, item.subscription, values, changedFields, snapshot, [:])
+#else
+        let update = ItemUpdate2Level(item.itemIdx, item.subscription, values, changedFields, snapshot)
+#endif
         
         fireOnItemUpdate(update)
     }
@@ -393,7 +421,11 @@ class Key2Level: ItemKey {
         }
         values[keyIdx] = keyValues[keyIdx]
         values[cmdIdx] = keyValues[cmdIdx]
+#if LS_JSON_PATCH
         let update = ItemUpdate2Level(item.itemIdx, item.subscription, values, changedFields, snapshot, [:])
+#else
+        let update = ItemUpdate2Level(item.itemIdx, item.subscription, values, changedFields, snapshot)
+#endif
         
         fireOnItemUpdate(update)
     }

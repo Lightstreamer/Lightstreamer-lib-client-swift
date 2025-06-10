@@ -97,8 +97,12 @@ class ItemBase {
         let prevValues = currValues
         currValues = try applyUpatesToCurrentFields(prevValues, values)
         let changedFields = findChangedFields(prev: prevValues, curr: currValues)
+#if LS_JSON_PATCH
         let jsonPatches = computeJsonPatches(prevValues, values)
         let update = ItemUpdateBase(itemIdx, subscription, currValues, changedFields, snapshot, jsonPatches)
+#else
+        let update = ItemUpdateBase(itemIdx, subscription, currValues, changedFields, snapshot)
+#endif
         subscription.fireOnItemUpdate(update, subId: m_subId)
     }
     

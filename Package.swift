@@ -16,6 +16,9 @@ let package = Package(
         .library(
             name: "LightstreamerClient",
             targets: ["LightstreamerClient"]),
+        .library(
+            name: "LightstreamerClientCompact",
+            targets: ["LightstreamerClientCompact"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -30,7 +33,11 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "LightstreamerClient",
-            dependencies: ["Starscream", "Alamofire", .product(name: "JSONPatch", package: "swift-jsonpatch")]),
+            dependencies: [ "Starscream", "Alamofire", .product(name: "JSONPatch", package: "swift-jsonpatch") ],
+            swiftSettings: [ .define("LS_JSON_PATCH") ]),
+        .target(
+            name: "LightstreamerClientCompact",
+            dependencies: ["Starscream", "Alamofire"]),
         .testTarget(
             name: "LightstreamerClientTests",
             dependencies: ["LightstreamerClient"]),

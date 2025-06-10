@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import Foundation
+#if LS_JSON_PATCH
 import JSONPatch
 
 typealias LsJson = Any
@@ -39,3 +40,4 @@ func newJsonPatch(_ str: String) throws -> LsJsonPatch {
 func jsonPatchToString(_ patch: LsJsonPatch) -> String {
     return String(decoding: try! patch.data(), as: UTF8.self)
 }
+#endif
