@@ -239,13 +239,16 @@ class LsWebsocketTask {
                 @unknown default:
                     fatalError("Unexpect message type")
                 }
+                
+                // NOTE: Call this method again if another message is expected
+                self.listen()
+
             case .failure(let error):
                 if streamLogger.isDebugEnabled {
                     streamLogger.debug("WS event: error(\(error.localizedDescription))")
                 }
                 self.getDelegate()?.onTaskError(error.localizedDescription)
             }
-            self.listen()
         }
     }
     
