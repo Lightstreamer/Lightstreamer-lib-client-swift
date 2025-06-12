@@ -17,19 +17,46 @@ This SDK is also meant to replace and evolve all the Client SDKs targeted to the
 
 | Platform | Minimum Swift Version | Installation | Status |
 | --- | --- | --- | --- |
-| iOS 12.0+ / macOS 10.13+ / tvOS 12.0+ / watchOS 5.0+ / visionOS 1.0+ | 5.1 | [Swift Package Manager](#swift-package-manager), [Manual](#manually),[CocoaPods](#cocoapods) | Fully Tested |
+| iOS 13.0+ / macOS 10.15+ / tvOS 13.0+ / watchOS 6.0+ / visionOS 1.0+ | 5.1 | [Swift Package Manager](#swift-package-manager), [Manual](#manually),[CocoaPods](#cocoapods) | Fully Tested |
 
 ## Installation
+
+The package exports two different library flavors: `LightstreamerClient` (Full) and `LightstreamerClientCompact` (Compact).
+
+The compact library has no third-party dependencies. However, it doesn't support decoding subscription fields in JSON Patch format. If a Lightstreamer server sends an update containing JSON Patch–encoded fields, the library will close the active session and notify the client through the `ClientDelegate.client(_:didReceiveServerError:withMessage:)` method. Additionally, the compact library doesn’t support the `ItemUpdate` methods `valueAsJSONPatchIfAvailable(withFieldName:)` and `valueAsJSONPatchIfAvailable(withFieldPos:)`.
+
+The full library has none of these limitations, but it relies on external libraries.
 
 ### Swift Package Manager
 
 The [Swift Package Manager](https://swift.org/package-manager/) is a tool for automating the distribution of Swift code and is integrated into the `swift` compiler.
-
-Once you have your Swift package set up, adding Lightstreamer Swift Client SDK as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
+With SPM, simply add the Lightstreamer Swift Client SDK to the `dependencies` array in your `Package.swift`.
 
 ```swift
 dependencies: [
     .package(url: "https://github.com/Lightstreamer/Lightstreamer-lib-client-swift.git", from: "6.2.1")
+]
+```
+
+Both Compact and Full libraries are available via Swift Package Manager.  
+
+Normally you'll want to depend on the `LightstreamerClient` library (Full):
+
+```swift
+targets: [
+    .target(
+        name: "MyTarget",
+        dependencies: [ .product(name: "LightstreamerClient", package: "Lightstreamer-lib-client-swift") ])
+]
+```
+
+But if you don't want any dependencies on external libraries, you can depend on the `LightstreamerClientCompact` library:
+
+```swift
+targets: [
+    .target(
+        name: "MyTarget",
+        dependencies: [ .product(name: "LightstreamerClientCompact", package: "Lightstreamer-lib-client-swift") ])
 ]
 ```
 
@@ -42,33 +69,26 @@ To integrate LightstreamerClient into your Xcode project using CocoaPods, specif
 pod 'LightstreamerClient'
 ```
 
+CocoaPods hosts **only** the Full (`LightstreamerClient`) library. 
+
 ### Manually
 
-If you prefer not to use any of the aforementioned dependency managers, you can integrate Lightstreamer Swift Client SDK into your project manually.
+If you prefer not to use any of the above dependency managers, you can integrate the Lightstreamer Swift Client SDK manually:
 
-- Open up Terminal, `cd` into your top-level project directory, and run the following command "if" your project is not initialized as a git repository:
-
-  ```bash
-  $ git init
+- Open Terminal and clone the SDK repository:  
+  ```sh
+  git clone https://github.com/Lightstreamer/Lightstreamer-lib-client-swift.git
   ```
 
-- Add Lightstreamer Swift Client SDK as a git [submodule](https://git-scm.com/docs/git-submodule) by running the following command:
+- In Xcode, choose **File > Add Package Dependencies**  
+  - Click **Add Local**, navigate to the folder where you cloned the SDK, and click **Add Package**.  
+  - On the next screen, select either **LightstreamerClient** or **LightstreamerClientCompact**.
 
-  ```bash
-  $ git submodule add https://github.com/Lightstreamer/Lightstreamer-lib-client-swift.git
-  ```
+- In the Project Navigator, select your app’s project, then tap your app target under **Targets** in the sidebar.
 
-- Open the new `Lightstreamer-lib-client-swift` folder, and drag the `LightstreamerClient.xcodeproj` into the Project Navigator of your application's Xcode project.
+- Switch to the **General** tab.
 
-    > It should appear nested underneath your application's blue project icon. Whether it is above or below all the other Xcode groups does not matter.
-    
-- Once that is complete, select your application project in the Project Navigator (blue project icon) to navigate to the target configuration window and select the application target under the "Targets" heading in the sidebar.
-
-- In the tab bar at the top of that window, open the "General" panel.
-
-- Click on the + button under the "Frameworks, Libraries and Embedded Content" section.
-
-- Select the entry LightstreamerClient.
+- Under **Frameworks, Libraries, and Embedded Content**, verify that **LightstreamerClient** or **LightstreamerClientCompact** is listed.
 
 ## Quickstart
 
