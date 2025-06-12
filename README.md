@@ -21,9 +21,9 @@ This SDK is also meant to replace and evolve all the Client SDKs targeted to the
 
 ## Installation
 
-The package exports two different library flavors: `LightstreamerClient` (Full) and `LightstreamerClientCompact` (Compact).
+The package exports two different library flavors: **LightstreamerClient** (Full) and **LightstreamerClientCompact** (Compact).
 
-The compact library has no third-party dependencies. However, it doesn't support decoding subscription fields in JSON Patch format. If a Lightstreamer server sends an update containing JSON Patch–encoded fields, the library will close the active session and notify the client through the `ClientDelegate.client(_:didReceiveServerError:withMessage:)` method. Additionally, the compact library doesn’t support the `ItemUpdate` methods `valueAsJSONPatchIfAvailable(withFieldName:)` and `valueAsJSONPatchIfAvailable(withFieldPos:)`.
+The compact library has no third-party dependencies. However, it doesn't support decoding subscription fields in JSON Patch format. If a Lightstreamer server sends an update containing JSON Patch–encoded fields, the library will close the active session and notify the client through the `ClientDelegate.client(_:didReceiveServerError:withMessage:)` method. Additionally, the compact library doesn't support the `ItemUpdate` methods `valueAsJSONPatchIfAvailable(withFieldName:)` and `valueAsJSONPatchIfAvailable(withFieldPos:)`.
 
 The full library has none of these limitations, but it relies on external libraries.
 
@@ -40,7 +40,7 @@ dependencies: [
 
 Both Compact and Full libraries are available via Swift Package Manager.  
 
-Normally you'll want to depend on the `LightstreamerClient` library (Full):
+Normally you'll want to depend on the **LightstreamerClient** library (Full):
 
 ```swift
 targets: [
@@ -50,7 +50,7 @@ targets: [
 ]
 ```
 
-But if you don't want any dependencies on external libraries, you can depend on the `LightstreamerClientCompact` library:
+But if you don't want any dependencies on external libraries, you can depend on the **LightstreamerClientCompact** library:
 
 ```swift
 targets: [
@@ -69,7 +69,7 @@ To integrate LightstreamerClient into your Xcode project using CocoaPods, specif
 pod 'LightstreamerClient'
 ```
 
-CocoaPods hosts **only** the Full (`LightstreamerClient`) library. 
+CocoaPods hosts **only** the Full (**LightstreamerClient**) library. 
 
 ### Manually
 
@@ -80,15 +80,15 @@ If you prefer not to use any of the above dependency managers, you can integrate
   git clone https://github.com/Lightstreamer/Lightstreamer-lib-client-swift.git
   ```
 
-- In Xcode, choose **File > Add Package Dependencies**  
-  - Click **Add Local**, navigate to the folder where you cloned the SDK, and click **Add Package**.  
+- In Xcode, choose `File > Add Package Dependencies`  
+  - Click `Add Local`, navigate to the folder where you cloned the SDK, and click `Add Package`.  
   - On the next screen, select either **LightstreamerClient** or **LightstreamerClientCompact**.
 
-- In the Project Navigator, select your app’s project, then tap your app target under **Targets** in the sidebar.
+- In the Project Navigator, select your app's project, then tap your app target under `Targets` in the sidebar.
 
-- Switch to the **General** tab.
+- Switch to the `General` tab.
 
-- Under **Frameworks, Libraries, and Embedded Content**, verify that **LightstreamerClient** or **LightstreamerClientCompact** is listed.
+- Under `Frameworks, Libraries, and Embedded Content`, verify that **LightstreamerClient** or **LightstreamerClientCompact** is listed.
 
 ## Quickstart
 
