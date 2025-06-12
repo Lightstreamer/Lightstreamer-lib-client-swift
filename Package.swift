@@ -39,5 +39,8 @@ let package = Package(
         .testTarget(
             name: "LightstreamerClientTests",
             dependencies: ["LightstreamerClient"]),
+        .testTarget(
+            name: "LightstreamerClientCompactTests",
+            dependencies: ["LightstreamerClientCompact"]),
     ]
 )
