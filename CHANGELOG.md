@@ -1,5 +1,34 @@
 # SDK for Swift Clients CHANGELOG
 
+## [unreleased]
+*Compatible with Lightstreamer Server since 7.4.0.*<br>
+*Compatible with code developed for the previous version.*<br>
+*Released on ...*
+
+### 🚀 Major Updates & Breaking Changes
+- **Removed** all dependencies on Starscream and Alamofire  
+- **WebSocket layer** now uses `URLSessionWebSocketTask` in place of of Starscream  
+- **HTTP layer** now uses `URLSessionDataTask` in place of Alamofire  
+- **Minimum OS versions bumped**  
+  - iOS 12 → **iOS 13**  
+  - macOS 10.13 → **macOS 10.15**  
+  - tvOS 12 → **tvOS 13**  
+  - watchOS 5 → **watchOS 6**
+
+### 📦 New Library Flavors
+- **LightstreamerClientCompact**  
+  - Zero third-party dependencies  
+  - Does *not* support subscription fields encoded using JSON Patch
+  - If a Lightstreamer server sends an update containing a field encoded using JSON Patch, the library will close the active session and notify the `ClientDelegate.client(_:didReceiveServerError:withMessage:)` method of error 61
+  - The `ItemUpdate` methods `valueAsJSONPatchIfAvailable(withFieldName:)` and `valueAsJSONPatchIfAvailable(withFieldPos:)` are no longer available
+- **LightstreamerClient** (full)  
+  - Retains JSONPatch dependency for full JSON-Patch support  
+
+### 🔧 Distribution
+- Both **Compact** and **Full** are available via **Swift Package Manager**  
+- **CocoaPods** hosts **only** the Full (`LightstreamerClient`) package 
+
+
 ## 6.2.1
 *Compatible with Lightstreamer Server since 7.4.0.*<br>
 *Compatible with code developed for the previous version.*<br>
