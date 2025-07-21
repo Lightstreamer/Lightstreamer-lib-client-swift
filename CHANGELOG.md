@@ -1,9 +1,9 @@
 # SDK for Swift Clients CHANGELOG
 
-## [unreleased]
+## 6.3.0
 *Compatible with Lightstreamer Server since 7.4.0.*<br>
 *Compatible with code developed for the previous version.*<br>
-*Released on ...*
+*Released on 21 Jul 2025.*
 
 ### 🚀 Major Updates & Breaking Changes
 - **Removed** all dependencies on Starscream and Alamofire  
