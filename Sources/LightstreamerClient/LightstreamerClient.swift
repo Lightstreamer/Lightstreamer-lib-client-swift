@@ -236,6 +236,9 @@ public protocol ClientMessageDelegate: AnyObject {
      - Parameter originalMessage: The message to which this notification is related.
 
      - Parameter sentOnNetwork: `true` if the message was sent on the network, `false` otherwise. Even if the flag is `true`, it is not possible to infer whether the message actually reached the Lightstreamer Server or not.
+     
+     
+     - SeeAlso: [Client-to-Server Messaging in Lightstreamer Explained — Aborted messages](https://lightstreamer.com/blog/client-to-server-messaging-in-lightstreamer-explained/#Aborted_messages)
      */
     func client(_ client: LightstreamerClient, didAbortMessage originalMessage: String, sentOnNetwork: Bool)
     /**
@@ -1358,6 +1361,9 @@ public class LightstreamerClient {
      no notification will be available.
 
      - Parameter enqueueWhileDisconnected: If this flag is set to `true`, and the client is in a disconnected status when the provided message is handled, then the message is not aborted right away but is queued waiting for a new session. Note that the message can still be aborted later when a new session is established.
+     
+     
+     - SeeAlso: [Client-to-Server Messaging in Lightstreamer Explained](https://lightstreamer.com/blog/client-to-server-messaging-in-lightstreamer-explained/)
      */
     public func sendMessage(_ message: String, withSequence sequence: String? = nil, timeout delayTimeout: Millis = -1, delegate: ClientMessageDelegate? = nil, enqueueWhileDisconnected: Bool = false) {
         synchronized {
