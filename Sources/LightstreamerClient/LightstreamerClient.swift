@@ -2025,12 +2025,12 @@ public class LightstreamerClient {
                 case .s250:
                     switch s_wp.m {
                     case .s600, .s601:
-                        trace(evt, State_wp_m.s600, State_m.s100)
+                        trace(evt, s_wp.m, State_m.s100)
                         disposeWS()
                         notifyStatus(.DISCONNECTED)
                         notifyServerErrorIfCauseIsError(terminationCause)
                         goto_m_from_wp(.s100)
-                        exit_ws_to_m()
+                        exit_wp_to_m()
                         evtTerminate(terminationCause)
                     case .s602:
                         trace(evt, s_wp.m, State_m.s100)
