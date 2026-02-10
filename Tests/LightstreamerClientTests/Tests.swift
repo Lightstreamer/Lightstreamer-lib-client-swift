@@ -56,7 +56,7 @@ final class Tests: XCTestCase {
     func testURL() {
         XCTAssertEqual("foo/bar", URL(string: "foo")!.appendingPathComponent("bar").absoluteString)
         XCTAssertEqual("foo/bar", URL(string: "foo/")!.appendingPathComponent("bar").absoluteString)
-        XCTAssertEqual("foo//bar", URL(string: "foo/")!.appendingPathComponent("/bar").absoluteString)
+        XCTAssertEqual("foo/bar", URL(string: "foo/")!.appendingPathComponent("/bar").absoluteString)
     }
     
     func testUrlBuilder() {
