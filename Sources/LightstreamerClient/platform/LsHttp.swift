@@ -18,21 +18,27 @@ import Foundation
 typealias HTTPFactoryService = (NSRecursiveLock, String,
                                 String,
                                 [String:String],
+                                [SecKey],
                                 @escaping (LsHttpClient, String) -> Void,
                                 @escaping (LsHttpClient, String) -> Void,
+                                @escaping (LsHttpClient, Int, String) -> Void,
                                 @escaping (LsHttpClient) -> Void) -> LsHttpClient
 
 func createHTTP(_ lock: NSRecursiveLock, _ url: String,
                 body: String,
                 headers: [String:String],
+                certificatePins: [SecKey],
                 onText: @escaping (LsHttpClient, String) -> Void,
                 onError: @escaping (LsHttpClient, String) -> Void,
+                onFatalError: @escaping (LsHttpClient, Int, String) -> Void,
                 onDone: @escaping (LsHttpClient) -> Void) -> LsHttpClient {
     return LsHttp(lock, url,
                   body: body,
                   headers: headers,
+                  certificatePins: certificatePins,
                   onText: onText,
                   onError: onError,
+                  onFatalError: onFatalError,
                   onDone: onDone)
 }
 
@@ -47,19 +53,26 @@ class LsHttp: LsHttpClient, LsHttpTaskDelegate {
     let assembler = LineAssembler()
     let onText: (LsHttp, String) -> Void
     let onError: (LsHttp, String) -> Void
+    let onFatalError: (LsHttp, Int, String) -> Void
     let onDone: (LsHttp) -> Void
+    let m_certificatePins: [SecKey]
     var m_disposed = false
   
     init(_ lock: NSRecursiveLock, _ url: String,
          body: String,
          headers: [String:String] = [:],
+         certificatePins: [SecKey],
          onText: @escaping (LsHttp, String) -> Void,
          onError: @escaping (LsHttp, String) -> Void,
-         onDone: @escaping (LsHttp) -> Void) {
+         onFatalError: @escaping (LsHttp, Int, String) -> Void,
+         onDone: @escaping (LsHttp) -> Void
+    ) {
         self.lock = lock
         self.onText = onText
         self.onError = onError
+        self.onFatalError = onFatalError
         self.onDone = onDone
+        self.m_certificatePins = certificatePins
         var headers = headers
         headers["Content-Type"] = "text/plain; charset=utf-8"
         if streamLogger.isDebugEnabled {
@@ -78,6 +91,10 @@ class LsHttp: LsHttpClient, LsHttpTaskDelegate {
         self.request = LsSession.shared.createHttpTask(with: urlRequest)
         request.setDelegate(self)
         request.open()
+    }
+    
+    var certificatePins: [SecKey] {
+        m_certificatePins
     }
     
     var disposed: Bool {
@@ -109,6 +126,13 @@ class LsHttp: LsHttpClient, LsHttpTaskDelegate {
         defaultQueue.async { [weak self] in
             guard let self = self else { return }
             onError(self, error)
+        }
+    }
+    
+    func onTaskFatalError(_ code: Int, _ msg: String) {
+        defaultQueue.async { [weak self] in
+            guard let self = self else { return }
+            onFatalError(self, code, msg)
         }
     }
     

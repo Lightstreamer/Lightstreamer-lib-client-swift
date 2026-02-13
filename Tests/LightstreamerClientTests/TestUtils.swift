@@ -93,10 +93,11 @@ class TestWSFactory: LsWebsocketClient {
         addTrace("ws.dispose")
     }
     
-    func createWS(_ lock: NSRecursiveLock, _ url: String, _ protocols: String, _ headers: [String:String],
+    func createWS(_ lock: NSRecursiveLock, _ url: String, _ protocols: String, _ headers: [String:String], _ certificatePins: [SecKey],
                    _ onOpen: @escaping (LsWebsocketClient) -> Void,
                    _ onText: @escaping (LsWebsocketClient, String) -> Void,
-                   _ onError: @escaping (LsWebsocketClient, String) -> Void) -> LsWebsocketClient {
+                   _ onError: @escaping (LsWebsocketClient, String) -> Void,
+                   _ onFatalError: @escaping (LsWebsocketClient, Int, String) -> Void) -> LsWebsocketClient {
         addTrace("ws.init \(url)")
         if showExtraHeaders {
             for (key, val) in headers {
@@ -151,9 +152,10 @@ class TestHTTPFactory: LsHttpClient {
         addTrace("\(prefix).dispose")
     }
     
-    func createHTTP(_ lock: NSRecursiveLock, _ url: String, _ body: String, _ headers: [String:String],
+    func createHTTP(_ lock: NSRecursiveLock, _ url: String, _ body: String, _ headers: [String:String], _ certificatePins: [SecKey],
                      onText: @escaping (LsHttpClient, String) -> Void,
                      onError: @escaping (LsHttpClient, String) -> Void,
+                     onFatalError: @escaping (LsHttpClient, Int, String) -> Void,
                      onDone: @escaping (LsHttpClient) -> Void) -> LsHttpClient {
         addTrace("\(prefix).send \(url)")
         if showExtraHeaders {

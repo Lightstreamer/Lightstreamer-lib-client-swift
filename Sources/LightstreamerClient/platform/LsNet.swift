@@ -116,6 +116,68 @@ class LsSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         }
     }
     
+    // Handle TLS server trust and apply per-task pinning policy if present
+    func urlSession(_ session: URLSession, task: URLSessionTask, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?)->Void) {
+        
+        guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+              let serverTrust = challenge.protectionSpace.serverTrust else {
+            completionHandler(.performDefaultHandling, nil)
+            return
+        }
+        
+        let delegate: LsTaskDelegate
+        if let task = task as? URLSessionWebSocketTask,
+           let taskWrapper = getSession()?.getWsWrapper(task),
+           let taskDelegate = taskWrapper.getDelegate() {
+            delegate = taskDelegate
+        } else if let task = task as? URLSessionDataTask,
+                  let taskWrapper = getSession()?.getHttpWrapper(task),
+                  let taskDelegate = taskWrapper.getDelegate() {
+            delegate = taskDelegate
+        } else {
+            // No matching task wrapper was found for this URLSessionTask.
+            // Invariant: every request created through LsSession should have an associated task wrapper
+            // (either LsWebsocketTask or LsHttpTask) that provides a delegate and pinning policy.
+            // This can occur if the task was not created via LsSession, was disposed prematurely,
+            // or the wrapper has been deallocated.
+            // Fall back to default handling to avoid blocking the connection.
+            completionHandler(.performDefaultHandling, nil)
+            return
+        }
+        
+        let certificatePins = delegate.certificatePins
+
+        guard !certificatePins.isEmpty else {
+            // No pins
+            completionHandler(.performDefaultHandling, nil)
+            return
+        }
+        
+        // Iterates over certificates in leaf-to-root order
+        var match = false
+        let count = SecTrustGetCertificateCount(serverTrust)
+        for i in 0..<count {
+            guard let certificate = SecTrustGetCertificateAtIndex(serverTrust, i),
+                  let publicKey = SecCertificateCopyKey(certificate) else {
+                continue
+            }
+            if certificatePins.contains(publicKey) {
+                match = true
+                break
+            }
+        }
+        
+        if match {
+            completionHandler(.useCredential, URLCredential(trust: serverTrust))
+        } else {
+            if streamLogger.isErrorEnabled {
+                streamLogger.error("Unrecognized server's identity")
+            }
+            delegate.onTaskFatalError(62, "Unrecognized server's identity")
+            completionHandler(.cancelAuthenticationChallenge, nil)
+        }
+    }
+    
     // URLSessionWebSocketDelegate events to be forwarded to LsWebsocketTask
     
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
@@ -134,7 +196,7 @@ class LsSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         taskWrapper.getDelegate()?.onTaskError("unexpected disconnection: \(closeCode) - \(String(describing: reason))")
     }
     
-    // URLSessionDelegate, URLSessionTaskDelegate and URLSessionDataDelegate events to be forwarded to LsHttpTask
+    // URLSessionTaskDelegate and URLSessionDataDelegate events to be forwarded to LsHttpTask
     
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse,
                     completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
@@ -273,8 +335,13 @@ class LsWebsocketTask {
     }
 }
 
+protocol LsTaskDelegate: AnyObject {
+    var certificatePins: [SecKey] { get }
+    func onTaskFatalError(_ code: Int, _ msg: String)
+}
+
 /// Delegate responsible for publishing events from LsWebsocketTask
-protocol LsWebSocketTaskDelegate: AnyObject {
+protocol LsWebSocketTaskDelegate: LsTaskDelegate {
     func onTaskOpen()
     func onTaskText(_ text: String)
     func onTaskError(_ error: String)
@@ -324,7 +391,7 @@ class LsHttpTask {
 }
 
 /// Delegate responsible for publishing events from LsHttpTask
-protocol LsHttpTaskDelegate: AnyObject {
+protocol LsHttpTaskDelegate: LsTaskDelegate {
     func onTaskText(_ chunk: String)
     func onTaskError(_ error: String)
     func onTaskDone()

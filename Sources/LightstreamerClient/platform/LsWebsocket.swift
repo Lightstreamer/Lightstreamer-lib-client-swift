@@ -18,22 +18,28 @@ import Foundation
 typealias WSFactoryService = (NSRecursiveLock, String,
             String,
             [String:String],
+            [SecKey],
             @escaping (LsWebsocketClient) -> Void,
             @escaping (LsWebsocketClient, String) -> Void,
-            @escaping (LsWebsocketClient, String) -> Void) -> LsWebsocketClient
+            @escaping (LsWebsocketClient, String) -> Void,
+            @escaping (LsWebsocketClient, Int, String) -> Void) -> LsWebsocketClient
 
 func createWS(_ lock: NSRecursiveLock, _ url: String,
                       protocols: String,
                       headers: [String:String],
+                      certificatePins: [SecKey],
                       onOpen: @escaping (LsWebsocketClient) -> Void,
                       onText: @escaping (LsWebsocketClient, String) -> Void,
-                      onError: @escaping (LsWebsocketClient, String) -> Void) -> LsWebsocketClient {
+                      onError: @escaping (LsWebsocketClient, String) -> Void,
+                      onFatalError: @escaping (LsWebsocketClient, Int, String) -> Void) -> LsWebsocketClient {
     return LsWebsocket(lock, url,
                        protocols: protocols,
                        headers: headers,
+                       certificatePins: certificatePins,
                        onOpen: onOpen,
                        onText: onText,
-                       onError: onError)
+                       onError: onError,
+                       onFatalError: onFatalError)
 }
 
 protocol LsWebsocketClient: AnyObject {
@@ -48,18 +54,25 @@ class LsWebsocket: LsWebsocketClient, LsWebSocketTaskDelegate {
     let onOpen: (LsWebsocket) -> Void
     let onText: (LsWebsocket, String) -> Void
     let onError: (LsWebsocket, String) -> Void
+    let onFatalError: (LsWebsocket, Int, String) -> Void
+    let m_certificatePins: [SecKey]
     var m_disposed = false
   
     init(_ lock: NSRecursiveLock, _ url: String,
          protocols: String,
          headers: [String:String] = [:],
+         certificatePins: [SecKey],
          onOpen: @escaping (LsWebsocket) -> Void,
          onText: @escaping (LsWebsocket, String) -> Void,
-         onError: @escaping (LsWebsocket, String) -> Void) {
+         onError: @escaping (LsWebsocket, String) -> Void,
+         onFatalError: @escaping (LsWebsocket, Int, String) -> Void
+    ) {
         self.lock = lock
         self.onOpen = onOpen
         self.onText = onText
         self.onError = onError
+        self.onFatalError = onFatalError
+        self.m_certificatePins = certificatePins
         var request = URLRequest(url: URL(string: url)!)
         request.setValue(protocols, forHTTPHeaderField: "Sec-WebSocket-Protocol")
         for (key, val) in headers {
@@ -71,6 +84,10 @@ class LsWebsocket: LsWebsocketClient, LsWebSocketTaskDelegate {
         self.socket = LsSession.shared.createWsTask(with: request)
         socket.setDelegate(self)
         socket.connect()
+    }
+    
+    var certificatePins: [SecKey] {
+        m_certificatePins
     }
     
     var disposed: Bool {
@@ -116,6 +133,13 @@ class LsWebsocket: LsWebsocketClient, LsWebSocketTaskDelegate {
         defaultQueue.async { [weak self] in
             guard let self = self else { return }
             onError(self, error)
+        }
+    }
+    
+    func onTaskFatalError(_ code: Int, _ msg: String) {
+        defaultQueue.async { [weak self] in
+            guard let self = self else { return }
+            onFatalError(self, code, msg)
         }
     }
 

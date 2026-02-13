@@ -38,9 +38,14 @@ let package = Package(
             dependencies: []),
         .testTarget(
             name: "LightstreamerClientTests",
-            dependencies: ["LightstreamerClient"]),
+            dependencies: ["LightstreamerClient"],
+            path: "Tests/LightstreamerClientTests",
+            resources: [ .process("Resources") ]
+        ),
         .testTarget(
             name: "LightstreamerClientCompactTests",
-            dependencies: ["LightstreamerClientCompact"]),
+            dependencies: ["LightstreamerClientCompact"],
+            path: "Tests/LightstreamerClientCompactTests"
+        ),
     ]
 )

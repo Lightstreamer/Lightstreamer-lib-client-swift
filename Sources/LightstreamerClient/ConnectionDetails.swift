@@ -55,6 +55,7 @@ public class ConnectionDetails: CustomStringConvertible {
     var m_serverInstanceAddress: String?
     var m_serverSocketName: String?
     var m_clientIp: String?
+    var m_certificatePins: [SecKey] = []
 
     init(_ client: LightstreamerClient) {
         self.client = client
@@ -122,6 +123,75 @@ public class ConnectionDetails: CustomStringConvertible {
                 if oldValue != newValue {
                     client.evtServerAddressChanged()
                 }
+            }
+        }
+    }
+    
+    /// Configures public key pinning for server authentication over TLS connections.
+    ///
+    /// When pins are configured, the client validates that at least one of the provided pins
+    /// matches the public key of a certificate in the server's chain before establishing a session. If no match
+    /// is found, the connection is aborted and any registered delegate is notified via `ClientDelegate.client(_:didReceiveServerError:withMessage:)`
+    /// with error code `62` and the message `Unrecognized server's identity`.
+    ///
+    /// **Lifecycle:**<br>
+    /// Ideally, public key pins should be set before calling `LightstreamerClient.connect()`.
+    /// However, this configuration is dynamic and can be updated at any time; new pins are
+    /// applied to all subsequent network requests issued by the client.
+    ///
+    /// **Notification:**<br>
+    /// A change to this setting is notified to any registered listener via
+    /// `ClientDelegate.client(_:didChangeProperty:)` with argument `certificatePins`.
+    ///
+    /// **Unsecure Connections:**<br>
+    /// Pinning is enforced only when the connection is established over HTTPS/WSS.
+    /// For plain HTTP/WS connections, pins are ignored.
+    ///
+    /// **Self-Signed Certificates:**<br>
+    /// Pinning does not bypass standard TLS trust evaluation performed by the system.
+    /// Certificates must still be considered valid by the platform trust store.
+    ///
+    /// **Example:**
+    ///   ```swift
+    ///   // Load a public key from a DER-encoded certificate in the app bundle
+    ///   func loadPublicKey(named resource: String, withExtension ext: String = "cer", in bundle: Bundle = .main) -> SecKey? {
+    ///       guard let url = bundle.url(forResource: resource, withExtension: ext),
+    ///             let data = try? Data(contentsOf: url),
+    ///             let cert = SecCertificateCreateWithData(nil, data as CFData) else {
+    ///                 return nil
+    ///       }
+    ///       return SecCertificateCopyKey(cert)
+    ///   }
+    ///
+    ///   // Configure pins (e.g., public keys of leaf and/or intermediate certificates)
+    ///   if let leafKey = loadPublicKey(named: "leaf-cert"),
+    ///      let intermediateKey = loadPublicKey(named: "ca-cert") {
+    ///       client.connectionDetails.certificatePins = [leafKey, intermediateKey]
+    ///   }
+    ///
+    ///   client.connect()
+    ///   ```
+    ///
+    /// - Parameter pins: The list of public keys to pin. Each value should be a `SecKey`
+    ///   derived from the certificate’s Subject Public Key Info (SPKI).
+    ///   Pass an empty array to disable pinning and clear existing pins.
+    public var certificatePins: [SecKey] {
+        get {
+            client.synchronized {
+                m_certificatePins
+            }
+        }
+        
+        set(pins) {
+            client.synchronized {
+                if (pins == m_certificatePins) {
+                    return
+                }
+                if actionLogger.isInfoEnabled {
+                    actionLogger.info("certificatePins changed")
+                }
+                m_certificatePins = pins
+                client.fireDidChangeProperty("certificatePins")
             }
         }
     }

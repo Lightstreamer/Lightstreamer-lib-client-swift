@@ -27,6 +27,7 @@ class NetTests: XCTestCase {
             NSRecursiveLock(),
             "http://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)",
             body: "LS_polling=true&LS_polling_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg",
+            certificatePins: [],
             onText: { http, text in
                 if text.contains("CONOK") {
                     expectation.fulfill()
@@ -35,6 +36,7 @@ class NetTests: XCTestCase {
             onError: { http, error in
 //                assertionFailure()
             },
+            onFatalError: {_, _, _ in },
             onDone: { http in
                 expectation.fulfill()
             })
@@ -51,6 +53,7 @@ class NetTests: XCTestCase {
             NSRecursiveLock(),
             "http://push.lightstreamer.com/lightstreamer",
             protocols: "\(TLCP_VERSION).lightstreamer.com",
+            certificatePins: [],
             onOpen: { ws in
                 ws.send("""
                     create_session\r
@@ -64,7 +67,8 @@ class NetTests: XCTestCase {
             },
             onError: { ws, error in
 //                assertionFailure()
-            })
+            },
+            onFatalError: {_,_,_ in })
         
         wait(for: [expectation], timeout: 2)
         
