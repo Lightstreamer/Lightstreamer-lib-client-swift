@@ -80,6 +80,8 @@ public protocol ClientDelegate: AnyObject {
      - 60 - this version of the client is not allowed by the current license terms.
 
      - 61 - there was an error in the parsing of the server response thus the client cannot continue with the current session.
+     
+     - 62 - the Server's identity has not been recognized over the TLS connection (see `ConnectionDetails.certificatePins`).
 
      - 66 - an unexpected exception was thrown by the Metadata Adapter while authorizing the connection.
 
@@ -205,6 +207,7 @@ public protocol ClientDelegate: AnyObject {
      - `idleTimeout`
      - `keepaliveInterval`
      - `pollingInterval`
+     - `certificatePins`
 
      - Parameter client: The `LightstreamerClient` instance.
 
