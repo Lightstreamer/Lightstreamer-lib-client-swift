@@ -2568,6 +2568,117 @@ public class LightstreamerClient {
             }
         }
     }
+    
+    func evtTransportFatalError(_ errCode: Int, _ errMsg: String) {
+        synchronized {
+            let evt = "transport.fatal.error"
+            let terminationCause = TerminationCause.standardError(errCode, errMsg)
+            switch s_m {
+            case .s120, .s121, .s122:
+                trace(evt, s_m, State_m.s100)
+                disposeWS()
+                notifyStatus(.DISCONNECTED)
+                notifyServerErrorIfCauseIsError(terminationCause)
+                s_m = .s100
+                cancel_evtTransportTimeout()
+                evtTerminate(terminationCause)
+            case .s130:
+                trace(evt, State_m.s130, State_m.s100)
+                disposeHTTP()
+                notifyStatus(.DISCONNECTED)
+                notifyServerErrorIfCauseIsError(terminationCause)
+                s_m = .s100
+                cancel_evtTransportTimeout()
+                evtTerminate(terminationCause)
+            case .s140:
+                trace(evt, State_m.s140, State_m.s100)
+                disposeHTTP()
+                notifyStatus(.DISCONNECTED)
+                notifyServerErrorIfCauseIsError(terminationCause)
+                s_m = .s100
+                cancel_evtTransportTimeout()
+                evtTerminate(terminationCause)
+            case .s150:
+                switch s_tr! {
+                case .s210:
+                    trace(evt, State_tr.s210, State_m.s100)
+                    disposeWS()
+                    notifyStatus(.DISCONNECTED)
+                    notifyServerErrorIfCauseIsError(terminationCause)
+                    clear_w()
+                    goto_m_from_session(.s100)
+                    exit_w()
+                    evtEndSession()
+                    evtTerminate(terminationCause)
+                case .s220:
+                    trace(evt, State_tr.s220, State_m.s100)
+                    disposeHTTP()
+                    notifyStatus(.DISCONNECTED)
+                    notifyServerErrorIfCauseIsError(terminationCause)
+                    goto_m_from_session(.s100)
+                    cancel_evtTransportTimeout()
+                    evtEndSession()
+                    evtTerminate(terminationCause)
+                case .s230:
+                    trace(evt, State_tr.s230, State_m.s100)
+                    disposeHTTP()
+                    notifyStatus(.DISCONNECTED)
+                    notifyServerErrorIfCauseIsError(terminationCause)
+                    goto_m_from_session(.s100)
+                    cancel_evtTransportTimeout()
+                    evtEndSession()
+                    evtTerminate(terminationCause)
+                case .s240:
+                    trace(evt, s_ws.m, State_m.s100)
+                    disposeWS()
+                    notifyStatus(.DISCONNECTED)
+                    notifyServerErrorIfCauseIsError(terminationCause)
+                    goto_m_from_ws(.s100)
+                    exit_ws_to_m()
+                    evtTerminate(terminationCause)
+                case .s250:
+                    trace(evt, s_wp.m, State_m.s100)
+                    disposeWS()
+                    notifyStatus(.DISCONNECTED)
+                    notifyServerErrorIfCauseIsError(terminationCause)
+                    goto_m_from_wp(.s100)
+                    exit_wp_to_m()
+                    evtTerminate(terminationCause)
+                case .s260:
+                    trace(evt, s_rec!, State_m.s100)
+                    disposeHTTP()
+                    notifyStatus(.DISCONNECTED)
+                    notifyServerErrorIfCauseIsError(terminationCause)
+                    goto_m_from_rec(.s100)
+                    exit_rec_to_m()
+                    evtTerminate(terminationCause)
+                case .s270:
+                    switch s_h! {
+                    case .s710:
+                        trace(evt, s_hs.m, State_m.s100)
+                        disposeHTTP()
+                        notifyStatus(.DISCONNECTED)
+                        notifyServerErrorIfCauseIsError(terminationCause)
+                        goto_m_from_hs(.s100)
+                        exit_hs_to_m()
+                        evtTerminate(terminationCause)
+                    case .s720:
+                        trace(evt, s_hp.m, State_m.s100)
+                        disposeHTTP()
+                        notifyStatus(.DISCONNECTED)
+                        notifyServerErrorIfCauseIsError(terminationCause)
+                        goto_m_from_hp(.s100)
+                        exit_hp_to_m()
+                        evtTerminate(terminationCause)
+                    }
+                default:
+                    break
+                }
+            default:
+                break
+            }
+        }
+    }
 
     func evtTransportError() {
         synchronized {
@@ -5058,6 +5169,22 @@ public class LightstreamerClient {
         }
     }
     
+    func evtCtrlFatalError(_ code: Int, _ msg: String) {
+        synchronized {
+            let evt = "ctrl.fatal.error"
+            let terminationCause = TerminationCause.standardError(code, msg)
+            if s_ctrl == .s1102 {
+                trace(evt, State_ctrl.s1102, State_m.s100)
+                disposeHTTP()
+                notifyStatus(.DISCONNECTED)
+                notifyServerError_ERROR(code, msg)
+                goto_m_from_ctrl(.s100)
+                exit_ctrl_to_m()
+                evtTerminate(terminationCause)
+            }
+        }
+    }
+    
     func evtCtrlError() {
         synchronized {
             let evt = "ctrl.error"
@@ -6431,6 +6558,7 @@ public class LightstreamerClient {
         return wsFactory(lock, url,
                          FULL_TLCP_VERSION,
                          headers ?? [:],
+                         m_details.m_certificatePins,
                          { [weak self] wsClient in
                             guard !wsClient.disposed else {
                                 return
@@ -6456,7 +6584,13 @@ public class LightstreamerClient {
                                 return
                             }
                             self?.evtTransportError()
-                         })
+                        }, {
+                            [weak self] wsClient, errCode, errMsg in
+                            guard !wsClient.disposed else {
+                                return
+                            }
+                            self?.evtTransportFatalError(errCode, errMsg)
+                        })
     }
     
     private func openWS_Create() {
@@ -6593,6 +6727,7 @@ public class LightstreamerClient {
         return httpFactory(lock, url,
                            req.encodedString,
                            headers ?? [:],
+                           m_details.m_certificatePins,
                            { [weak self] httpClient, line in
                             guard !httpClient.disposed else {
                                 return
@@ -6612,6 +6747,12 @@ public class LightstreamerClient {
                                 return
                             }
                             self?.evtTransportError()
+                           },
+                           { [weak self] httpClient, errCode, errMsg in
+                            guard !httpClient.disposed else {
+                                return
+                            }
+                            self?.evtTransportFatalError(errCode, errMsg)
                            },
                            { httpClient in
                             // ignore onDone
@@ -7764,6 +7905,7 @@ public class LightstreamerClient {
         ctrl_http = ctrlFactory(lock, url,
                            body,
                            headers ?? [:],
+                           m_details.m_certificatePins,
                            { [weak self] httpClient, line in
                             guard !httpClient.disposed else {
                                 return
@@ -7775,6 +7917,12 @@ public class LightstreamerClient {
                                 return
                             }
                             self?.evtCtrlError()
+                           },
+                           { [weak self] httpClient, errCode, errMsg in
+                            guard !httpClient.disposed else {
+                                return
+                            }
+                            self?.evtCtrlFatalError(errCode, errMsg)
                            },
                            { [weak self] httpClient in
                             guard !httpClient.disposed else {
