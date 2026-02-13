@@ -134,20 +134,20 @@ public class ConnectionDetails: CustomStringConvertible {
     /// is found, the connection is aborted and any registered delegate is notified via `ClientDelegate.client(_:didReceiveServerError:withMessage:)`
     /// with error code `62` and the message `Unrecognized server's identity`.
     ///
-    /// **Lifecycle:**
+    /// **Lifecycle:**<br>
     /// Ideally, public key pins should be set before calling `LightstreamerClient.connect()`.
     /// However, this configuration is dynamic and can be updated at any time; new pins are
     /// applied to all subsequent network requests issued by the client.
     ///
-    /// **Notification:**
+    /// **Notification:**<br>
     /// A change to this setting is notified to any registered listener via
     /// `ClientDelegate.client(_:didChangeProperty:)` with argument `certificatePins`.
     ///
-    /// **Unsecure Connections:**
+    /// **Unsecure Connections:**<br>
     /// Pinning is enforced only when the connection is established over HTTPS/WSS.
     /// For plain HTTP/WS connections, pins are ignored.
     ///
-    /// **Self-Signed Certificates:**
+    /// **Self-Signed Certificates:**<br>
     /// Pinning does not bypass standard TLS trust evaluation performed by the system.
     /// Certificates must still be considered valid by the platform trust store.
     ///
@@ -175,9 +175,6 @@ public class ConnectionDetails: CustomStringConvertible {
     /// - Parameter pins: The list of public keys to pin. Each value should be a `SecKey`
     ///   derived from the certificate’s Subject Public Key Info (SPKI).
     ///   Pass an empty array to disable pinning and clear existing pins.
-    ///
-    /// - SeeAlso: `ClientDelegate.client(_:didChangeProperty:)`
-    /// - SeeAlso: `LightstreamerClient.connect()`
     public var certificatePins: [SecKey] {
         get {
             client.synchronized {

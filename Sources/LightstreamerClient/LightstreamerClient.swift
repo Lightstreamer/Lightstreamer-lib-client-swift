@@ -67,14 +67,14 @@ public protocol ClientDelegate: AnyObject {
 
      - 30-41 - the current connection or the whole session has been closed by external agents; the possible cause may be:
 
-     - The session was closed on the Server side (via software or by the administrator) (32), or through a client "destroy" request (31);
+       - The session was closed on the Server side (via software or by the administrator) (32), or through a client "destroy" request (31);
 
-     - The Metadata Adapter imposes limits on the overall open sessions for the current user and has requested the closure of the current session upon opening
+       - The Metadata Adapter imposes limits on the overall open sessions for the current user and has requested the closure of the current session upon opening
        of a new session for the same user on a different browser window (35);
 
-     - An unexpected error occurred on the Server while the session was in activity (33, 34);
+       - An unexpected error occurred on the Server while the session was in activity (33, 34);
 
-     - An unknown or unexpected cause; any code different from the ones identified in the above cases could be issued. A detailed description for the specific
+       - An unknown or unexpected cause; any code different from the ones identified in the above cases could be issued. A detailed description for the specific
        cause is currently not supplied (i.e. errorMessage is nil in this case).
 
      - 60 - this version of the client is not allowed by the current license terms.
