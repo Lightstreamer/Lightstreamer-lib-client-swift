@@ -7,7 +7,7 @@
 *Compatible with watchOS 6+.*<br>
 *Compatible with tvOS 13+.*<br>
 *Compatible with code developed for the previous version.*<br>
-*Released on [TBD].*
+*Released on 16 Feb 2026.*
 
 **New:** Added support for public key pinning through the `ConnectionDetails.certificatePins` property, allowing clients to restrict TLS connections to servers presenting specific certificates.
 
