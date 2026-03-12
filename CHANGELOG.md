@@ -1,13 +1,13 @@
 # SDK for Swift Clients CHANGELOG
 
-## 6.4.0-alpha.1
+## 6.4.0
 *Compatible with Lightstreamer Server since 7.4.0.*<br>
 *Compatible with iOS 13+.*<br>
 *Compatible with macOS 10.15+.*<br>
 *Compatible with watchOS 6+.*<br>
 *Compatible with tvOS 13+.*<br>
 *Compatible with code developed for the previous version.*<br>
-*Released on 16 Feb 2026.*
+*Released on 12 Mar 2026.*
 
 **New:** Added support for public key pinning through the `ConnectionDetails.certificatePins` property, allowing clients to restrict TLS connections to servers presenting specific certificates.
 
