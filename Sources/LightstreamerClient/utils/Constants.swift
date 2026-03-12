@@ -17,47 +17,47 @@ import Foundation
 
 #if os(macOS)
     #if LS_JSON_PATCH
-    let LS_CID_MACOS = "scFuxkwp1ltvcC4FJ4KhrrKg4CHfDprfc85DQ4O8Cv"
+    let LS_CID_MACOS = "scFuxkwp1ltvcC4FJ4Ji kOj2DK6S793hk"
     let LS_CID = LS_CID_MACOS
     #else
-    let LS_CID_MACOS_COMPACT = "scFuxkwp1ltvcC4FJ4KhrrKg4CHfDprfc85DQ4O8C0Fur ugCj"
+    let LS_CID_MACOS_COMPACT = "scFuxkwp1ltvcC4FJ4Ji kOj2DK6S793h4hz3twjzx"
     let LS_CID = LS_CID_MACOS_COMPACT
     #endif
 #elseif os(tvOS)
     #if LS_JSON_PATCH
-    let LS_CID_TVOS = "zxRyen2m uz.l59AK2wsvjD568vy1sj.h67HK6NDa"
+    let LS_CID_TVOS = "zxRyen2m uz.l59AK1x-onG37BMAMA74o"
     let LS_CID = LS_CID_TVOS
     #else
-    let LS_CID_TVOS_COMPACT = "zxRyen2m uz.l59AK2wsvjD568vy1sj.h67HK6ND4eRsulwxn"
+    let LS_CID_TVOS_COMPACT = "zxRyen2m uz.l59AK1x-onG37BMAMA74ditx6ey c"
     let LS_CID = LS_CID_TVOS_COMPACT
     #endif
 #elseif os(watchOS)
     #if LS_JSON_PATCH
-    let LS_CID_WATCHOS = ".cWimz9dysogQz2HJ8L74cOvmlJ5Ji kOj2DK6S783lb"
+    let LS_CID_WATCHOS = ".cWimz9dysogQz2HJ8L73dXoqoH6M9C2i77p"
     let LS_CID = LS_CID_WATCHOS
     #else
-    let LS_CID_WATCHOS_COMPACT = ".cWimz9dysogQz2HJ8L74cOvmlJ5Ji kOj2DK6S783l4hz3twjzo"
+    let LS_CID_WATCHOS_COMPACT = ".cWimz9dysogQz2HJ8L73dXoqoH6M9C2i779ws5wgeWd"
     let LS_CID = LS_CID_WATCHOS_COMPACT
     #endif
 #elseif os(visionOS)
     #if LS_JSON_PATCH
-    let LS_CID_VISIONOS = "-kVoty5wvjrkHty8Q3Q660Drusu3N4hwLri8M4OD64gCf"
+    let LS_CID_VISIONOS = "-kVoty5wvjrkHty8Q3Q66.E nwx1O788f96Dt"
     let LS_CID = LS_CID_VISIONOS
     #else
-    let LS_CID_VISIONOS_COMPACT = "-kVoty5wvjrkHty8Q3Q660Drusu3N4hwLri8M4OD64gC3n5q8hivs"
+    let LS_CID_VISIONOS_COMPACT = "-kVoty5wvjrkHty8Q3Q66.E nwx1O788f96DIg7tvcFzh"
     let LS_CID = LS_CID_VISIONOS_COMPACT
     #endif
 #else // iOS
     #if LS_JSON_PATCH
-    let LS_CID_IOS = "oqVfhw.i6 38eA4BIe4wnce72mBm4k34f8BBM5Sv"
+    let LS_CID_IOS = "oqVfhw.i6 38eA4BHfDprfc85DQ4P88k"
     let LS_CID = LS_CID_IOS
     #else
-    let LS_CID_IOS_COMPACT = "oqVfhw.i6 38eA4BIe4wnce72mBm4k34f8BBM5S5iqPvfnAj"
+    let LS_CID_IOS_COMPACT = "oqVfhw.i6 38eA4BHfDprfc85DQ4P880Fur ugCx"
     let LS_CID = LS_CID_IOS_COMPACT
     #endif
 #endif
 let LS_LIB_NAME = "swift_client"
-let LS_LIB_VERSION = "6.4.0-alpha.1"
+let LS_LIB_VERSION = "6.4.0"
 
 let TLCP_VERSION = "TLCP-2.5.0"
 let FULL_TLCP_VERSION = TLCP_VERSION + ".lightstreamer.com"
