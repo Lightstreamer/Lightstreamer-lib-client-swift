@@ -160,6 +160,9 @@ public class MPNBuilder {
      Sets the `aps.badge` field with a string value.
      
      - Parameter badge: A string to be used for the `aps.badge` field value, or nil to clear it.
+     When set to `AUTO`, the badge will be assigned automatically as a progressive counter of all
+     push notifications originated by MPN subscriptions with the "AUTO" value, on a per-device and per-application basis.
+     The counter can also be reset at any time by calling `LightstreamerClient.resetMPNBadge`.
      */
     @discardableResult
     public func badge(with badge: String?) -> MPNBuilder {
