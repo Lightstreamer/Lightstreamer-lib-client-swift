@@ -19,7 +19,7 @@
 
 ### 🚀 Major Updates & Breaking Changes
 - **Removed** all dependencies on Starscream and Alamofire  
-- **WebSocket layer** now uses `URLSessionWebSocketTask` in place of of Starscream  
+- **WebSocket layer** now uses `URLSessionWebSocketTask` in place of Starscream  
 - **HTTP layer** now uses `URLSessionDataTask` in place of Alamofire  
 - **Minimum OS versions bumped**  
   - iOS 12 → **iOS 13**  
