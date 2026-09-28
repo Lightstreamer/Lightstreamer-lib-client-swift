@@ -1060,6 +1060,26 @@ public class LightstreamerClient {
      A constant string representing the version of the library.
      */
     public static let LIB_VERSION: String = LS_LIB_VERSION
+
+    /**
+     Errors raised while configuring the shared networking session.
+     */
+    public enum NetworkingError: Error {
+        /// The shared URLSession has already been initialized and cannot be reconfigured.
+        case sessionAlreadyInitialized
+    }
+
+    /**
+     Configures the URLSession shared by all LightstreamerClient instances in this library module.
+
+     This method must be called before creating any `LightstreamerClient` instance. If it is not called,
+     the shared session uses `URLSessionConfiguration.default`. The configuration is copied when supplied.
+
+     - Throws: `NetworkingError.sessionAlreadyInitialized` if the shared URLSession already exists.
+     */
+    public static func configureNetworking(configuration: URLSessionConfiguration) throws {
+        try LsSession.configure(configuration: configuration)
+    }
     
     /**
      Static method that permits to configure the logging system used by the library.

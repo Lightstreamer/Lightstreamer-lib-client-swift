@@ -17,7 +17,52 @@ import Foundation
 
 /// Wrapper of URLSession
 class LsSession: NSObject, URLSessionWebSocketDelegate {
-    public static let shared = LsSession()
+    private static let sharedLock = NSRecursiveLock()
+    private static var sharedSession: LsSession?
+    private static var configuredSession: URLSessionConfiguration?
+
+    static var shared: LsSession {
+        synchronized {
+            if let session = sharedSession {
+                return session
+            }
+            let session = LsSession(configuration: configuredSession ?? .default)
+            sharedSession = session
+            return session
+        }
+    }
+
+    static func configure(configuration: URLSessionConfiguration) throws {
+        try synchronized {
+            guard sharedSession == nil else {
+                throw LightstreamerClient.NetworkingError.sessionAlreadyInitialized
+            }
+            configuredSession = copyConfiguration(configuration)
+        }
+    }
+
+    private static func copyConfiguration(_ configuration: URLSessionConfiguration) -> URLSessionConfiguration {
+        configuration.copy() as! URLSessionConfiguration
+    }
+
+    private static func synchronized<T>(_ block: () throws -> T) rethrows -> T {
+        sharedLock.lock()
+        defer { sharedLock.unlock() }
+        return try block()
+    }
+    
+    // Internal reset hook for tests; the next access to `shared` creates a fresh session.
+    static func resetForTesting(configuration: URLSessionConfiguration? = nil) {
+        synchronized {
+            sharedSession?.urlSession.invalidateAndCancel()
+            sharedSession = nil
+            configuredSession = configuration.map(copyConfiguration)
+        }
+    }
+    
+    var configurationForTesting: URLSessionConfiguration {
+        urlSession.configuration
+    }
     
     private let lock = NSRecursiveLock()
     private let urlSession: URLSession
@@ -32,8 +77,8 @@ class LsSession: NSObject, URLSessionWebSocketDelegate {
     private var wsTaskMap = [URLSessionWebSocketTask: LsWebsocketTask]()
     private var delegate = LsSessionDelegate()
     
-    public override init() {
-        urlSession = URLSession(configuration: .default, delegate: delegate, delegateQueue: nil)
+    private init(configuration: URLSessionConfiguration) {
+        urlSession = URLSession(configuration: configuration, delegate: delegate, delegateQueue: nil)
         super.init()
         delegate.setSession(self)
     }
