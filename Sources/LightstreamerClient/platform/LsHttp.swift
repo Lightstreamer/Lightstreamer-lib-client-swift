@@ -15,7 +15,7 @@
  */
 import Foundation
 
-typealias HTTPFactoryService = (NSRecursiveLock, String,
+typealias HTTPFactoryService = (NSRecursiveLock, LsSession, String,
                                 String,
                                 [String:String],
                                 [SecKey],
@@ -24,7 +24,7 @@ typealias HTTPFactoryService = (NSRecursiveLock, String,
                                 @escaping (LsHttpClient, Int, String) -> Void,
                                 @escaping (LsHttpClient) -> Void) -> LsHttpClient
 
-func createHTTP(_ lock: NSRecursiveLock, _ url: String,
+func createHTTP(_ lock: NSRecursiveLock, _ session: LsSession, _ url: String,
                 body: String,
                 headers: [String:String],
                 certificatePins: [SecKey],
@@ -32,7 +32,7 @@ func createHTTP(_ lock: NSRecursiveLock, _ url: String,
                 onError: @escaping (LsHttpClient, String) -> Void,
                 onFatalError: @escaping (LsHttpClient, Int, String) -> Void,
                 onDone: @escaping (LsHttpClient) -> Void) -> LsHttpClient {
-    return LsHttp(lock, url,
+    return LsHttp(lock, session, url,
                   body: body,
                   headers: headers,
                   certificatePins: certificatePins,
@@ -58,7 +58,7 @@ class LsHttp: LsHttpClient, LsHttpTaskDelegate {
     let m_certificatePins: [SecKey]
     var m_disposed = false
   
-    init(_ lock: NSRecursiveLock, _ url: String,
+    init(_ lock: NSRecursiveLock, _ session: LsSession, _ url: String,
          body: String,
          headers: [String:String] = [:],
          certificatePins: [SecKey],
@@ -88,7 +88,7 @@ class LsHttp: LsHttpClient, LsHttpTaskDelegate {
             urlRequest.setValue(val, forHTTPHeaderField: key)
         }
         urlRequest.httpBody = Data(body.utf8)
-        self.request = LsSession.shared.createHttpTask(with: urlRequest)
+        self.request = session.createHttpTask(with: urlRequest)
         request.setDelegate(self)
         request.open()
     }

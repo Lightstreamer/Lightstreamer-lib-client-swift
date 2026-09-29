@@ -25,6 +25,7 @@ class NetTests: XCTestCase {
         
         let client = LsHttp(
             NSRecursiveLock(),
+            LsSession.shared,
             "http://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)",
             body: "LS_polling=true&LS_polling_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg",
             certificatePins: [],
@@ -51,6 +52,7 @@ class NetTests: XCTestCase {
         
         let client = LsWebsocket(
             NSRecursiveLock(),
+            LsSession.shared,
             "http://push.lightstreamer.com/lightstreamer",
             protocols: "\(TLCP_VERSION).lightstreamer.com",
             certificatePins: [],

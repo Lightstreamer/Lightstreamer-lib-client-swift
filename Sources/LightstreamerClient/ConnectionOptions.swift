@@ -84,6 +84,13 @@ public enum RealMaxBandwidth: Equatable, CustomStringConvertible {
     }
 }
 
+/// Errors raised while configuring a client's URLSession.
+/// - SeeAlso: `ConnectionOptions.configureNetworking(configuration:)`
+public enum NetworkingError: Error, Equatable {
+    /// The client's URLSession has already been initialized and cannot be reconfigured.
+    case sessionAlreadyInitialized
+}
+
 /**
  Used by `LightstreamerClient` to provide an extra connection properties object.
  
@@ -117,6 +124,26 @@ public class ConnectionOptions: CustomStringConvertible {
     
     init(_ client: LightstreamerClient) {
         self.client = client
+    }
+
+    /**
+     Configures a private `URLSession` for this client.
+     If no private session is configured, the client defaults to the library-wide shared `URLSession` configured with `URLSessionConfiguration.default`.
+
+     This configuration is isolated and does not affect other client instances or the shared `URLSession`.
+
+     - Important: Call this method before `LightstreamerClient.connect()`. Once a session is assigned, it cannot be reconfigured, even after calling `LightstreamerClient.disconnect()`.
+
+     - Parameter configuration: The configuration for the client's private `URLSession`.
+     - Throws: `NetworkingError.sessionAlreadyInitialized` if a session has already been assigned.
+     */
+    public func configureNetworking(configuration: URLSessionConfiguration) throws {
+        try client.synchronized {
+            guard client.m_session == nil else {
+                throw NetworkingError.sessionAlreadyInitialized
+            }
+            client.m_session = LsSession(configuration: configuration)
+        }
     }
     
     /**

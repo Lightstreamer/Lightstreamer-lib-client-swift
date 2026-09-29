@@ -32,8 +32,12 @@ class LsSession: NSObject, URLSessionWebSocketDelegate {
     private var wsTaskMap = [URLSessionWebSocketTask: LsWebsocketTask]()
     private var delegate = LsSessionDelegate()
     
-    public override init() {
-        urlSession = URLSession(configuration: .default, delegate: delegate, delegateQueue: nil)
+    public override convenience init() {
+        self.init(configuration: .default)
+    }
+
+    public init(configuration: URLSessionConfiguration) {
+        urlSession = URLSession(configuration: configuration, delegate: delegate, delegateQueue: nil)
         super.init()
         delegate.setSession(self)
     }

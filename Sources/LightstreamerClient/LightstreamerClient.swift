@@ -829,6 +829,8 @@ public class LightstreamerClient {
     let lock = NSRecursiveLock()
     var m_details: ConnectionDetails!
     var m_options: ConnectionOptions!
+    // Assigned on first `ConnectionOptions.configureNetworking` or `LightstreamerClient.connect`; retained across disconnects.
+    var m_session: LsSession?
     let callbackQueue = defaultQueue
     let multicastDelegate = MulticastDelegate<ClientDelegate>()
     // resource factories
@@ -1294,6 +1296,9 @@ public class LightstreamerClient {
         synchronized {
             guard let serverAddress = m_details.m_serverAddress else {
                 preconditionFailure("Configure the server address before trying to connect")
+            }
+            if m_session == nil {
+                m_session = LsSession.shared
             }
             if actionLogger.isInfoEnabled {
                 actionLogger.info("Connection requested: details: \(m_details!) options: \(m_options!)")
@@ -6558,7 +6563,7 @@ public class LightstreamerClient {
     }
     
     private func openWS(_ url: String, _ headers: [String:String]?) -> LsWebsocketClient {
-        return wsFactory(lock, url,
+        return wsFactory(lock, m_session!, url,
                          FULL_TLCP_VERSION,
                          headers ?? [:],
                          m_details.m_certificatePins,
@@ -6727,7 +6732,7 @@ public class LightstreamerClient {
     }
     
     private func sendHttpRequest(_ url: String, _ req: LsRequestBuilder, _ headers: [String:String]?) -> LsHttpClient {
-        return httpFactory(lock, url,
+        return httpFactory(lock, m_session!, url,
                            req.encodedString,
                            headers ?? [:],
                            m_details.m_certificatePins,
@@ -7905,7 +7910,7 @@ public class LightstreamerClient {
             URLQueryItem(name: "LS_session", value: sessionId)
         ])
         let headers = getHeadersForRequestOtherThanCreate()
-        ctrl_http = ctrlFactory(lock, url,
+        ctrl_http = ctrlFactory(lock, m_session!, url,
                            body,
                            headers ?? [:],
                            m_details.m_certificatePins,

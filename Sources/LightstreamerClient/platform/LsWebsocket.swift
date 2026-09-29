@@ -15,7 +15,7 @@
  */
 import Foundation
 
-typealias WSFactoryService = (NSRecursiveLock, String,
+typealias WSFactoryService = (NSRecursiveLock, LsSession, String,
             String,
             [String:String],
             [SecKey],
@@ -24,7 +24,7 @@ typealias WSFactoryService = (NSRecursiveLock, String,
             @escaping (LsWebsocketClient, String) -> Void,
             @escaping (LsWebsocketClient, Int, String) -> Void) -> LsWebsocketClient
 
-func createWS(_ lock: NSRecursiveLock, _ url: String,
+func createWS(_ lock: NSRecursiveLock, _ session: LsSession, _ url: String,
                       protocols: String,
                       headers: [String:String],
                       certificatePins: [SecKey],
@@ -32,7 +32,7 @@ func createWS(_ lock: NSRecursiveLock, _ url: String,
                       onText: @escaping (LsWebsocketClient, String) -> Void,
                       onError: @escaping (LsWebsocketClient, String) -> Void,
                       onFatalError: @escaping (LsWebsocketClient, Int, String) -> Void) -> LsWebsocketClient {
-    return LsWebsocket(lock, url,
+    return LsWebsocket(lock, session, url,
                        protocols: protocols,
                        headers: headers,
                        certificatePins: certificatePins,
@@ -58,7 +58,7 @@ class LsWebsocket: LsWebsocketClient, LsWebSocketTaskDelegate {
     let m_certificatePins: [SecKey]
     var m_disposed = false
   
-    init(_ lock: NSRecursiveLock, _ url: String,
+    init(_ lock: NSRecursiveLock, _ session: LsSession, _ url: String,
          protocols: String,
          headers: [String:String] = [:],
          certificatePins: [SecKey],
@@ -81,7 +81,7 @@ class LsWebsocket: LsWebsocketClient, LsWebSocketTaskDelegate {
         if streamLogger.isDebugEnabled {
             streamLogger.debug("WS connecting: \(request) \(request.allHTTPHeaderFields ?? [:])")
         }
-        self.socket = LsSession.shared.createWsTask(with: request)
+        self.socket = session.createWsTask(with: request)
         socket.setDelegate(self)
         socket.connect()
     }

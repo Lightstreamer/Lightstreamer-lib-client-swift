@@ -55,6 +55,7 @@ class TestDelegate: ClientDelegate {
 
 class TestWSFactory: LsWebsocketClient {
     var m_trace: Trace
+    var session: LsSession?
     var disposed: Bool = false
     var m_onOpen: (() -> Void)!
     var m_onText: ((String) -> Void)!
@@ -93,11 +94,12 @@ class TestWSFactory: LsWebsocketClient {
         addTrace("ws.dispose")
     }
     
-    func createWS(_ lock: NSRecursiveLock, _ url: String, _ protocols: String, _ headers: [String:String], _ certificatePins: [SecKey],
+    func createWS(_ lock: NSRecursiveLock, _ session: LsSession, _ url: String, _ protocols: String, _ headers: [String:String], _ certificatePins: [SecKey],
                    _ onOpen: @escaping (LsWebsocketClient) -> Void,
                    _ onText: @escaping (LsWebsocketClient, String) -> Void,
                    _ onError: @escaping (LsWebsocketClient, String) -> Void,
                    _ onFatalError: @escaping (LsWebsocketClient, Int, String) -> Void) -> LsWebsocketClient {
+        self.session = session
         addTrace("ws.init \(url)")
         if showExtraHeaders {
             for (key, val) in headers {
@@ -116,6 +118,7 @@ class TestWSFactory: LsWebsocketClient {
 
 class TestHTTPFactory: LsHttpClient {
     var m_trace: Trace
+    var session: LsSession?
     var disposed: Bool = false
     var m_onText: ((String) -> Void)!
     var m_onError: (() -> Void)!
@@ -152,11 +155,12 @@ class TestHTTPFactory: LsHttpClient {
         addTrace("\(prefix).dispose")
     }
     
-    func createHTTP(_ lock: NSRecursiveLock, _ url: String, _ body: String, _ headers: [String:String], _ certificatePins: [SecKey],
+    func createHTTP(_ lock: NSRecursiveLock, _ session: LsSession, _ url: String, _ body: String, _ headers: [String:String], _ certificatePins: [SecKey],
                      onText: @escaping (LsHttpClient, String) -> Void,
                      onError: @escaping (LsHttpClient, String) -> Void,
                      onFatalError: @escaping (LsHttpClient, Int, String) -> Void,
                      onDone: @escaping (LsHttpClient) -> Void) -> LsHttpClient {
+        self.session = session
         addTrace("\(prefix).send \(url)")
         if showExtraHeaders {
             for (key, val) in headers {
