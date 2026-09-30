@@ -33,6 +33,12 @@ class CertificatePinning: XCTestCase {
     override static func setUp() {
 //        LightstreamerClient.setLoggerProvider(ConsoleLoggerProvider(level: .debug))
         
+        /*
+         The bundled certificates are from the SSL Labs Server Test results for
+         push.lightstreamer.com. They were converted from PEM to DER with OpenSSL:
+
+          https://www.ssllabs.com/ssltest/analyze.html?d=push.lightstreamer.com
+        */
         lsLeafKey = loadPubKey(file: "lightstreamer.com")
         lsIntermediateKey = loadPubKey(file: "lightstreamer.comCA")
         bogusKey = loadPubKey(file: "google.com")
