@@ -262,7 +262,7 @@ class LsWebsocketTask {
     private let lock = NSRecursiveLock()
     private let session: LsSession
     private let task: URLSessionWebSocketTask
-    private var delegate: LsWebSocketTaskDelegate?
+    private weak var delegate: LsWebSocketTaskDelegate?
     
     public init(task: URLSessionWebSocketTask, session: LsSession) {
         self.session = session
@@ -356,7 +356,7 @@ class LsHttpTask {
     private let lock = NSRecursiveLock()
     private let session: LsSession
     private let task: URLSessionDataTask
-    private var delegate: LsHttpTaskDelegate?
+    private weak var delegate: LsHttpTaskDelegate?
     
     public init(task: URLSessionDataTask, session: LsSession) {
         self.session = session
