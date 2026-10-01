@@ -1947,12 +1947,12 @@ public class LightstreamerClient {
                 }
                 s_nr = .s1410
                 oldManager?.stopListening()
-                nr_reachabilityManager?.startListening { status in
+                nr_reachabilityManager?.startListening { [weak self] status in
                     switch status {
                     case .notReachable:
-                        self.evtNetworkNotReachable(hostAddress)
+                        self?.evtNetworkNotReachable(hostAddress)
                     case .reachable:
-                        self.evtNetworkReachable(hostAddress)
+                        self?.evtNetworkReachable(hostAddress)
                     }
                 }
             default:

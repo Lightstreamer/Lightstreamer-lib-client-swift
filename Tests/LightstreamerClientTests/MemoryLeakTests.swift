@@ -20,6 +20,27 @@ import XCTest
 
 final class MemoryLeakTests: XCTestCase {
     
+    func testReleasingClientAfterServerAddressChange() throws {
+        weak var weakClient: LightstreamerClient?
+
+        try autoreleasepool {
+            let client = LightstreamerClient(serverAddress: "http://localtest.me:8080", adapterSet: "TEST")
+            try client.connectionOptions.configureNetworking(configuration: .default)
+            client.connect()
+
+            client.connectionDetails.serverAddress = "http://127.0.0.1:8080"
+            weakClient = client
+        }
+
+        // Allow pending callbacks to finish before distinguishing a leak from temporary retention.
+        let released = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            weakClient == nil
+        }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [released], timeout: 3), .completed,
+                       "Changing serverAddress must not retain the client")
+    }
+
+    
     func testReleasingConnectedClientShutsDownPrivateSession() throws {
         let expectation = XCTestExpectation(description: "Private URLSession invalidated")
         
