@@ -143,6 +143,7 @@ public class ConnectionOptions: CustomStringConvertible {
                 throw NetworkingError.sessionAlreadyInitialized
             }
             client.m_session = LsSession(configuration: configuration)
+            client.m_sessionIsPrivate = true
         }
     }
     

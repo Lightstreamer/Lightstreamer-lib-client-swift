@@ -21,6 +21,7 @@ class LsSession: NSObject, URLSessionWebSocketDelegate {
     
     private let lock = NSRecursiveLock()
     private let urlSession: URLSession
+    private var m_isShutdown = false
     // URLSessionDataTask does not notify when portions of data arrive.
     // To track these events, a URLSessionTaskDelegate is attached to URLSession.
     // When URLSession triggers such an event for a URLSessionDataTask,
@@ -41,9 +42,27 @@ class LsSession: NSObject, URLSessionWebSocketDelegate {
         super.init()
         delegate.setSession(self)
     }
+
+    var isShutdown: Bool {
+        synchronized { m_isShutdown }
+    }
+
+    func shutdown() {
+        let shouldInvalidate = synchronized {
+            guard !m_isShutdown else { return false }
+            m_isShutdown = true
+            httpTaskMap.removeAll()
+            wsTaskMap.removeAll()
+            return true
+        }
+        if shouldInvalidate {
+            urlSession.invalidateAndCancel()
+        }
+    }
     
     public func createHttpTask(with request: URLRequest) -> LsHttpTask {
         synchronized {
+            precondition(!m_isShutdown, "Cannot create a task after the URLSession has been invalidated")
             let task = urlSession.dataTask(with: request)
             return LsHttpTask(task: task, session: self)
         }
@@ -51,6 +70,7 @@ class LsSession: NSObject, URLSessionWebSocketDelegate {
     
     public func createWsTask(with request: URLRequest) -> LsWebsocketTask {
         synchronized {
+            precondition(!m_isShutdown, "Cannot create a task after the URLSession has been invalidated")
             let task = urlSession.webSocketTask(with: request)
             return LsWebsocketTask(task: task, session: self)
         }
@@ -204,7 +224,10 @@ class LsSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse,
                     completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
-        guard let taskWrapper = getSession()?.getHttpWrapper(dataTask) else { return }
+        guard let taskWrapper = getSession()?.getHttpWrapper(dataTask) else {
+            completionHandler(.cancel)
+            return
+        }
         guard let response = response as? HTTPURLResponse else {
             completionHandler(.cancel)
             taskWrapper.getDelegate()?.onTaskError("Unexpected response type")

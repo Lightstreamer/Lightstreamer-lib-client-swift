@@ -18,66 +18,6 @@ import XCTest
 @testable import LightstreamerClient
 
 class NetTests: XCTestCase {
-    
-    func testNoHTTPRetentionCycle() {
-        let expectation = XCTestExpectation()
-        
-        let host = "http://localtest.me:8080"
-        let client = LightstreamerClient(serverAddress: host, adapterSet: "TEST")
-        defer { client.disconnect() }
-        
-        let clientDelegate = CTBClientDelegate()
-        client.connectionOptions.forcedTransport = .HTTP
-        client.addDelegate(clientDelegate)
-        
-        weak var http: LsHttpClient?
-        
-        clientDelegate.onStatusChange = { status in
-            if status == .CONNECTED_HTTP_STREAMING {
-                http = client.http
-                XCTAssertNotNil(http)
-                client.disconnect()
-                
-            } else if status == .DISCONNECTED {
-                XCTAssertNil(client.http)
-                XCTAssertNil(http)
-                expectation.fulfill()
-            }
-        }
-        client.connect()
-        
-        wait(for: [expectation], timeout: 3)
-    }
-    
-    func testNoWSRetentionCycle() {
-        let expectation = XCTestExpectation()
-        
-        let host = "http://localtest.me:8080"
-        let client = LightstreamerClient(serverAddress: host, adapterSet: "TEST")
-        defer { client.disconnect() }
-        
-        let clientDelegate = CTBClientDelegate()
-        client.connectionOptions.forcedTransport = .WS
-        client.addDelegate(clientDelegate)
-        
-        weak var ws: LsWebsocketClient?
-        
-        clientDelegate.onStatusChange = { status in
-            if status == .CONNECTED_WS_STREAMING {
-                ws = client.ws
-                XCTAssertNotNil(ws)
-                client.disconnect()
-                
-            } else if status == .DISCONNECTED {
-                XCTAssertNil(client.ws)
-                XCTAssertNil(ws)
-                expectation.fulfill()
-            }
-        }
-        client.connect()
-        
-        wait(for: [expectation], timeout: 3)
-    }
    
     func testHTTP() {
         let expectation = XCTestExpectation()

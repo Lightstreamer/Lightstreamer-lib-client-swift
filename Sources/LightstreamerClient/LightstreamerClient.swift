@@ -831,6 +831,7 @@ public class LightstreamerClient {
     var m_options: ConnectionOptions!
     // Assigned on first `ConnectionOptions.configureNetworking` or `LightstreamerClient.connect`; retained across disconnects.
     var m_session: LsSession?
+    var m_sessionIsPrivate = false
     let callbackQueue = defaultQueue
     let multicastDelegate = MulticastDelegate<ClientDelegate>()
     // resource factories
@@ -1050,6 +1051,14 @@ public class LightstreamerClient {
         }
         if let adapterSet = adapterSet {
             m_details.adapterSet = adapterSet
+        }
+    }
+
+    deinit {
+        // Only the session owned by this client can be invalidated. Do not run
+        // the disconnect state machine here: it dispatches callbacks using self.
+        if m_sessionIsPrivate {
+            m_session?.shutdown()
         }
     }
     
@@ -1299,6 +1308,7 @@ public class LightstreamerClient {
             }
             if m_session == nil {
                 m_session = LsSession.shared
+                m_sessionIsPrivate = false
             }
             if actionLogger.isInfoEnabled {
                 actionLogger.info("Connection requested: details: \(m_details!) options: \(m_options!)")
