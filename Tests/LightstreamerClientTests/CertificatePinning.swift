@@ -29,6 +29,7 @@ class CertificatePinning: XCTestCase {
     // Other keys
     static var bogusKey: SecKey!
     static var bogusKey2: SecKey!
+    static var localhostKey: SecKey!
     
     override static func setUp() {
 //        LightstreamerClient.setLoggerProvider(ConsoleLoggerProvider(level: .debug))
@@ -43,6 +44,7 @@ class CertificatePinning: XCTestCase {
         lsIntermediateKey = loadPubKey(file: "lightstreamer.comCA")
         bogusKey = loadPubKey(file: "google.com")
         bogusKey2 = loadPubKey(file: "example.com")
+        localhostKey = loadPubKey(file: "localtest.me")
     }
     
     static func loadPubKey(file: String) -> SecKey {
@@ -68,6 +70,36 @@ class CertificatePinning: XCTestCase {
             }
         }
         client.connectionDetails.certificatePins = [ Self.lsLeafKey ]
+        
+        wait(for: [expectation], timeout: 3)
+    }
+    
+    func testUnsuccessfulTLSTrustValidation_WS() {
+        // localhost has a self-signed certificate, so it should fail the TLS validation
+        client = LightstreamerClient(serverAddress: "https://localtest.me:8443", adapterSet: "TEST")
+        client.connectionDetails.certificatePins = [ Self.localhostKey ]
+        setTransport(.WS)
+        client.addDelegate(listener)
+        listener.onServerError = { code, msg in
+            XCTAssertEqual("62 Server identity verification failed: TLS certificate validation failed", "\(code) \(msg)")
+            self.expectation.fulfill()
+        }
+        client.connect()
+        
+        wait(for: [expectation], timeout: 3)
+    }
+    
+    func testUnsuccessfulTLSTrustValidation_HTTP() {
+        // localhost has a self-signed certificate, so it should fail the TLS validation
+        client = LightstreamerClient(serverAddress: "https://localtest.me:8443", adapterSet: "TEST")
+        client.connectionDetails.certificatePins = [ Self.localhostKey ]
+        setTransport(.HTTP)
+        client.addDelegate(listener)
+        listener.onServerError = { code, msg in
+            XCTAssertEqual("62 Server identity verification failed: TLS certificate validation failed", "\(code) \(msg)")
+            self.expectation.fulfill()
+        }
+        client.connect()
         
         wait(for: [expectation], timeout: 3)
     }
@@ -107,7 +139,7 @@ class CertificatePinning: XCTestCase {
         setTransport(.WS)
         client.addDelegate(listener)
         listener.onServerError = { code, msg in
-            XCTAssertEqual("62 Unrecognized server's identity", "\(code) \(msg)")
+            XCTAssertEqual("62 Server identity verification failed: no certificate public key matches a configured pin", "\(code) \(msg)")
             self.expectation.fulfill()
         }
         client.connect()
@@ -124,7 +156,7 @@ class CertificatePinning: XCTestCase {
         setTransport(.HTTP)
         client.addDelegate(listener)
         listener.onServerError = { code, msg in
-            XCTAssertEqual("62 Unrecognized server's identity", "\(code) \(msg)")
+            XCTAssertEqual("62 Server identity verification failed: no certificate public key matches a configured pin", "\(code) \(msg)")
             self.expectation.fulfill()
         }
         client.connect()
@@ -146,7 +178,7 @@ class CertificatePinning: XCTestCase {
             }
         }
         listener.onServerError = { code, msg in
-            XCTAssertEqual("62 Unrecognized server's identity", "\(code) \(msg)")
+            XCTAssertEqual("62 Server identity verification failed: no certificate public key matches a configured pin", "\(code) \(msg)")
             self.expectation.fulfill()
         }
         client.connect()
@@ -168,7 +200,7 @@ class CertificatePinning: XCTestCase {
             }
         }
         listener.onServerError = { code, msg in
-            XCTAssertEqual("62 Unrecognized server's identity", "\(code) \(msg)")
+            XCTAssertEqual("62 Server identity verification failed: no certificate public key matches a configured pin", "\(code) \(msg)")
             self.expectation.fulfill()
         }
         client.connect()
@@ -190,7 +222,7 @@ class CertificatePinning: XCTestCase {
             }
         }
         listener.onServerError = { code, msg in
-            XCTAssertEqual("62 Unrecognized server's identity", "\(code) \(msg)")
+            XCTAssertEqual("62 Server identity verification failed: no certificate public key matches a configured pin", "\(code) \(msg)")
             self.expectation.fulfill()
         }
         client.connect()
@@ -212,7 +244,7 @@ class CertificatePinning: XCTestCase {
             }
         }
         listener.onServerError = { code, msg in
-            XCTAssertEqual("62 Unrecognized server's identity", "\(code) \(msg)")
+            XCTAssertEqual("62 Server identity verification failed: no certificate public key matches a configured pin", "\(code) \(msg)")
             self.expectation.fulfill()
         }
         client.connect()
@@ -234,7 +266,7 @@ class CertificatePinning: XCTestCase {
             }
         }
         listener.onServerError = { code, msg in
-            XCTAssertEqual("62 Unrecognized server's identity", "\(code) \(msg)")
+            XCTAssertEqual("62 Server identity verification failed: no certificate public key matches a configured pin", "\(code) \(msg)")
             self.expectation.fulfill()
         }
         client.connect()
@@ -343,7 +375,7 @@ class CertificatePinning: XCTestCase {
         ]
         client.addDelegate(listener)
         listener.onServerError = { code, msg in
-            XCTAssertEqual("62 Unrecognized server's identity", "\(code) \(msg)")
+            XCTAssertEqual("62 Server identity verification failed: no certificate public key matches a configured pin", "\(code) \(msg)")
             self.expectation.fulfill()
         }
         client.connect()

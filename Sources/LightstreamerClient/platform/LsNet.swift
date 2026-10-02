@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import Foundation
+import Security
 
 /// Wrapper of URLSession
 class LsSession: NSObject, URLSessionWebSocketDelegate {
@@ -159,13 +160,12 @@ class LsSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
                   let taskDelegate = taskWrapper.getDelegate() {
             delegate = taskDelegate
         } else {
-            // No matching task wrapper was found for this URLSessionTask.
-            // Invariant: every request created through LsSession should have an associated task wrapper
-            // (either LsWebsocketTask or LsHttpTask) that provides a delegate and pinning policy.
-            // This can occur if the task was not created via LsSession, was disposed prematurely,
-            // or the wrapper has been deallocated.
-            // Fall back to default handling to avoid blocking the connection.
-            completionHandler(.performDefaultHandling, nil)
+            // Every task created through LsSession must have a wrapper and a delegate.
+            // Cancel the task if the delegate cannot be resolved.
+            if streamLogger.isErrorEnabled {
+                streamLogger.error("Unexpected task \(task.taskIdentifier) (\(type(of: task))) on \(challenge.protectionSpace.host); canceling authentication")
+            }
+            completionHandler(.cancelAuthenticationChallenge, nil)
             return
         }
         
@@ -177,9 +177,28 @@ class LsSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
             return
         }
         
-        // Iterates over certificates in leaf-to-root order
+        // Pinning supplements the existing TLS policies; it must not bypass trust validation.
+        var trustError: CFError?
+        guard SecTrustEvaluateWithError(serverTrust, &trustError) else {
+            if streamLogger.isErrorEnabled {
+                let message = "TLS server trust evaluation failed for \(challenge.protectionSpace.host)"
+                if let error = trustError {
+                    streamLogger.error(message, withException: error as Error)
+                } else {
+                    streamLogger.error(message)
+                }
+            }
+            delegate.onTaskFatalError(62, "Server identity verification failed: TLS certificate validation failed")
+            completionHandler(.cancelAuthenticationChallenge, nil)
+            return
+        }
+
+        // Iterates over the evaluated certificate chain in leaf-to-root order.
         var match = false
         let count = SecTrustGetCertificateCount(serverTrust)
+        if streamLogger.isDebugEnabled {
+            streamLogger.debug("TLS server trust validated for \(challenge.protectionSpace.host); checking \(count) certificates against pins")
+        }
         for i in 0..<count {
             guard let certificate = SecTrustGetCertificateAtIndex(serverTrust, i),
                   let publicKey = SecCertificateCopyKey(certificate) else {
@@ -192,12 +211,15 @@ class LsSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         }
         
         if match {
+            if streamLogger.isDebugEnabled {
+                streamLogger.debug("TLS certificate pin matched for \(challenge.protectionSpace.host)")
+            }
             completionHandler(.useCredential, URLCredential(trust: serverTrust))
         } else {
             if streamLogger.isErrorEnabled {
-                streamLogger.error("Unrecognized server's identity")
+                streamLogger.error("TLS certificate pin mismatch for \(challenge.protectionSpace.host)")
             }
-            delegate.onTaskFatalError(62, "Unrecognized server's identity")
+            delegate.onTaskFatalError(62, "Server identity verification failed: no certificate public key matches a configured pin")
             completionHandler(.cancelAuthenticationChallenge, nil)
         }
     }

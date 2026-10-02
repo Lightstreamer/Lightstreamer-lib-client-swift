@@ -129,10 +129,12 @@ public class ConnectionDetails: CustomStringConvertible {
     
     /// Configures public key pinning for server authentication over TLS connections.
     ///
-    /// When pins are configured, the client validates that at least one of the provided pins
-    /// matches the public key of a certificate in the server's chain before establishing a session. If no match
-    /// is found, the connection is aborted and any registered delegate is notified via `ClientDelegate.client(_:didReceiveServerError:withMessage:)`
-    /// with error code `62` and the message `Unrecognized server's identity`.
+    /// When pins are configured, the client first performs standard TLS trust evaluation, including
+    /// hostname and certificate-chain validation. It then requires at least one of the provided pins
+    /// to match the public key of a certificate in the evaluated chain before establishing a session.
+    /// If trust evaluation fails or no matching pin is found, the connection is aborted and any registered
+    /// delegate is notified via `ClientDelegate.client(_:didReceiveServerError:withMessage:)`
+    /// with error code `62` and the message `Server identity verification failed`.
     ///
     /// **Lifecycle:**<br>
     /// Ideally, public key pins should be set before calling `LightstreamerClient.connect()`.
@@ -174,7 +176,7 @@ public class ConnectionDetails: CustomStringConvertible {
     ///
     /// - Parameter pins: The list of public keys to pin. Each value should be a `SecKey`
     ///   derived from the certificate’s Subject Public Key Info (SPKI).
-    ///   Pass an empty array to disable pinning and clear existing pins.
+    ///   Pass an empty array to disable pinning and clear existing pins; standard TLS trust validation remains enabled.
     public var certificatePins: [SecKey] {
         get {
             client.synchronized {
