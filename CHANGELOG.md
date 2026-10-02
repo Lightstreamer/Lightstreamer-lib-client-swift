@@ -1,5 +1,24 @@
 # SDK for Swift Clients CHANGELOG
 
+## 6.5.0
+*Compatible with Lightstreamer Server since 7.4.0.*<br>
+*Compatible with iOS 13+.*<br>
+*Compatible with macOS 10.15+.*<br>
+*Compatible with watchOS 6+.*<br>
+*Compatible with tvOS 13+.*<br>
+*Compatible with code developed for the previous version.*<br>
+*Released on 2 October 2026.*
+
+**New:** Added `ConnectionOptions.configureNetworking(configuration:)` to configure an isolated, per-client `URLSession` using a `URLSessionConfiguration`. Call it before the first `LightstreamerClient.connect()`; subsequent configuration attempts throw `NetworkingError.sessionAlreadyInitialized`, even after disconnecting. 
+    Clients without a custom configuration continue to use the library-wide shared `URLSession`.
+
+**Fixed:** Removed retain cycles involving HTTP and WebSocket task delegates that could prevent transport objects from being deallocated.
+
+**Fixed:** Removed a client retain cycle in reachability callbacks after changing `ConnectionDetails.serverAddress`.
+
+**Fixed:** Connections using `ConnectionDetails.certificatePins` now perform standard TLS trust evaluation, including hostname and certificate-chain validation, before checking the pins. Trust-validation failures and pin mismatches are reported through `ClientDelegate.client(_:didReceiveServerError:withMessage:)` with error code `62` and a descriptive message.
+
+
 ## 6.4.0
 *Compatible with Lightstreamer Server since 7.4.0.*<br>
 *Compatible with iOS 13+.*<br>
