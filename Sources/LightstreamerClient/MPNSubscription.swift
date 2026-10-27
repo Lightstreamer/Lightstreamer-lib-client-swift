@@ -283,8 +283,9 @@ public protocol MPNSubscriptionDelegate {
  When an MPNSubscription is subscribed on the server, it acquires a permanent `subscriptionId` that the server later uses to identify the same
  MPN subscription on subsequent sessions.
 
- An MPNSubscription can be configured to use either an Item Group or an Item List to specify the items to be subscribed to, and using either a Field Schema
- or Field List to specify the fields. The same rules that apply to `Subscription` apply to MPNSubscription.
+ An MPNSubscription specifies explicit item and field lists through its constructor or the `items` and `fields` properties. Each entry is an
+ individual name, not an identifier to be expanded by the server. Both lists must be configured before submission. The same name validation rules
+ that apply to `Subscription` apply to MPNSubscription.
  
  An MPNSubscription object can also be provided by the client to represent a pre-existing MPN subscription on the server. In fact, differently than real-time
  subscriptions, MPN subscriptions are persisted on the server's MPN Module database and survive the session they were created on.
@@ -378,8 +379,6 @@ public class MPNSubscription: CustomStringConvertible {
     var m_mode: Mode!
     var m_items: [String]?
     var m_fields: [String]?
-    var m_group: String?
-    var m_schema: String?
     var m_dataAdapter: String?
     var m_bufferSize: RequestedBufferSize?
     var m_requestedMaxFrequency: RequestedMaxFrequency?
@@ -429,8 +428,7 @@ public class MPNSubscription: CustomStringConvertible {
      
      - Parameter item: The item name to be subscribed to through Lightstreamer Server.
 
-     - Parameter fields: An array of fields for the items to be subscribed to through Lightstreamer Server. It is also possible to specify the "Field List" or
-     "Field Schema" later through `fields` and `fieldSchema`.
+     - Parameter fields: An explicit array of field names for the item to be subscribed to through Lightstreamer Server.
      
      - Precondition: the specified "Item List" and "Field List" must be valid; see `items` and `fields` for details.
      */
@@ -453,11 +451,9 @@ public class MPNSubscription: CustomStringConvertible {
 
      - Parameter subscriptionMode: The subscription mode for the items, required by Lightstreamer Server.
      
-     - Parameter items: An array of items to be subscribed to through Lightstreamer Server. It is also possible specify the "Item List" or
-     "Item Group" later through `items` and `itemGroup`.
+     - Parameter items: An explicit array of item names to be subscribed to through Lightstreamer Server.
      
-     - Parameter fields: An array of fields for the items to be subscribed to through Lightstreamer Server. It is also possible to specify the "Field List" or
-     "Field Schema" later through `fields` and `fieldSchema`.
+     - Parameter fields: An explicit array of field names for the items to be subscribed to through Lightstreamer Server.
      
      - Precondition: the specified "Item List" and "Field List" must be valid; see `items` and `fields` for details.
      */
@@ -487,12 +483,10 @@ public class MPNSubscription: CustomStringConvertible {
         case .DISTINCT:
             m_mode = .DISTINCT
         default:
-            preconditionFailure("Invalid mode: only MERGE and COMMAND modes are supported")
+            preconditionFailure("Invalid mode: only MERGE and DISTINCT modes are supported")
         }
         m_items = subscription.items
-        m_group = subscription.itemGroup
         m_fields = subscription.fields
-        m_schema = subscription.fieldSchema
         m_dataAdapter = subscription.dataAdapter
         switch subscription.requestedBufferSize {
         case .limited(let size):
@@ -527,9 +521,7 @@ public class MPNSubscription: CustomStringConvertible {
     public init(MPNSubscription mpnSubscription: MPNSubscription) {
         m_mode = mpnSubscription.mode
         m_items = mpnSubscription.items
-        m_group = mpnSubscription.itemGroup
         m_fields = mpnSubscription.fields
-        m_schema = mpnSubscription.fieldSchema
         m_dataAdapter = mpnSubscription.dataAdapter
         m_bufferSize = mpnSubscription.requestedBufferSize
         m_requestedMaxFrequency = mpnSubscription.requestedMaxFrequency
@@ -541,18 +533,6 @@ public class MPNSubscription: CustomStringConvertible {
     init(_ mpnSubId: String) {
         m_mpnSubId = mpnSubId
         m_madeByServer = true
-    }
-    
-    var itemsOrGroup: String {
-        synchronized {
-            items?.joined(separator: " ") ?? itemGroup ?? ""
-        }
-    }
-    
-    var fieldsOrSchema: String {
-        synchronized {
-            fields?.joined(separator: " ") ?? fieldSchema ?? ""
-        }
     }
     
     /**
@@ -654,9 +634,8 @@ public class MPNSubscription: CustomStringConvertible {
      
      - `{ "aps" : { "alert" : "Stock ${stock_name} is now valued ${last_price}" } }`
      
-     Named arguments are available if the Metadata Adapter is a subclass of LiteralBasedProvider or provides equivalent functionality, otherwise only
-     indexed arguments may be used. In both cases common metadata rules apply: field names and indexes are checked against the Metadata Adapter, hence
-     they must be consistent with the schema and group specified.
+     Named arguments refer to the names in the configured `fields` list; indexed arguments refer to their 1-based positions. Arguments must be
+     consistent with the explicit item and field lists and are checked by the server.
      
      Some special server-managed arguments may also be used:
      
@@ -751,14 +730,12 @@ public class MPNSubscription: CustomStringConvertible {
     /**
      The "Field List" to be subscribed to through Lightstreamer Server.
      
-     Any change to this property will override any "Field List" or "Field Schema" previously specified.
-     
-     Note: if the MPNSubscription has been created by the client, such as when obtained through `LightstreamerClient.MPNSubscriptions`,
-     fields are always expressed with a "Field Schema"", even if originally the MPN subscription used a "Field List".
+     Any change to this property replaces the previously configured field list. Nil leaves the list unconfigured; a list is required before submission.
+     Subscriptions obtained through `LightstreamerClient.MPNSubscriptions` expose the explicit field list reported by the server once available.
      
      **Lifecycle:** this property can only be set while the MPNSubscription instance is in its "inactive" state.
      
-     **Related notifications:** a change to this setting will be notified through a call to `MPNSubscriptionDelegate.mpnSubscription(_:didChangeProperty:)` with argument `schema` on any `MPNSubscriptionDelegate` listening to the related MPNSubscription.
+     **Related notifications:** a server-reported change to this list is notified through `MPNSubscriptionDelegate.mpnSubscription(_:didChangeProperty:)` with argument `schema`.
 
      - Precondition: the field names in the list must not contain a space or be empty/nil.
      
@@ -777,70 +754,6 @@ public class MPNSubscription: CustomStringConvertible {
                 precondition(notEmpty(newValue), Self.EMPTY_FIELD_LIST)
                 precondition(allValidFields(newValue), Self.INVALID_FIELD_LIST)
                 m_fields = newValue
-                m_schema = nil
-            }
-        }
-    }
-    
-    /**
-     The "Field Schema" to be subscribed to through Lightstreamer Server.
-     
-     Any change to this property will override any "Field List" or "Field Schema" previously specified.
-     
-     Note: if the MPNSubscription has been created by the client, such as when obtained through `LightstreamerClient.MPNSubscriptions`,
-     fields are always expressed with a "Field Schema"", even if originally the MPN subscription used a "Field List".
-
-     **Lifecycle:** this property can only be set while the MPNSubscription instance is in its "inactive" state.
-     
-     **Related notifications:** a change to this setting will be notified through a call to `MPNSubscriptionDelegate.mpnSubscription(_:didChangeProperty:)` with argument `schema` on any `MPNSubscriptionDelegate` listening to the related MPNSubscription.
-
-     - Precondition: the MPNSubscription must be currently "inactive".
-     */
-    public var fieldSchema: String? {
-        get {
-            synchronized {
-                m_schema
-            }
-            
-        }
-        
-        set {
-            synchronized {
-                precondition(!isActive, Self.IS_ACTIVE)
-                precondition(notEmpty(newValue), Self.IS_EMPTY)
-                m_schema = newValue
-                m_fields = nil
-            }
-        }
-    }
-    
-    /**
-     The "Item Group" to be subscribed to through Lightstreamer Server.
-     
-     Any change to this property will override any "Item List" or "Item Group" previously specified.
-     
-     Note: if the MPNSubscription has been created by the client, such as when obtained through `LightstreamerClient.MPNSubscriptions`,
-     items are always expressed with an "Item Group"", even if originally the MPN subscription used an "Item List".
-
-     **Lifecycle:** this property can only be set while the MPNSubscription instance is in its "inactive" state.
-     
-     **Related notifications:** a change to this setting will be notified through a call to `MPNSubscriptionDelegate.mpnSubscription(_:didChangeProperty:)` with argument `group` on any `MPNSubscriptionDelegate` listening to the related MPNSubscription.
-
-     - Precondition: the MPNSubscription must be currently "inactive".
-     */
-    public var itemGroup: String? {
-        get {
-            synchronized {
-                m_group
-            }
-        }
-        
-        set {
-            synchronized {
-                precondition(!isActive, Self.IS_ACTIVE)
-                precondition(notEmpty(newValue), Self.IS_EMPTY)
-                m_group = newValue
-                m_items = nil
             }
         }
     }
@@ -848,14 +761,12 @@ public class MPNSubscription: CustomStringConvertible {
     /**
      The "Item List" to be subscribed to through Lightstreamer Server.
      
-     Any change to this property will override any "Item List" or "Item Group" previously specified.
-     
-     Note: if the MPNSubscription has been created by the client, such as when obtained through `LightstreamerClient.MPNSubscriptions`,
-     items are always expressed with an "Item Group"", even if originally the MPN subscription used an "Item List".
+     Any change to this property replaces the previously configured item list. Nil leaves the list unconfigured; a list is required before submission.
+     Subscriptions obtained through `LightstreamerClient.MPNSubscriptions` expose the explicit item list reported by the server once available.
 
      **Lifecycle:** this property can only be set while the MPNSubscription instance is in its "inactive" state.
      
-     **Related notifications:** a change to this setting will be notified through a call to `MPNSubscriptionDelegate.mpnSubscription(_:didChangeProperty:)` with argument `group` on any `MPNSubscriptionDelegate` listening to the related MPNSubscription.
+     **Related notifications:** a server-reported change to this list is notified through `MPNSubscriptionDelegate.mpnSubscription(_:didChangeProperty:)` with argument `group`.
 
      - Precondition: the item names in the "Item List" must not contain a space or be a number or be empty/nil.
      
@@ -874,7 +785,6 @@ public class MPNSubscription: CustomStringConvertible {
                 precondition(notEmpty(newValue), Self.EMPTY_ITEM_LIST)
                 precondition(allValidItems(newValue), Self.INVALID_ITEM_LIST)
                 m_items = newValue
-                m_group = nil
             }
         }
     }
@@ -1130,8 +1040,8 @@ public class MPNSubscription: CustomStringConvertible {
         synchronized {
             var map = OrderedDictionary<String, CustomStringConvertible>()
             map["mode"] = m_mode
-            map["items"] = m_items ?? m_group
-            map["fields"] = m_fields ?? m_schema
+            map["items"] = m_items
+            map["fields"] = m_fields
             map["dataAdapter"] = m_dataAdapter
             map["requestedBufferSize"] = m_bufferSize
             map["requestedMaxFrequency"] = m_requestedMaxFrequency
@@ -1194,27 +1104,35 @@ public class MPNSubscription: CustomStringConvertible {
         }
     }
     
-    func changeGroup(_ group: String?) {
+    // The internal MPN Data Adapter reports explicit lists separated by spaces.
+    // This metadata representation is separate from subscription request encoding.
+    func changeItems(_ rawItems: String?) {
         synchronized {
-            guard let group = group else {
+            guard let rawItems = rawItems else {
                 return
             }
-            if group != m_group {
-                m_group = group
-                m_items = nil
+            let items = rawItems.split(separator: " ").map(String.init)
+            guard !items.isEmpty else {
+                return
+            }
+            if items != m_items {
+                m_items = items
                 fireOnPropertyChange("group")
             }
         }
     }
     
-    func changeSchema(_ schema: String?) {
+    func changeFields(_ rawFields: String?) {
         synchronized {
-            guard let schema = schema else {
+            guard let rawFields = rawFields else {
                 return
             }
-            if schema != m_schema {
-                m_schema = schema
-                m_fields = nil
+            let fields = rawFields.split(separator: " ").map(String.init)
+            guard !fields.isEmpty else {
+                return
+            }
+            if fields != m_fields {
+                m_fields = fields
                 fireOnPropertyChange("schema")
             }
         }
@@ -1383,9 +1301,9 @@ public class MPNSubscription: CustomStringConvertible {
                 case "mode":
                     propVal = "newValue: \(m_mode == nil ? "nil" : String(describing: m_mode))"
                 case "group":
-                    propVal = "newValue: \(m_group ?? "nil")"
+                    propVal = "newValue: \(String(describing: m_items))"
                 case "schema":
-                    propVal = "newValue: \(m_schema ?? "nil")"
+                    propVal = "newValue: \(String(describing: m_fields))"
                 case "adapter":
                     propVal = "newValue: \(m_dataAdapter ?? "nil")"
                 case "notification_format":

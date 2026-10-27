@@ -549,15 +549,11 @@ class Key2Level: ItemKey {
         let sub = item.subscription
         let sub2 = Subscription(subscriptionMode: .MERGE)
         let items = [keyName]
-        guard allValidItems(items) else {
+        guard allValidItems(items), let fields2 = sub.commandSecondLevelFields else {
             return nil
         }
         sub2.items = items
-        if let fields2 = sub.commandSecondLevelFields {
-            sub2.fields = fields2
-        } else {
-            sub2.fieldSchema = sub.commandSecondLevelFieldSchema
-        }
+        sub2.fields = fields2
         sub2.dataAdapter = sub.commandSecondLevelDataAdapter
         sub2.requestedSnapshot = .yes
         sub2.requestedMaxFrequency = item.strategy.requestedMaxFrequency

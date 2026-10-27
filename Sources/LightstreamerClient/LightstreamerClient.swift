@@ -820,8 +820,8 @@ public class LightstreamerClient {
     }
     
     static let IS_ACTIVE = "Cannot subscribe to an active Subscription"
-    static let NO_ITEMS = "Specify property 'items' or 'itemGroup'"
-    static let NO_FIELDS = "Specify property 'fields' or 'fieldSchema'"
+    static let NO_ITEMS = "Specify property 'items'"
+    static let NO_FIELDS = "Specify property 'fields'"
     static let IS_ACTIVE_MPN = "Cannot subscribe to an active MPNSubscription"
     static let NO_DEVICE = "No MPNDevice Registered"
     static let NO_FORMAT = "Specify property 'notificationFormat'"
@@ -1442,6 +1442,8 @@ public class LightstreamerClient {
 
      - Parameter subscription: A `Subscription` object, carrying all the information needed to process real-time values.
 
+     - Precondition: the subscription must be inactive and contain explicit `Subscription.items` and `Subscription.fields` lists.
+
      - SeeAlso: `unsubscribe(_:)`
      */
     public func subscribe(_ subscription: Subscription) {
@@ -1451,8 +1453,8 @@ public class LightstreamerClient {
     func subscribeExt(_ subscription: Subscription, isInternal: Bool = false) {
         synchronized {
             precondition(!subscription.isActive, Self.IS_ACTIVE)
-            precondition(subscription.items != nil || subscription.itemGroup != nil, Self.NO_ITEMS)
-            precondition(subscription.fields != nil || subscription.fieldSchema != nil, Self.NO_FIELDS)
+            precondition(subscription.items != nil, Self.NO_ITEMS)
+            precondition(subscription.fields != nil, Self.NO_FIELDS)
             let sm = SubscriptionManagerLiving(subscription, self)
             if actionLogger.isInfoEnabled {
                 actionLogger.info("\(isInternal ? "Internal subscription" : "Subscription") requested: subId: \(sm.subId) \(String(describing: subscription))")
@@ -1549,7 +1551,7 @@ public class LightstreamerClient {
      (i.e. as soon as there is a session available and subsequently as soon as the MPN device registration succeeds). Differently than real-time subscriptions,
      MPN subscriptions are persisted on the server's MPN Module database and survive the session they were created on.
      
-     If the `coalescing` flag is *set*, the activation of two MPN subscriptions with the same Adapter Set, Data Adapter, Group, Schema and trigger expression will be considered the same MPN subscription. Activating two such subscriptions will result in the second activation modifying the first MPNSubscription (that could have been issued within a previous session). If the `coalescing` flag is *not set*, two activations are always considered different MPN subscriptions, whatever the Adapter Set, Data Adapter, Group, Schema and trigger expression are set.
+     If the `coalescing` flag is *set*, the activation of two MPN subscriptions with the same Adapter Set, Data Adapter, explicit item list, explicit field list and trigger expression will be considered the same MPN subscription. Activating two such subscriptions will result in the second activation modifying the first MPNSubscription (that could have been issued within a previous session). If the `coalescing` flag is *not set*, two activations are always considered different MPN subscriptions, regardless of those settings.
      
      The rationale behind the `coalescing` flag is to allow simple apps to always activate their MPN subscriptions when the app starts, without worrying if
      the same subscriptions have been activated before or not. In fact, since MPN subscriptions are persistent, if they are activated every time the app starts and the `coalescing` flag is not set, every activation is a *new* MPN subscription, leading to multiple push notifications for the same event.
@@ -1567,11 +1569,11 @@ public class LightstreamerClient {
 
      - Parameter mpnSubscription: An `MPNSubscription` object, carrying all the information to route real-time data via push notifications.
 
-     - Parameter coalescing: A flag that specifies if the MPN subscription must coalesce with any pre-existing MPN subscription with the same Adapter Set, Data Adapter, Group, Schema and trigger expression.
+     - Parameter coalescing: A flag that specifies if the MPN subscription must coalesce with any pre-existing MPN subscription with the same Adapter Set, Data Adapter, explicit item list, explicit field list and trigger expression.
 
-     - Precondition: the given MPN subscription must contain a field list/field schema.
+     - Precondition: the given MPN subscription must contain an explicit field list.
      
-     - Precondition: the given MPN subscription must contain a item list/item group.
+     - Precondition: the given MPN subscription must contain an explicit item list.
      
      - Precondition: an MPN device must be registered.
      
@@ -1586,8 +1588,8 @@ public class LightstreamerClient {
             precondition(mpn_device != nil, Self.NO_DEVICE)
             precondition(!mpnSubscription.isActive, Self.IS_ACTIVE_MPN)
             precondition(mpnSubscription.requestedFormat != nil, Self.NO_FORMAT)
-            precondition(mpnSubscription.items != nil || mpnSubscription.itemGroup != nil, Self.NO_ITEMS)
-            precondition(mpnSubscription.fields != nil || mpnSubscription.fieldSchema != nil, Self.NO_FIELDS)
+            precondition(mpnSubscription.items != nil, Self.NO_ITEMS)
+            precondition(mpnSubscription.fields != nil, Self.NO_FIELDS)
             let sm = MpnSubscriptionManager(mpnSubscription, coalescing: coalescing, self)
             if actionLogger.isInfoEnabled {
                 actionLogger.info("MPN Subscription requested: subId: \(sm.subId) \(mpnSubscription) coalescing: \(coalescing)")
@@ -6323,6 +6325,8 @@ public class LightstreamerClient {
         itemSub.setInternal()
         itemSub.dataAdapter = adapterName
         itemSub.requestedMaxFrequency = .unfiltered
+        // "group" and "schema" are MPN metadata field labels carrying explicit lists,
+        // not subscription configuration identifiers.
         itemSub.commandSecondLevelFields = [
             "status", "status_timestamp", "notification_format", "trigger", "group",
             "schema", "adapter", "mode", "requested_buffer_size", "requested_max_frequency"

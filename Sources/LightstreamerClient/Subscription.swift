@@ -58,13 +58,13 @@ public protocol SubscriptionDelegate: AnyObject {
      - For an item delivered in DISTINCT mode, to notify that all the previous updates received for the item should be considered as obsolete; hence, if the
        delegate were showing a list of recent updates for the item, it should clear the list in order to keep a coherent view.
      
-     Note that, if the involved `Subscription` has a two-level behavior enabled (see `Subscription.commandSecondLevelFields` and `Subscription.commandSecondLevelFieldSchema`), the notification refers to the first-level item (which is in COMMAND mode). This kind of notification is not possible for second-level items (which are in MERGE mode).
+     Note that, if the involved `Subscription` has a two-level behavior enabled (see `Subscription.commandSecondLevelFields`), the notification refers to the first-level item (which is in COMMAND mode). This kind of notification is not possible for second-level items (which are in MERGE mode).
      
      - Parameter subscription: The `Subscription` involved.
      
-     - Parameter itemName: The name of the involved item. If the `Subscription` was initialized using an "Item Group" then a nil value is supplied.
+     - Parameter itemName: The name of the involved item in the configured item list.
      
-     - Parameter itemPos: The 1-based position of the item within the "Item List" or "Item Group".
+     - Parameter itemPos: The 1-based position of the item within the "Item List".
      */
     func subscription(_ subscription: Subscription, didClearSnapshotForItemName itemName: String?, itemPos: UInt)
     /**
@@ -85,8 +85,6 @@ public protocol SubscriptionDelegate: AnyObject {
      - SeeAlso: `Subscription.requestedMaxFrequency`
      
      - SeeAlso: `Subscription.commandSecondLevelFields`
-     
-     - SeeAlso: `Subscription.commandSecondLevelFieldSchema`
      */
     func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: UInt, forCommandSecondLevelItemWithKey key: String)
     /**
@@ -130,8 +128,6 @@ public protocol SubscriptionDelegate: AnyObject {
      - SeeAlso: `ConnectionDetails.adapterSet`
 
      - SeeAlso: `Subscription.commandSecondLevelFields`
-     
-     - SeeAlso: `Subscription.commandSecondLevelFieldSchema`
      */
     func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String?, forCommandSecondLevelItemWithKey key: String)
     /**
@@ -142,13 +138,13 @@ public protocol SubscriptionDelegate: AnyObject {
      snapshot information was indeed requested for the items. By implementing this method it is possible to perform actions which require that all the initial
      values have been received.
      
-     Note that, if the involved `Subscription` has a two-level behavior enabled (see `Subscription.commandSecondLevelFields` and `Subscription.commandSecondLevelFieldSchema`), the notification refers to the first-level item (which is in COMMAND mode). Snapshot-related updates for the second-level items (which are in MERGE mode) can be received both before and after this notification.
+     Note that, if the involved `Subscription` has a two-level behavior enabled (see `Subscription.commandSecondLevelFields`), the notification refers to the first-level item (which is in COMMAND mode). Snapshot-related updates for the second-level items (which are in MERGE mode) can be received both before and after this notification.
      
      - Parameter subscription: The `Subscription` involved.
      
-     - Parameter itemName: The name of the involved item. If the Subscription was initialized using an "Item Group" then a nil value is supplied.
+     - Parameter itemName: The name of the involved item in the configured item list.
      
-     - Parameter itemPos: The 1-based position of the item within the "Item List" or "Item Group".
+     - Parameter itemPos: The 1-based position of the item within the "Item List".
      
      - SeeAlso: `Subscription.requestedSnapshot`
      
@@ -175,9 +171,9 @@ public protocol SubscriptionDelegate: AnyObject {
      
      - Parameter lostUpdates: The number of consecutive updates dropped for the item.
      
-     - Parameter itemName: The name of the involved item. If the Subscription was initialized using an "Item Group" then a nil value is supplied.
+     - Parameter itemName: The name of the involved item in the configured item list.
      
-     - Parameter itemPos: The 1-based position of the item within the "Item List" or "Item Group".
+     - Parameter itemPos: The 1-based position of the item within the "Item List".
      
      - SeeAlso: `Subscription.requestedMaxFrequency`
      */
@@ -216,7 +212,7 @@ public protocol SubscriptionDelegate: AnyObject {
      
      Note that two consecutive calls to this method are not possible, as before a second `subscriptionDidSubscribe:` event is fired an `subscriptionDidUnsubscribe(_:)` event is eventually fired.
      
-     If the involved `Subscription` has a two-level behavior enabled (see `Subscription.commandSecondLevelFields` and `Subscription.commandSecondLevelFieldSchema`), second-level subscriptions are not notified.
+     If the involved `Subscription` has a two-level behavior enabled (see `Subscription.commandSecondLevelFields`), second-level subscriptions are not notified.
      
      - Parameter subscription: The `Subscription` involved.
      */
@@ -230,9 +226,9 @@ public protocol SubscriptionDelegate: AnyObject {
      
      The error code can be one of the following:
      
-     - 15 - "key" field not specified in the schema for a COMMAND mode subscription
+     - 15 - "key" field not specified in the field list for a COMMAND mode subscription
      
-     - 16 - "command" field not specified in the schema for a COMMAND mode subscription
+     - 16 - "command" field not specified in the field list for a COMMAND mode subscription
      
      - 17 - bad Data Adapter name or default Data Adapter not defined for the current Adapter Set
      
@@ -281,7 +277,7 @@ public protocol SubscriptionDelegate: AnyObject {
      
      Note that two consecutive calls to this method are not possible, as before a second `subscriptionDidUnsubscribe(_:)` event is fired an `subscriptionDidSubscribe(_:)` event is eventually fired.
      
-     If the involved `Subscription` has a two-level behavior enabled (see `Subscription.commandSecondLevelFields` and `Subscription.commandSecondLevelFieldSchema`), second-level unsubscriptions are not notified.
+     If the involved `Subscription` has a two-level behavior enabled (see `Subscription.commandSecondLevelFields`), second-level unsubscriptions are not notified.
 
      - Parameter subscription: The `Subscription` involved.
      */
@@ -289,7 +285,7 @@ public protocol SubscriptionDelegate: AnyObject {
     /**
      Event handler that is called by Lightstreamer to notify the client with the real maximum update frequency of the Subscription.
      
-     It is called immediately after the Subscription is established and in response to a requested change (see `Subscription.requestedMaxFrequency`). Since the frequency limit is applied on an item basis and a Subscription can involve multiple items,  this is actually the maximum frequency among all items. For Subscriptions with two-level behavior enabled (see `Subscription.commandSecondLevelFields` and `Subscription.commandSecondLevelFieldSchema`), the reported frequency limit applies to both first-level and second-level items.
+     It is called immediately after the Subscription is established and in response to a requested change (see `Subscription.requestedMaxFrequency`). Since the frequency limit is applied on an item basis and a Subscription can involve multiple items,  this is actually the maximum frequency among all items. For Subscriptions with two-level behavior enabled (see `Subscription.commandSecondLevelFields`), the reported frequency limit applies to both first-level and second-level items.
      
      The value may differ from the requested one because of restrictions operated on the server side,  but also because of number rounding.
      
@@ -321,8 +317,7 @@ public protocol SubscriptionDelegate: AnyObject {
  - The field name can always be used, both for the first-level and the second-level fields. In case of name conflict, the first-level field is meant.
  
  - The field position can always be used; however, the field positions for the second-level fields start at the highest position of the first-level
-   field list + 1. If a field schema had been specified for either first-level or second-level Subscriptions, then client-side knowledge of the first-level
-   schema length would be required.
+   field list + 1.
  */
 public protocol ItemUpdate: AnyObject, CustomStringConvertible {
     /**
@@ -332,22 +327,16 @@ public protocol ItemUpdate: AnyObject, CustomStringConvertible {
      for the same key. On such tables if a DELETE command is received, all the fields, excluding the key field, will be present as changed, with nil value.
      All of this is also true on tables that have the two-level behavior enabled, but in case of DELETE commands second-level fields will not be iterated.
      
-     - Precondition: the `Subscription` must have been initialized using a field list
-     
-     - SeeAlso: `Subscription.fieldSchema`
-     
      - SeeAlso: `Subscription.fields`
      */
     var changedFields: [String:String?] {get}
     /**
-     Values for each field changed with the last server update. The 1-based field position within the field schema or field list is used as key for
+     Values for each field changed with the last server update. The 1-based field position within the field list is used as key for
      the values in the map.
      
      Note that if the `Subscription` mode of the involved Subscription is COMMAND, then changed fields are meant as relative to the previous update
      for the same key. On such tables if a DELETE command is received, all the fields, excluding the key field, will be present as changed, with nil value.
      All of this is also true on tables that have the two-level behavior enabled, but in case of DELETE commands second-level fields will not be iterated.
-     
-     - SeeAlso: `Subscription.fieldSchema`
      
      - SeeAlso: `Subscription.fields`
      */
@@ -355,17 +344,11 @@ public protocol ItemUpdate: AnyObject, CustomStringConvertible {
     /**
      Values for each field in the `Subscription`. The related field name is used as key for the values in the map.
      
-     - Precondition: the `Subscription` must have been initialized using a field list
-     
-     - SeeAlso: `Subscription.fieldSchema`
-     
      - SeeAlso: `Subscription.fields`
      */
     var fields: [String:String?] {get}
     /**
-     Values for each field in the `Subscription`. The 1-based field position within the field schema or field list is used as key for the values in the map.
-     
-     - SeeAlso: `Subscription.fieldSchema`
+     Values for each field in the `Subscription`. The 1-based field position within the field list is used as key for the values in the map.
      
      - SeeAlso: `Subscription.fields`
      */
@@ -373,17 +356,11 @@ public protocol ItemUpdate: AnyObject, CustomStringConvertible {
     /**
      The name of the item to which this update pertains.
      
-     The name will be nil if the related `Subscription` was initialized using an "Item Group".
-     
-     - SeeAlso: `Subscription.itemGroup`
-     
      - SeeAlso: `Subscription.items`
      */
     var itemName: String? {get}
     /**
-     The 1-based position in the "Item List" or "Item Group" of the item to which this update pertains.
-     
-     - SeeAlso: `Subscription.itemGroup`
+     The 1-based position in the "Item List" of the item to which this update pertains.
      
      - SeeAlso: `Subscription.items`
      */
@@ -399,14 +376,12 @@ public protocol ItemUpdate: AnyObject, CustomStringConvertible {
      
      - the item is subscribed to with the COMMAND mode and a DELETE command is received (only the fields used to carry key and command information are valued).
      
-     - Parameter fieldPos: The 1-based position of the field within the "Field List" or "Field Schema".
+     - Parameter fieldPos: The 1-based position of the field within the "Field List".
      
      - Returns: The value of the specified field.
      
      - Precondition: the specified field is part of the `Subscription`.
      
-     - SeeAlso: `Subscription.fieldSchema`
-
      - SeeAlso: `Subscription.fields`
      */
     func value(withFieldPos fieldPos: Int) -> String?
@@ -470,13 +445,11 @@ public protocol ItemUpdate: AnyObject, CustomStringConvertible {
      
      In all other cases, the return value is `false`.
      
-     - Parameter fieldPos: The 1-based position of the field within the "Field List" or "Field Schema".
+     - Parameter fieldPos: The 1-based position of the field within the "Field List".
      
      - Returns: `true` if the value is changed (see above).
      
      - Precondition: the specified field is part of the `Subscription`.
-     
-     - SeeAlso: `Subscription.fieldSchema`
      
      - SeeAlso: `Subscription.fields`
      */
@@ -562,7 +535,7 @@ public protocol ItemUpdate: AnyObject, CustomStringConvertible {
      case, the new value can only be determined through `value(...)`. For instance,
      this will always be needed to get the first value received.
     
-     - Parameter fieldPos: The 1-based position of the field within the "Field List" or "Field Schema".
+     - Parameter fieldPos: The 1-based position of the field within the "Field List".
        
      - Returns: A JSON Patch structure representing the difference between
      the new value and the previous one, or nil if the difference in JSON Patch format
@@ -584,26 +557,12 @@ public protocol ItemUpdate: AnyObject, CustomStringConvertible {
  After the creation, an Subscription object is in the "inactive" state. When an Subscription object is subscribed to on a `LightstreamerClient` object,
  through the `LightstreamerClient.subscribe(_:)` method, its state becomes "active". This means that the client activates a subscription to the required items through Lightstreamer Server and the Subscription object begins to receive real-time events.
 
- An Subscription can be configured to use either an Item Group or an Item List to specify the items to be subscribed to and using either a Field Schema or Field List to specify the fields.
+ A Subscription specifies explicit item and field lists, either in its constructor or through the `items` and `fields` properties before submission.
+ Each entry is an individual name, not an identifier to be expanded by the server. Items and fields can be addressed by name or by their 1-based
+ positions within the configured lists. See `items` and `fields` for name validation rules.
 
- "Item Group" and "Item List" are defined as follows:
-
- - "Item Group": an Item Group is a String identifier representing a list of items. Such Item Group has to be expanded into a list of items by the
-   `getItems` method of the MetadataProvider of the associated Adapter Set. When using an Item Group, items in the subscription are identified by their
-   1-based index within the group. It is possible to configure the Subscription to use an "Item Group" using the `itemGroup` property.
-
- - "Item List": an Item List is an array of Strings each one representing an item. For the Item List to be correctly interpreted a LiteralBasedProvider or
-   a MetadataProvider with a compatible implementation of getItems has to be configured in the associated Adapter Set. Note that no item in the list can be empty, can contain spaces or can be a number. When using an Item List, items in the subscription are identified by their name or by their 1-based index within the list. It is possible to configure the subscription to use an "Item List" using the `items` property or by specifying it in the constructor.
-
- "Field Schema" and "Field List" are defined as follows:
-
- - "Field Schema": a Field Schema is a String identifier representing a list of fields. Such Field Schema has to be expanded into a list of fields by
-   the `getFields` method of the MetadataProvider of the associated Adapter Set. When using a Field Schema, fields in the subscription are identified by
-   their 1-based index within the schema. It is possible to configure the Subscription to use a "Field Schema" using the `fieldSchema` property.
-
- - "Field List": a Field List is an array of Strings each one representing a field. For the Field List to be correctly interpreted a LiteralBasedProvider or
-   a MetadataProvider with a compatible implementation of getFields has to be configured in the associated Adapter Set. Note that no field in the list can be empty, or can contain spaces. When using a Field List, fields in the subscription are identified by their name or by their 1-based index within the list.
-   It is possible to configure the Subscription to use a "Field List" using the `fields` property or by specifying it in the constructor.
+ A Subscription created with only a mode remains unconfigured until both lists are supplied. COMMAND subscriptions can also configure explicit
+ second-level fields through `commandSecondLevelFields`.
  */
 public class Subscription: CustomStringConvertible {
     
@@ -720,8 +679,6 @@ public class Subscription: CustomStringConvertible {
     let m_mode: Mode
     var m_items: [String]?
     var m_fields: [String]?
-    var m_group: String?
-    var m_schema: String?
     let multicastDelegate = MulticastDelegate<SubscriptionDelegate>()
     let callbackQueue = defaultQueue
     var m_dataAdapter: String?
@@ -731,7 +688,6 @@ public class Subscription: CustomStringConvertible {
     var m_selector: String?
     var m_dataAdapter2: String?
     var m_fields2: [String]?
-    var m_schema2: String?
     /* other variables */
     let lock = NSRecursiveLock()
     var m_state: State = .Inactive
@@ -766,18 +722,6 @@ public class Subscription: CustomStringConvertible {
             synchronized {
                 m_manager = newValue
             }
-        }
-    }
-    
-    var itemsOrGroup: String {
-        synchronized {
-            items?.joined(separator: " ") ?? itemGroup ?? ""
-        }
-    }
-    
-    var fieldsOrSchema: String {
-        synchronized {
-            fields?.joined(separator: " ") ?? fieldSchema ?? ""
         }
     }
     
@@ -836,8 +780,7 @@ public class Subscription: CustomStringConvertible {
 
      - Parameter item: The item name to be subscribed to through Lightstreamer Server.
 
-     - Parameter fields: An array of fields for the items to be subscribed to through Lightstreamer Server. It is also possible to specify the "Field List" or
-     "Field Schema" later through `fields` and `fieldSchema`.
+     - Parameter fields: An explicit array of field names for the item to be subscribed to through Lightstreamer Server.
 
      - Precondition: the specified "Field List" must be valid; see `fields` for details.
      */
@@ -865,9 +808,9 @@ public class Subscription: CustomStringConvertible {
 
      - Parameter subscriptionMode: The subscription mode for the items, required by Lightstreamer Server.
 
-     - Parameter items: An array of items to be subscribed to through Lightstreamer server. It is also possible specify the "Item List" or "Item Group" later through `items` and `itemGroup`.
+     - Parameter items: An explicit array of item names to be subscribed to through Lightstreamer Server.
 
-     - Parameter fields: An array of fields for the items to be subscribed to through Lightstreamer Server. It is also possible to specify the "Field List" or "Field Schema" later through `fields` and `fieldSchema`.
+     - Parameter fields: An explicit array of field names for the items to be subscribed to through Lightstreamer Server.
 
      - Precondition: the specified "Item List" and "Field List" must be valid; see `items` and `fields` for details.
      */
@@ -941,7 +884,7 @@ public class Subscription: CustomStringConvertible {
     /**
      Position of the "command" field in a COMMAND Subscription.
 
-     This property can only be used if the Subscription `mode` is COMMAND and the Subscription was initialized using a "Field Schema".
+     This property is available for COMMAND subscriptions after the server acknowledges the subscription; otherwise it is nil.
 
      **Lifecycle:** this property can be read at any time after the first `SubscriptionDelegate.subscriptionDidSubscribe(_:)` event.
      */
@@ -954,7 +897,7 @@ public class Subscription: CustomStringConvertible {
     /**
      Position of the "key" field in a COMMAND Subscription.
 
-     This property can only be accessed if the Subscription `mode` is COMMAND and the Subscription was initialized using a "Field Schema".
+     This property is available for COMMAND subscriptions after the server acknowledges the subscription; otherwise it is nil.
 
      **Lifecycle:** this property can be read at any time.
      */
@@ -981,8 +924,6 @@ public class Subscription: CustomStringConvertible {
      - Precondition: the Subscription `mode` must be `COMMAND`.
 
      - SeeAlso: `commandSecondLevelFields`
-
-     - SeeAlso: `commandSecondLevelFieldSchema`
      */
     public var commandSecondLevelDataAdapter: String? {
         get {
@@ -1005,7 +946,7 @@ public class Subscription: CustomStringConvertible {
     /**
      The "Field List" to be subscribed to through Lightstreamer Server for the second-level items. It can only be used on COMMAND Subscriptions.
 
-     Any change to this property will override any "Field List" or "Field Schema" previously specified for the second-level.
+     Any change to this property replaces the previously configured second-level field list.
 
      Setting this property enables the two-level behavior: in synthesis, each time a new key is received on the COMMAND Subscription, the key value is
      treated as an Item name and an underlying Subscription for this Item is created and subscribed to automatically, to feed fields specified by this property.
@@ -1024,7 +965,6 @@ public class Subscription: CustomStringConvertible {
 
      - Precondition: the Subscription `mode` must be `COMMAND`.
 
-     - SeeAlso: `commandSecondLevelFieldSchema`
      */
     public var commandSecondLevelFields: [String]? {
         get {
@@ -1040,49 +980,7 @@ public class Subscription: CustomStringConvertible {
                 precondition(notEmpty(newValue), Self.EMPTY_FIELD_LIST)
                 precondition(allValidFields(newValue), Self.INVALID_FIELD_LIST)
                 m_fields2 = newValue
-                m_schema2 = nil
             }
-        }
-    }
-    
-    /**
-     The "Field Schema" to be subscribed to through Lightstreamer Server for the second-level items. It can only be used on COMMAND Subscriptions.
-
-     Any change to this property will override any "Field List" or "Field Schema" previously specified for the second-level.
-
-     Setting this property enables the two-level behavior: in synthesis, each time a new key is received on the COMMAND Subscription, the key value is
-     treated as an Item name and an underlying Subscription for this Item is created and subscribed to automatically, to feed fields specified by this property.
-     This mono-item Subscription is specified through an "Item List" containing only the Item name received. As a consequence, all the conditions provided
-     for subscriptions through Item Lists have to be satisfied. The item is subscribed to in `MERGE` mode, with snapshot request and with the same maximum
-     frequency setting as for the first-level items (including the `unfiltered` case). All other Subscription properties are left as the default. When the
-     key is deleted by a DELETE command on the first-level Subscription, the associated second-level Subscription is also unsubscribed from.
-
-     Specifying nil as parameter will disable the two-level behavior.
-
-     **Lifecycle:** this property can only be set while the Subscription instance is in its "inactive" state.
-
-     - Precondition: the Subscription must be currently "inactive".
-
-     - Precondition: the Subscription `mode` must be `COMMAND`.
-
-     - SeeAlso: `commandSecondLevelFields`
-     */
-    public var commandSecondLevelFieldSchema: String? {
-        get {
-            synchronized {
-                m_schema2
-            }
-        }
-        
-        set {
-            synchronized {
-                precondition(!isActive, Self.IS_ACTIVE)
-                precondition(m_mode == .COMMAND, Self.NOT_COMMAND)
-                precondition(notEmpty(newValue), Self.IS_EMPTY)
-                m_schema2 = newValue
-                m_fields2 = nil
-            }
-            
         }
     }
     
@@ -1122,7 +1020,7 @@ public class Subscription: CustomStringConvertible {
     /**
      The "Field List" to be subscribed to through Lightstreamer Server.
 
-     Any change to this property will override any "Field List" or "Field Schema" previously specified.
+     Any change to this property replaces the previously configured field list. Nil leaves the list unconfigured; a list is required before submission.
 
      **Lifecycle:** this property can only be set while the Subscription instance is in its "inactive" state.
 
@@ -1145,60 +1043,6 @@ public class Subscription: CustomStringConvertible {
                 precondition(m_mode == .COMMAND && newValue != nil ? newValue!.contains("command") : true, Self.MISSING_FIELD_COMMAND)
                 precondition(m_mode == .COMMAND && newValue != nil ? newValue!.contains("key") : true, Self.MISSING_FIELD_KEY)
                 m_fields = newValue
-                m_schema = nil
-            }
-        }
-    }
-    
-    /**
-     The "Field Schema" to be subscribed to through Lightstreamer Server.
-
-     Any change to this property will override any "Field List" or "Field Schema" previously specified.
-
-     **Lifecycle:** this property can only be set while the Subscription instance is in its "inactive" state.
-
-     - Precondition: the Subscription must be currently "inactive".
-     */
-    public var fieldSchema: String? {
-        get {
-            synchronized {
-                m_schema
-            }
-            
-        }
-        
-        set {
-            synchronized {
-                precondition(!isActive, Self.IS_ACTIVE)
-                precondition(notEmpty(newValue), Self.IS_EMPTY)
-                m_schema = newValue
-                m_fields = nil
-            }
-        }
-    }
-    
-    /**
-     The "Item Group" to be subscribed to through Lightstreamer Server.
-
-     Any change to this property will override any "Item List" or "Item Group" previously specified.
-
-     **Lifecycle:** this property can only be set while the Subscription instance is in its "inactive" state.
-
-     - Precondition: the Subscription must be currently "inactive".
-     */
-    public var itemGroup: String? {
-        get {
-            synchronized {
-                m_group
-            }
-        }
-        
-        set {
-            synchronized {
-                precondition(!isActive, Self.IS_ACTIVE)
-                precondition(notEmpty(newValue), Self.IS_EMPTY)
-                m_group = newValue
-                m_items = nil
             }
         }
     }
@@ -1206,7 +1050,7 @@ public class Subscription: CustomStringConvertible {
     /**
      The "Item List" to be subscribed to through Lightstreamer Server.
 
-     Any change to this property will override any "Item List" or "Item Group" previously specified.
+     Any change to this property replaces the previously configured item list. Nil leaves the list unconfigured; a list is required before submission.
 
      **Lifecycle:** this property can only be set while the Subscription instance is in its "inactive" state.
 
@@ -1227,7 +1071,6 @@ public class Subscription: CustomStringConvertible {
                 precondition(notEmpty(newValue), Self.EMPTY_ITEM_LIST)
                 precondition(allValidItems(newValue), Self.INVALID_ITEM_LIST)
                 m_items = newValue
-                m_group = nil
             }
         }
     }
@@ -1284,7 +1127,7 @@ public class Subscription: CustomStringConvertible {
      limit is requested. It is also possible to supply the value `unfiltered`, to ask for unfiltered dispatching, if it is allowed for the items, or a nil value
      stick to the Server default (which currently corresponds to `unlimited`).
 
-     It can be used only if the Subscription `mode` is MERGE, DISTINCT or COMMAND (in the latter case, the frequency limitation applies to the UPDATE events for each single key). For Subscriptions with two-level behavior (see `commandSecondLevelFields` and `commandSecondLevelFieldSchema`), the specified frequency limit applies to both first-level and second-level items.
+     It can be used only if the Subscription `mode` is MERGE, DISTINCT or COMMAND (in the latter case, the frequency limitation applies to the UPDATE events for each single key). For Subscriptions with two-level behavior (see `commandSecondLevelFields`), the specified frequency limit applies to both first-level and second-level items.
 
      Note that frequency limits on the items can also be set on the server side and this request can only be issued in order to furtherly reduce the
      frequency, not to rise it beyond these limits.
@@ -1450,9 +1293,9 @@ public class Subscription: CustomStringConvertible {
 
      **Lifecycle:** this method can be called at any time; if called to retrieve a value that has not been received yet, then it will return nil.
 
-     - Parameter itemPos: The 1-based position of an item within the configured "Item Group" or "Item List"
+     - Parameter itemPos: The 1-based position of an item within the configured "Item List"
 
-     - Parameter fieldPos: The 1-based position of a field within the configured "Field Schema" or "Field List"
+     - Parameter fieldPos: The 1-based position of a field within the configured "Field List"
 
      - Returns: The current value for the specified field of the specified item (possibly nil), or nil if no value has been received yet.
      */
@@ -1481,7 +1324,7 @@ public class Subscription: CustomStringConvertible {
 
      **Lifecycle:** this method can be called at any time; if called to retrieve a value that has not been received yet, then it will return nil.
 
-     - Parameter itemPos: The 1-based position of an item within the configured "Item Group" or "Item List"
+     - Parameter itemPos: The 1-based position of an item within the configured "Item List"
 
      - Parameter fieldName: An item in the configured "Field List"
 
@@ -1509,7 +1352,7 @@ public class Subscription: CustomStringConvertible {
 
      - Parameter itemName: An item in the configured "Item List"
 
-     - Parameter fieldPos: The 1-based position of a field within the configured "Field Schema" or "Field List"
+     - Parameter fieldPos: The 1-based position of a field within the configured "Field List"
 
      - Returns: The current value for the specified field of the specified item (possibly nil), or nil if no value has been received yet.
      */
@@ -1553,17 +1396,17 @@ public class Subscription: CustomStringConvertible {
     
     /**
      Returns the latest value received for the specified item/key/field combination. This method can only be used if the Subscription `mode` is COMMAND.
-     Subscriptions with two-level behavior (see `commandSecondLevelFields` and `commandSecondLevelFieldSchema`) are also supported, hence the specified field can be either a first-level or a second-level one.
+     Subscriptions with two-level behavior (see `commandSecondLevelFields`) are also supported, hence the specified field can be either a first-level or a second-level one.
 
      It is suggested to consume real-time data by implementing and adding a proper `SubscriptionDelegate` rather than probing this method.
 
      Note that internal data is cleared when the Subscription is unsubscribed from.
 
-     - Parameter itemPos: The 1-based position of an item within the configured "Item Group" or "Item List"
+     - Parameter itemPos: The 1-based position of an item within the configured "Item List"
 
      - Parameter key: The value of a key received on the COMMAND Subscription.
 
-     - Parameter fieldPos: The 1-based position of a field within the configured "Field Schema" or "Field List"
+     - Parameter fieldPos: The 1-based position of a field within the configured "Field List"
 
      - Precondition: the Subscription `mode` must be COMMAND.
 
@@ -1587,13 +1430,13 @@ public class Subscription: CustomStringConvertible {
     
     /**
      Returns the latest value received for the specified item/key/field combination. This method can only be used if the Subscription `mode` is COMMAND.
-     Subscriptions with two-level behavior (see `commandSecondLevelFields` and `commandSecondLevelFieldSchema`) are also supported, hence the specified field can be either a first-level or a second-level one.
+     Subscriptions with two-level behavior (see `commandSecondLevelFields`) are also supported, hence the specified field can be either a first-level or a second-level one.
 
      It is suggested to consume real-time data by implementing and adding a proper `SubscriptionDelegate` rather than probing this method.
 
      Note that internal data is cleared when the Subscription is unsubscribed from.
 
-     - Parameter itemPos: The 1-based position of an item within the configured "Item Group" or "Item List"
+     - Parameter itemPos: The 1-based position of an item within the configured "Item List"
 
      - Parameter key: The value of a key received on the COMMAND Subscription.
 
@@ -1616,7 +1459,7 @@ public class Subscription: CustomStringConvertible {
     
     /**
      Returns the latest value received for the specified item/key/field combination. This method can only be used if the Subscription `mode` is COMMAND.
-     Subscriptions with two-level behavior (see `commandSecondLevelFields` and `commandSecondLevelFieldSchema`) are also supported, hence the specified field can be either a first-level or a second-level one.
+     Subscriptions with two-level behavior (see `commandSecondLevelFields`) are also supported, hence the specified field can be either a first-level or a second-level one.
 
      It is suggested to consume real-time data by implementing and adding a proper `SubscriptionDelegate` rather than probing this method.
 
@@ -1626,7 +1469,7 @@ public class Subscription: CustomStringConvertible {
 
      - Parameter key: The value of a key received on the COMMAND Subscription.
 
-     - Parameter fieldPos: The 1-based position of a field within the configured "Field Schema" or "Field List"
+     - Parameter fieldPos: The 1-based position of a field within the configured "Field List"
 
      - Precondition: the Subscription `mode` must be COMMAND.
 
@@ -1645,7 +1488,7 @@ public class Subscription: CustomStringConvertible {
     
     /**
      Returns the latest value received for the specified item/key/field combination. This method can only be used if the Subscription `mode` is COMMAND.
-     Subscriptions with two-level behavior (see `commandSecondLevelFields` and `commandSecondLevelFieldSchema`) are also supported, hence the specified field can be either a first-level or a second-level one.
+     Subscriptions with two-level behavior (see `commandSecondLevelFields`) are also supported, hence the specified field can be either a first-level or a second-level one.
 
      It is suggested to consume real-time data by implementing and adding a proper `SubscriptionDelegate` rather than probing this method.
 
@@ -1679,14 +1522,14 @@ public class Subscription: CustomStringConvertible {
         synchronized {
             var map = OrderedDictionary<String, CustomStringConvertible>()
             map["mode"] = m_mode
-            map["items"] = m_items ?? m_group
-            map["fields"] = m_fields ?? m_schema
+            map["items"] = m_items
+            map["fields"] = m_fields
             map["dataAdapter"] = m_dataAdapter
             map["requestedBufferSize"] = m_bufferSize
             map["requestedSnapshot"] = m_snapshot
             map["requestedMaxFrequency"] = m_requestedMaxFrequency
             map["selector"] = m_selector
-            map["secondLevelFields"] = m_fields2 ?? m_schema2
+            map["secondLevelFields"] = m_fields2
             map["secondLevelDataAdapter"] = m_dataAdapter2
             return String(describing: map)
         }

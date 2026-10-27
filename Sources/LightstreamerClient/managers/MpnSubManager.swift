@@ -734,22 +734,20 @@ class MpnSubscriptionManager: Encodable {
     }
     
     private func encodeActivate() -> String {
+        guard let items = m_subscription.items else {
+            preconditionFailure(LightstreamerClient.NO_ITEMS)
+        }
+        guard let fields = m_subscription.fields else {
+            preconditionFailure(LightstreamerClient.NO_FIELDS)
+        }
         let req = LsRequestBuilder()
         m_lastActivateReqId = m_client.generateFreshReqId()
         req.LS_reqId(m_lastActivateReqId!)
         req.LS_op("activate")
         req.LS_subId(m_subId)
         req.LS_mode(m_subscription.mode.rawValue)
-        if let group = m_subscription.itemGroup {
-            req.LS_group(group)
-        } else if let items = m_subscription.items {
-            req.LS_group(items.joined(separator: " "))
-        }
-        if let schema = m_subscription.fieldSchema {
-            req.LS_schema(schema)
-        } else if let fields = m_subscription.fields {
-            req.LS_schema(fields.joined(separator: " "))
-        }
+        req.LS_group(items.joined(separator: " "))
+        req.LS_schema(fields.joined(separator: " "))
         if let adapter = m_subscription.dataAdapter {
             req.LS_data_adapter(adapter)
         }
@@ -797,21 +795,19 @@ class MpnSubscriptionManager: Encodable {
     }
     
     private func encodeConfigure() -> String {
+        guard let items = m_subscription.items else {
+            preconditionFailure(LightstreamerClient.NO_ITEMS)
+        }
+        guard let fields = m_subscription.fields else {
+            preconditionFailure(LightstreamerClient.NO_FIELDS)
+        }
         let req = LsRequestBuilder()
         m_lastConfigureReqId = m_client.generateFreshReqId()
         req.LS_reqId(m_lastConfigureReqId!)
         req.LS_op("pn_reconf")
         req.LS_mode(m_subscription.mode.rawValue)
-        if let group = m_subscription.itemGroup {
-            req.LS_group(group)
-        } else if let items = m_subscription.items {
-            req.LS_group(items.joined(separator: " "))
-        }
-        if let schema = m_subscription.fieldSchema {
-            req.LS_schema(schema)
-        } else if let fields = m_subscription.fields {
-            req.LS_schema(fields.joined(separator: " "))
-        }
+        req.LS_group(items.joined(separator: " "))
+        req.LS_schema(fields.joined(separator: " "))
         if let adapter = m_subscription.dataAdapter {
             req.LS_data_adapter(adapter)
         }
@@ -889,8 +885,8 @@ class MpnSubscriptionManager: Encodable {
         m_subscription.changeStatusTs(update.value(withFieldName: "status_timestamp"))
         m_subscription.changeMode(update.value(withFieldName: "mode"))
         m_subscription.changeAdapter(update.value(withFieldName: "adapter"))
-        m_subscription.changeGroup(update.value(withFieldName: "group"))
-        m_subscription.changeSchema(update.value(withFieldName: "schema"))
+        m_subscription.changeItems(update.value(withFieldName: "group"))
+        m_subscription.changeFields(update.value(withFieldName: "schema"))
         m_subscription.changeFormat(update.value(withFieldName: "notification_format"))
         m_subscription.changeTrigger(update.value(withFieldName: "trigger"))
         m_subscription.changeBufferSize(update.value(withFieldName: "requested_buffer_size"))

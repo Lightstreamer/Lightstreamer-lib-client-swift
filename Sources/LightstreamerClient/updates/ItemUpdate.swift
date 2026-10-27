@@ -15,7 +15,7 @@
  */
 import Foundation
 
-fileprivate let NO_FIELDS = "The Subscription was initiated using a Field Schema: the field names are not available"
+fileprivate let NO_FIELDS = "Field names are unavailable because a required field list is not configured"
 fileprivate let POS_OUT_BOUNDS = "The field position is out of bounds"
 fileprivate let UNKNOWN_FIELD_NAME = "The field name is unknown"
 

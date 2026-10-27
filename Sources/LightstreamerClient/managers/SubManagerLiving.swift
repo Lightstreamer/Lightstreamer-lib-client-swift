@@ -23,7 +23,7 @@ protocol SubscriptionManager: AnyObject, Encodable {
     func evtSUBOK(nItems: Int, nFields: Int)
     func evtSUBCMD(nItems: Int, nFields: Int, keyIdx: Int, cmdIdx: Int)
     func evtUNSUB()
-    func evtU(_ itemIdx: Int, _ values: [Pos:FieldValue]) throws 
+    func evtU(_ itemIdx: Int, _ values: [Pos:FieldValue]) throws
     func evtEOS(_ itemIdx: Int)
     func evtCS(_ itemIdx: Int)
     func evtOV(_ itemIdx: Int, _ lostUpdates: Int)
@@ -447,22 +447,20 @@ class SubscriptionManagerLiving: SubscriptionManager {
     }
     
     private func encodeAdd(isWS: Bool) -> String {
+        guard let items = m_subscription.items else {
+            preconditionFailure(LightstreamerClient.NO_ITEMS)
+        }
+        guard let fields = m_subscription.fields else {
+            preconditionFailure(LightstreamerClient.NO_FIELDS)
+        }
         let req = LsRequestBuilder()
         m_lastAddReqId = m_client.generateFreshReqId()
         req.LS_reqId(m_lastAddReqId!)
         req.LS_op("add")
         req.LS_subId(m_subId)
         req.LS_mode(m_subscription.mode.rawValue)
-        if let group = m_subscription.itemGroup {
-            req.LS_group(group)
-        } else if let items = m_subscription.items {
-            req.LS_group(items.joined(separator: " "))
-        }
-        if let schema = m_subscription.fieldSchema {
-            req.LS_schema(schema)
-        } else if let fields = m_subscription.fields {
-            req.LS_schema(fields.joined(separator: " "))
-        }
+        req.LS_group(items.joined(separator: " "))
+        req.LS_schema(fields.joined(separator: " "))
         if let adapter = m_subscription.dataAdapter {
             req.LS_data_adapter(adapter)
         }
@@ -647,6 +645,6 @@ class SubscriptionManagerLiving: SubscriptionManager {
 }
 
 private func is2LevelCommand(_ sub: Subscription) -> Bool {
-    sub.mode == .COMMAND && (sub.commandSecondLevelFields != nil || sub.commandSecondLevelFieldSchema != nil)
+    sub.mode == .COMMAND && sub.commandSecondLevelFields != nil
 }
 
