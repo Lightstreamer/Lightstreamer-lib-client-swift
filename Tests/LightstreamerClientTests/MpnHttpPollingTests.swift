@@ -654,8 +654,6 @@ class MpnHttpPollingTests: BaseTestCase {
                 mpn.onStatusChange SUBSCRIBED 0
                 mpn.onSubscription
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, mpnSubDelegate1.trace)
             XCTAssertEqual("""
@@ -665,8 +663,6 @@ class MpnHttpPollingTests: BaseTestCase {
                 mpn.onStatusChange TRIGGERED 100
                 mpn.onTrigger
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, mpnSubDelegate2.trace)
             XCTAssertEqual("""

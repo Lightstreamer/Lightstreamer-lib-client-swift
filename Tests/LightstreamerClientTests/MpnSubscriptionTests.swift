@@ -420,8 +420,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         XCTAssertEqual(0, sub.statusTimestamp)
         XCTAssertEqual("fmt", sub.notificationFormat)
         XCTAssertEqual(nil, sub.triggerExpression)
-        XCTAssertEqual(nil, sub.itemGroup)
-        XCTAssertEqual(nil, sub.fieldSchema)
+        XCTAssertEqual(["i1"], sub.items)
+        XCTAssertEqual(["f1"], sub.fields)
         XCTAssertEqual(nil, sub.dataAdapter)
         XCTAssertEqual(.MERGE, sub.mode)
         XCTAssertEqual(nil, sub.requestedBufferSize)
@@ -438,8 +438,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             XCTAssertEqual(100, sub.statusTimestamp)
             XCTAssertEqual("fmt", sub.notificationFormat)
             XCTAssertEqual(nil, sub.triggerExpression)
-            XCTAssertEqual("i1", sub.itemGroup)
-            XCTAssertEqual("f1", sub.fieldSchema)
+            XCTAssertEqual(["i1"], sub.items)
+            XCTAssertEqual(["f1"], sub.fields)
             XCTAssertEqual(nil, sub.dataAdapter)
             XCTAssertEqual(.MERGE, sub.mode)
             XCTAssertEqual(nil, sub.requestedBufferSize)
@@ -461,8 +461,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange SUBSCRIBED 0
                 mpn.onSubscription
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, self.mpnSubDelegate.trace)
             XCTAssertEqual("""
@@ -487,8 +485,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         XCTAssertEqual(0, sub.statusTimestamp)
         XCTAssertEqual("fmt", sub.notificationFormat)
         XCTAssertEqual("trg", sub.triggerExpression)
-        XCTAssertEqual(nil, sub.itemGroup)
-        XCTAssertEqual(nil, sub.fieldSchema)
+        XCTAssertEqual(["i1"], sub.items)
+        XCTAssertEqual(["f1"], sub.fields)
         XCTAssertEqual(nil, sub.dataAdapter)
         XCTAssertEqual(.MERGE, sub.mode)
         XCTAssertEqual(nil, sub.requestedBufferSize)
@@ -506,8 +504,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             XCTAssertEqual(110, sub.statusTimestamp)
             XCTAssertEqual("fmt", sub.notificationFormat)
             XCTAssertEqual("trg", sub.triggerExpression)
-            XCTAssertEqual("i1", sub.itemGroup)
-            XCTAssertEqual("f1", sub.fieldSchema)
+            XCTAssertEqual(["i1"], sub.items)
+            XCTAssertEqual(["f1"], sub.fields)
             XCTAssertEqual(nil, sub.dataAdapter)
             XCTAssertEqual(.MERGE, sub.mode)
             XCTAssertEqual(nil, sub.requestedBufferSize)
@@ -530,8 +528,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange SUBSCRIBED 0
                 mpn.onSubscription
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 mpn.onPropertyChange trigger
                 mpn.onStatusChange TRIGGERED 110
@@ -560,8 +556,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         XCTAssertEqual(0, sub.statusTimestamp)
         XCTAssertEqual("fmt", sub.notificationFormat)
         XCTAssertEqual("trg", sub.triggerExpression)
-        XCTAssertEqual(nil, sub.itemGroup)
-        XCTAssertEqual(nil, sub.fieldSchema)
+        XCTAssertEqual(["i1"], sub.items)
+        XCTAssertEqual(["f1"], sub.fields)
         XCTAssertEqual(nil, sub.dataAdapter)
         XCTAssertEqual(.MERGE, sub.mode)
         XCTAssertEqual(nil, sub.requestedBufferSize)
@@ -580,8 +576,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             XCTAssertEqual(120, sub.statusTimestamp)
             XCTAssertEqual("fmt", sub.notificationFormat)
             XCTAssertEqual("trg", sub.triggerExpression)
-            XCTAssertEqual("i1", sub.itemGroup)
-            XCTAssertEqual("f1", sub.fieldSchema)
+            XCTAssertEqual(["i1"], sub.items)
+            XCTAssertEqual(["f1"], sub.fields)
             XCTAssertEqual(nil, sub.dataAdapter)
             XCTAssertEqual(.MERGE, sub.mode)
             XCTAssertEqual(nil, sub.requestedBufferSize)
@@ -605,8 +601,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange SUBSCRIBED 0
                 mpn.onSubscription
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 mpn.onPropertyChange trigger
                 mpn.onStatusChange TRIGGERED 110
@@ -637,8 +631,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         XCTAssertEqual(0, sub.statusTimestamp)
         XCTAssertEqual("fmt", sub.notificationFormat)
         XCTAssertEqual("trg", sub.triggerExpression)
-        XCTAssertEqual(nil, sub.itemGroup)
-        XCTAssertEqual(nil, sub.fieldSchema)
+        XCTAssertEqual(["i1"], sub.items)
+        XCTAssertEqual(["f1"], sub.fields)
         XCTAssertEqual(nil, sub.dataAdapter)
         XCTAssertEqual(.MERGE, sub.mode)
         XCTAssertEqual(nil, sub.requestedBufferSize)
@@ -659,8 +653,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             XCTAssertEqual(140, sub.statusTimestamp)
             XCTAssertEqual("fmt", sub.notificationFormat)
             XCTAssertEqual("trg", sub.triggerExpression)
-            XCTAssertEqual("i1", sub.itemGroup)
-            XCTAssertEqual("f1", sub.fieldSchema)
+            XCTAssertEqual(["i1"], sub.items)
+            XCTAssertEqual(["f1"], sub.fields)
             XCTAssertEqual(nil, sub.dataAdapter)
             XCTAssertEqual(.MERGE, sub.mode)
             XCTAssertEqual(nil, sub.requestedBufferSize)
@@ -686,8 +680,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange SUBSCRIBED 0
                 mpn.onSubscription
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 mpn.onPropertyChange trigger
                 mpn.onPropertyChange status_timestamp
@@ -720,8 +712,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         XCTAssertEqual(0, sub.statusTimestamp)
         XCTAssertEqual("fmt", sub.notificationFormat)
         XCTAssertEqual("trg", sub.triggerExpression)
-        XCTAssertEqual(nil, sub.itemGroup)
-        XCTAssertEqual(nil, sub.fieldSchema)
+        XCTAssertEqual(["i1"], sub.items)
+        XCTAssertEqual(["f1"], sub.fields)
         XCTAssertEqual(nil, sub.dataAdapter)
         XCTAssertEqual(.MERGE, sub.mode)
         XCTAssertEqual(nil, sub.requestedBufferSize)
@@ -731,15 +723,15 @@ final class MpnSubscriptionTests: BaseTestCase {
         ws.onText("SUBCMD,2,1,2,1,2")
         ws.onText("U,2,1,SUB-sub3|ADD")
         ws.onText("SUBOK,4,1,10")
-        ws.onText("U,4,1,ACTIVE|100|format|trigger|item|field|adapter|DISTINCT|unlimited|unlimited")
+        ws.onText("U,4,1,ACTIVE|100|format|trigger|item item2|field field2|adapter|DISTINCT|unlimited|unlimited")
         
         asyncAssert(after: 0.5) {
             XCTAssertEqual(.SUBSCRIBED, sub.status)
             XCTAssertEqual(100, sub.statusTimestamp)
             XCTAssertEqual("format", sub.actualNotificationFormat)
             XCTAssertEqual("trigger", sub.actualTriggerExpression)
-            XCTAssertEqual("item", sub.itemGroup)
-            XCTAssertEqual("field", sub.fieldSchema)
+            XCTAssertEqual(["item", "item2"], sub.items)
+            XCTAssertEqual(["field", "field2"], sub.fields)
             XCTAssertEqual("adapter", sub.dataAdapter)
             XCTAssertEqual(.DISTINCT, sub.mode)
             XCTAssertEqual(.unlimited, sub.requestedBufferSize)
@@ -754,7 +746,7 @@ final class MpnSubscriptionTests: BaseTestCase {
                 control\r
                 LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,4,1,10
-                U,4,1,ACTIVE|100|format|trigger|item|field|adapter|DISTINCT|unlimited|unlimited
+                U,4,1,ACTIVE|100|format|trigger|item item2|field field2|adapter|DISTINCT|unlimited|unlimited
                 """, self.io.trace)
             XCTAssertEqual("""
                 mpn.onStatusChange ACTIVE 0
@@ -792,8 +784,8 @@ final class MpnSubscriptionTests: BaseTestCase {
         XCTAssertEqual(0, sub.statusTimestamp)
         XCTAssertEqual("fmt", sub.notificationFormat)
         XCTAssertEqual("trg", sub.triggerExpression)
-        XCTAssertEqual(nil, sub.itemGroup)
-        XCTAssertEqual(nil, sub.fieldSchema)
+        XCTAssertEqual(["i1"], sub.items)
+        XCTAssertEqual(["f1"], sub.fields)
         XCTAssertEqual(nil, sub.dataAdapter)
         XCTAssertEqual(.MERGE, sub.mode)
         XCTAssertEqual(nil, sub.requestedBufferSize)
@@ -810,8 +802,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             XCTAssertEqual(100, sub.statusTimestamp)
             XCTAssertEqual("format", sub.actualNotificationFormat)
             XCTAssertEqual("trigger", sub.actualTriggerExpression)
-            XCTAssertEqual("item", sub.itemGroup)
-            XCTAssertEqual("field", sub.fieldSchema)
+            XCTAssertEqual(["item"], sub.items)
+            XCTAssertEqual(["field"], sub.fields)
             XCTAssertEqual("adapter", sub.dataAdapter)
             XCTAssertEqual(.DISTINCT, sub.mode)
             XCTAssertEqual(.limited(123), sub.requestedBufferSize)
@@ -2032,8 +2024,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange SUBSCRIBED 0
                 mpn.onSubscription
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, mpnSubDelegate1.trace)
             XCTAssertEqual("""
@@ -2041,8 +2031,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange SUBSCRIBED 0
                 mpn.onSubscription
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, mpnSubDelegate2.trace)
             XCTAssertEqual("""
@@ -2100,8 +2088,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange SUBSCRIBED 0
                 mpn.onSubscription
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, mpnSubDelegate1.trace)
             XCTAssertEqual("""
@@ -2109,8 +2095,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange SUBSCRIBED 0
                 mpn.onSubscription
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, mpnSubDelegate2.trace)
             XCTAssertEqual("""
@@ -2247,8 +2231,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange SUBSCRIBED 0
                 mpn.onSubscription
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, mpnSubDelegate1.trace)
             XCTAssertEqual("""
@@ -2258,8 +2240,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange TRIGGERED 100
                 mpn.onTrigger
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, mpnSubDelegate2.trace)
             XCTAssertEqual("""
@@ -2331,8 +2311,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange SUBSCRIBED 0
                 mpn.onSubscription
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, mpnSubDelegate1.trace)
             XCTAssertEqual("""
@@ -2342,8 +2320,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange TRIGGERED 100
                 mpn.onTrigger
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, mpnSubDelegate2.trace)
             XCTAssertEqual("""
@@ -2415,8 +2391,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange SUBSCRIBED 0
                 mpn.onSubscription
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, mpnSubDelegate1.trace)
             XCTAssertEqual("""
@@ -2426,8 +2400,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange TRIGGERED 100
                 mpn.onTrigger
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, mpnSubDelegate2.trace)
             XCTAssertEqual("""
@@ -2499,8 +2471,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange SUBSCRIBED 0
                 mpn.onSubscription
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, mpnSubDelegate1.trace)
             XCTAssertEqual("""
@@ -2510,8 +2480,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange TRIGGERED 100
                 mpn.onTrigger
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, mpnSubDelegate2.trace)
             XCTAssertEqual("""
@@ -2583,8 +2551,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange SUBSCRIBED 0
                 mpn.onSubscription
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, mpnSubDelegate1.trace)
             XCTAssertEqual("""
@@ -2594,8 +2560,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange TRIGGERED 100
                 mpn.onTrigger
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, mpnSubDelegate2.trace)
             XCTAssertEqual("""
@@ -2672,8 +2636,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange SUBSCRIBED 0
                 mpn.onSubscription
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, mpnSubDelegate1.trace)
             XCTAssertEqual("""
@@ -2683,8 +2645,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange TRIGGERED 100
                 mpn.onTrigger
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, mpnSubDelegate2.trace)
             XCTAssertEqual("""
@@ -2823,8 +2783,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             XCTAssertEqual(100, sub.statusTimestamp)
             XCTAssertEqual("fmt", sub.actualNotificationFormat)
             XCTAssertEqual("trg", sub.actualTriggerExpression)
-            XCTAssertEqual("i1", sub.itemGroup)
-            XCTAssertEqual("f1", sub.fieldSchema)
+            XCTAssertEqual(["i1"], sub.items)
+            XCTAssertEqual(["f1"], sub.fields)
             XCTAssertEqual("adt", sub.dataAdapter)
             XCTAssertEqual(.MERGE, sub.mode)
             XCTAssertEqual(.unlimited, sub.requestedBufferSize)
@@ -2872,8 +2832,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             XCTAssertEqual(100, sub.statusTimestamp)
             XCTAssertEqual("fmt", sub.actualNotificationFormat)
             XCTAssertEqual("trg", sub.actualTriggerExpression)
-            XCTAssertEqual("i1", sub.itemGroup)
-            XCTAssertEqual("f1", sub.fieldSchema)
+            XCTAssertEqual(["i1"], sub.items)
+            XCTAssertEqual(["f1"], sub.fields)
             XCTAssertEqual("adt", sub.dataAdapter)
             XCTAssertEqual(.MERGE, sub.mode)
             XCTAssertEqual(.unlimited, sub.requestedBufferSize)
@@ -2925,8 +2885,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             XCTAssertEqual(100, sub.statusTimestamp)
             XCTAssertEqual("fmt", sub.actualNotificationFormat)
             XCTAssertEqual("trg", sub.actualTriggerExpression)
-            XCTAssertEqual("i1", sub.itemGroup)
-            XCTAssertEqual("f1", sub.fieldSchema)
+            XCTAssertEqual(["i1"], sub.items)
+            XCTAssertEqual(["f1"], sub.fields)
             XCTAssertEqual("adt", sub.dataAdapter)
             XCTAssertEqual(.MERGE, sub.mode)
             XCTAssertEqual(.unlimited, sub.requestedBufferSize)
@@ -2936,8 +2896,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             XCTAssertEqual(100, sub2.statusTimestamp)
             XCTAssertEqual("fmt", sub2.actualNotificationFormat)
             XCTAssertEqual("trg", sub2.actualTriggerExpression)
-            XCTAssertEqual("i1", sub2.itemGroup)
-            XCTAssertEqual("f1", sub2.fieldSchema)
+            XCTAssertEqual(["i1"], sub2.items)
+            XCTAssertEqual(["f1"], sub2.fields)
             XCTAssertEqual("adt", sub2.dataAdapter)
             XCTAssertEqual(.MERGE, sub2.mode)
             XCTAssertEqual(.unlimited, sub2.requestedBufferSize)
@@ -2995,8 +2955,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             XCTAssertEqual(100, sub.statusTimestamp)
             XCTAssertEqual("fmt", sub.actualNotificationFormat)
             XCTAssertEqual("trg", sub.actualTriggerExpression)
-            XCTAssertEqual("i1", sub.itemGroup)
-            XCTAssertEqual("f1", sub.fieldSchema)
+            XCTAssertEqual(["i1"], sub.items)
+            XCTAssertEqual(["f1"], sub.fields)
             XCTAssertEqual("adt", sub.dataAdapter)
             XCTAssertEqual(.MERGE, sub.mode)
             XCTAssertEqual(.unlimited, sub.requestedBufferSize)
@@ -3006,8 +2966,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             XCTAssertEqual(100, sub2.statusTimestamp)
             XCTAssertEqual("fmt", sub2.actualNotificationFormat)
             XCTAssertEqual("trg", sub2.actualTriggerExpression)
-            XCTAssertEqual("i1", sub2.itemGroup)
-            XCTAssertEqual("f1", sub2.fieldSchema)
+            XCTAssertEqual(["i1"], sub2.items)
+            XCTAssertEqual(["f1"], sub2.fields)
             XCTAssertEqual("adt", sub2.dataAdapter)
             XCTAssertEqual(.MERGE, sub2.mode)
             XCTAssertEqual(.unlimited, sub2.requestedBufferSize)
@@ -3068,8 +3028,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             XCTAssertEqual(100, sub.statusTimestamp)
             XCTAssertEqual("fmt", sub.actualNotificationFormat)
             XCTAssertEqual("trg", sub.actualTriggerExpression)
-            XCTAssertEqual("i1", sub.itemGroup)
-            XCTAssertEqual("f1", sub.fieldSchema)
+            XCTAssertEqual(["i1"], sub.items)
+            XCTAssertEqual(["f1"], sub.fields)
             XCTAssertEqual("adt", sub.dataAdapter)
             XCTAssertEqual(.MERGE, sub.mode)
             XCTAssertEqual(.unlimited, sub.requestedBufferSize)
@@ -3079,8 +3039,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             XCTAssertEqual(100, sub2.statusTimestamp)
             XCTAssertEqual("fmt", sub2.actualNotificationFormat)
             XCTAssertEqual("trg", sub2.actualTriggerExpression)
-            XCTAssertEqual("i1", sub2.itemGroup)
-            XCTAssertEqual("f1", sub2.fieldSchema)
+            XCTAssertEqual(["i1"], sub2.items)
+            XCTAssertEqual(["f1"], sub2.fields)
             XCTAssertEqual("adt", sub2.dataAdapter)
             XCTAssertEqual(.MERGE, sub2.mode)
             XCTAssertEqual(.unlimited, sub2.requestedBufferSize)
@@ -3138,8 +3098,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             XCTAssertEqual(100, sub.statusTimestamp)
             XCTAssertEqual("fmt", sub.actualNotificationFormat)
             XCTAssertEqual("trg", sub.actualTriggerExpression)
-            XCTAssertEqual("i1", sub.itemGroup)
-            XCTAssertEqual("f1", sub.fieldSchema)
+            XCTAssertEqual(["i1"], sub.items)
+            XCTAssertEqual(["f1"], sub.fields)
             XCTAssertEqual("adt", sub.dataAdapter)
             XCTAssertEqual(.MERGE, sub.mode)
             XCTAssertEqual(.unlimited, sub.requestedBufferSize)
@@ -3195,8 +3155,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             XCTAssertEqual(100, sub.statusTimestamp)
             XCTAssertEqual("fmt2-sub3", sub.actualNotificationFormat)
             XCTAssertEqual(nil, sub.triggerExpression)
-            XCTAssertEqual("i1", sub.itemGroup)
-            XCTAssertEqual("f1", sub.fieldSchema)
+            XCTAssertEqual(["i1"], sub.items)
+            XCTAssertEqual(["f1"], sub.fields)
             XCTAssertEqual(nil, sub.dataAdapter)
             XCTAssertEqual(.MERGE, sub.mode)
             XCTAssertEqual(nil, sub.requestedBufferSize)
@@ -3210,8 +3170,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             XCTAssertEqual(100, sub4.statusTimestamp)
             XCTAssertEqual("fmt2-sub4", sub4.actualNotificationFormat)
             XCTAssertEqual(nil, sub4.triggerExpression)
-            XCTAssertEqual("i1", sub4.itemGroup)
-            XCTAssertEqual("f1", sub4.fieldSchema)
+            XCTAssertEqual(["i1"], sub4.items)
+            XCTAssertEqual(["f1"], sub4.fields)
             XCTAssertEqual(nil, sub4.dataAdapter)
             XCTAssertEqual(.MERGE, sub4.mode)
             XCTAssertEqual(nil, sub4.requestedBufferSize)
@@ -3222,8 +3182,8 @@ final class MpnSubscriptionTests: BaseTestCase {
             XCTAssertEqual(100, sub3.statusTimestamp)
             XCTAssertEqual("fmt2-sub3", sub3.actualNotificationFormat)
             XCTAssertEqual(nil, sub3.triggerExpression)
-            XCTAssertEqual("i1", sub3.itemGroup)
-            XCTAssertEqual("f1", sub3.fieldSchema)
+            XCTAssertEqual(["i1"], sub3.items)
+            XCTAssertEqual(["f1"], sub3.fields)
             XCTAssertEqual(nil, sub3.dataAdapter)
             XCTAssertEqual(.MERGE, sub3.mode)
             XCTAssertEqual(nil, sub3.requestedBufferSize)
@@ -3252,8 +3212,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange SUBSCRIBED 0
                 mpn.onSubscription
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 mpn.onPropertyChange notification_format
                 """, self.mpnSubDelegate.trace)
@@ -3351,8 +3309,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange SUBSCRIBED 0
                 mpn.onSubscription
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, mpnSubDelegate1.trace)
             XCTAssertEqual("""
@@ -3362,8 +3318,6 @@ final class MpnSubscriptionTests: BaseTestCase {
                 mpn.onStatusChange TRIGGERED 100
                 mpn.onTrigger
                 mpn.onPropertyChange status_timestamp
-                mpn.onPropertyChange group
-                mpn.onPropertyChange schema
                 mpn.onPropertyChange notification_format
                 """, mpnSubDelegate2.trace)
             XCTAssertEqual("""
@@ -3372,6 +3326,48 @@ final class MpnSubscriptionTests: BaseTestCase {
                 dev.onSubscriptionsUpdated
                 dev.onSubscriptionsUpdated
                 """, self.mpnDevDelegate.trace)
+        }
+    }
+
+    func testRestoredListsSurviveCopyAndReconfiguration() {
+        client = newClient("http://server")
+        client.connect()
+        simulateCreation()
+        ws.onText("SUBCMD,2,1,2,1,2")
+        ws.onText("U,2,1,SUB-restored|ADD")
+        ws.onText("SUBOK,3,1,10")
+        ws.onText("U,3,1,ACTIVE|100|fmt|trg|i2 i1|f2 f1|adt|MERGE|unlimited|unlimited")
+
+        async(after: 0.2) {
+            self.ws.onText("EOS,2,1")
+        }
+
+        asyncAssert(after: 0.5) {
+            guard let restored = self.client.findMPNSubscription("restored") else {
+                XCTFail("Expected a restored MPN subscription")
+                return
+            }
+            XCTAssertEqual(["i2", "i1"], restored.items)
+            XCTAssertEqual(["f2", "f1"], restored.fields)
+            let copy = MPNSubscription(MPNSubscription: restored)
+            XCTAssertEqual(restored.items, copy.items)
+            XCTAssertEqual(restored.fields, copy.fields)
+            XCTAssertEqual("adt", copy.dataAdapter)
+            copy.items = ["copyItem"]
+            XCTAssertEqual(["i2", "i1"], restored.items)
+            copy.items = restored.items
+
+            restored.notificationFormat = "new format"
+            XCTAssertTrue(self.io.trace.contains("LS_op=pn_reconf&LS_mode=MERGE&LS_group=i2%20i1&LS_schema=f2%20f1&LS_data_adapter=adt"))
+
+            copy.notificationFormat = "copy format"
+            self.client.subscribeMPN(copy, coalescing: true)
+            XCTAssertTrue(self.io.trace.components(separatedBy: "\n").contains {
+                $0.contains("LS_op=activate") &&
+                $0.contains("LS_group=i2%20i1&LS_schema=f2%20f1&LS_data_adapter=adt") &&
+                $0.contains("PN_notificationFormat=copy%20format") &&
+                $0.contains("PN_coalescing=true")
+            })
         }
     }
 }

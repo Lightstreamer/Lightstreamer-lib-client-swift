@@ -73,15 +73,15 @@ final class SubscriptionWSTests: BaseTestCase {
       }
   }
     
-    func testSubscribe_adapter_schema_group_selector_buffer() {
+    func testSubscribe_adapter_fields_items_selector_buffer() {
         client = newClient("http://server")
         client.addDelegate(delegate)
         client.connect()
         
         let sub = Subscription(subscriptionMode: .RAW)
         sub.dataAdapter = "adapter"
-        sub.fieldSchema = "schema"
-        sub.itemGroup = "group"
+        sub.fields = ["schema"]
+        sub.items = ["group"]
         sub.selector = "selector"
         sub.requestedBufferSize = .limited(123)
         sub.addDelegate(subDelegate)
@@ -111,8 +111,8 @@ final class SubscriptionWSTests: BaseTestCase {
         client.connect()
         
         let sub = Subscription(subscriptionMode: .RAW)
-        sub.fieldSchema = "schema"
-        sub.itemGroup = "group"
+        sub.fields = ["schema"]
+        sub.items = ["group"]
         sub.requestedBufferSize = .unlimited
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
@@ -394,14 +394,14 @@ final class SubscriptionWSTests: BaseTestCase {
         }
     }
     
-    func testSUBOK_ItemGroupAndFieldSchema() {
+    func testSUBOK_ExplicitLists() {
         client = newClient("http://server")
         client.addDelegate(delegate)
         client.connect()
         
-        let sub = Subscription(subscriptionMode: .RAW, item: "item", fields: ["f1", "f2"])
-        sub.itemGroup = "ig"
-        sub.fieldSchema = "fs"
+        let sub = Subscription(subscriptionMode: .RAW)
+        sub.items = ["i2", "i1"]
+        sub.fields = ["f3", "f1", "f2"]
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         XCTAssertEqual(true, sub.isActive)
@@ -410,10 +410,12 @@ final class SubscriptionWSTests: BaseTestCase {
         ws.onOpen()
         ws.onText("WSOK")
         ws.onText("CONOK,sid,70000,5000,*")
-        ws.onText("SUBOK,1,10,20")
+        ws.onText("SUBOK,1,2,3")
         XCTAssertEqual(true, sub.isActive)
         XCTAssertEqual(true, sub.isSubscribed)
         XCTAssertEqual(1, client.subscriptionManagers.count)
+        XCTAssertEqual(["i2", "i1"], sub.items)
+        XCTAssertEqual(["f3", "f1", "f2"], sub.fields)
         
         asyncAssert {
             XCTAssertEqual("""
@@ -424,8 +426,8 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=ig&LS_schema=fs&LS_ack=false
-                SUBOK,1,10,20
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=i2%20i1&LS_schema=f3%20f1%20f2&LS_ack=false
+                SUBOK,1,2,3
                 """, self.io.trace)
             XCTAssertEqual("""
                 onSUB
