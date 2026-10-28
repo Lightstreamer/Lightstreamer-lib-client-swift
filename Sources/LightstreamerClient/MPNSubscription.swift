@@ -737,7 +737,7 @@ public class MPNSubscription: CustomStringConvertible {
      
      **Related notifications:** a server-reported change to this list is notified through `MPNSubscriptionDelegate.mpnSubscription(_:didChangeProperty:)` with argument `schema`.
 
-     - Precondition: the field names in the list must not contain a space or be empty/nil.
+     - Precondition: each field name must be non-empty. Names may contain any character.
      
      - Precondition: the MPNSubscription must be currently "inactive".
      */
@@ -768,7 +768,7 @@ public class MPNSubscription: CustomStringConvertible {
      
      **Related notifications:** a server-reported change to this list is notified through `MPNSubscriptionDelegate.mpnSubscription(_:didChangeProperty:)` with argument `group`.
 
-     - Precondition: the item names in the "Item List" must not contain a space or be a number or be empty/nil.
+     - Precondition: each item name must be non-empty. Names may contain any character.
      
      - Precondition: the MPNSubscription must be currently "inactive".
      */
@@ -1104,8 +1104,9 @@ public class MPNSubscription: CustomStringConvertible {
         }
     }
     
-    // The internal MPN Data Adapter reports explicit lists separated by spaces.
-    // This metadata representation is separate from subscription request encoding.
+    // Legacy MPN metadata uses space-separated lists, independently of request encoding.
+    // It cannot describe names containing spaces unambiguously. Keep such configured
+    // lists intact until a lossless server metadata contract is available.
     func changeItems(_ rawItems: String?) {
         synchronized {
             guard let rawItems = rawItems else {

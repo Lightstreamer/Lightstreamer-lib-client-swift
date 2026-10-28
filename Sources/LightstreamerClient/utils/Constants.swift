@@ -59,5 +59,5 @@ import Foundation
 let LS_LIB_NAME = "swift_client"
 let LS_LIB_VERSION = "6.5.0"
 
-let TLCP_VERSION = "TLCP-2.5.0"
+let TLCP_VERSION = "TLCP-2.6.0"
 let FULL_TLCP_VERSION = TLCP_VERSION + ".lightstreamer.com"

@@ -652,8 +652,8 @@ final class BatchTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=itm1&LS_schema=f1&LS_snapshot=true&LS_ack=false\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=DISTINCT&LS_group=itm2&LS_schema=f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=itm1&LS_field=f1&LS_snapshot=true&LS_ack=false\r
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=DISTINCT&LS_item=itm2&LS_field=f2&LS_snapshot=true&LS_ack=false
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -702,8 +702,8 @@ final class BatchTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=itm1&LS_schema=f1&LS_snapshot=true&LS_ack=false\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=DISTINCT&LS_group=itm2&LS_schema=f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=itm1&LS_field=f1&LS_snapshot=true&LS_ack=false\r
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=DISTINCT&LS_item=itm2&LS_field=f2&LS_snapshot=true&LS_ack=false
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -750,8 +750,8 @@ final class BatchTests: BaseTestCase {
                 bind_session\r
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=itm1&LS_schema=f1&LS_snapshot=true&LS_ack=false\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=DISTINCT&LS_group=itm2&LS_schema=f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=itm1&LS_field=f1&LS_snapshot=true&LS_ack=false\r
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=DISTINCT&LS_item=itm2&LS_field=f2&LS_snapshot=true&LS_ack=false
                 CONOK,sid,70000,5000,*
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -803,8 +803,8 @@ final class BatchTests: BaseTestCase {
                 REQOK,1
                 ctrl.dispose
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=itm1&LS_schema=f1&LS_snapshot=true\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=DISTINCT&LS_group=itm2&LS_schema=f2&LS_snapshot=true
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=itm1&LS_field=f1&LS_snapshot=true\r
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=DISTINCT&LS_item=itm2&LS_field=f2&LS_snapshot=true
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -858,8 +858,8 @@ final class BatchTests: BaseTestCase {
                 REQOK,1
                 ctrl.dispose
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=itm1&LS_schema=f1&LS_snapshot=true\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=DISTINCT&LS_group=itm2&LS_schema=f2&LS_snapshot=true
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=itm1&LS_field=f1&LS_snapshot=true\r
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=DISTINCT&LS_item=itm2&LS_field=f2&LS_snapshot=true
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -903,13 +903,13 @@ final class BatchTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=itm1&LS_schema=f1&LS_snapshot=true&LS_ack=false\r
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=itm1&LS_field=f1&LS_snapshot=true&LS_ack=false\r
                 LS_reqId=2&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -974,13 +974,13 @@ final class BatchTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=itm1&LS_schema=f1&LS_snapshot=true&LS_ack=false\r
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=itm1&LS_field=f1&LS_snapshot=true&LS_ack=false\r
                 LS_reqId=2&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 REQOK,1
                 REQOK,2
                 REQOK,3
@@ -994,8 +994,8 @@ final class BatchTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_group=itm1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt1\r
-                LS_reqId=6&LS_op=activate&LS_subId=5&LS_mode=MERGE&LS_group=itm1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt2\r
+                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_item=itm1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt1\r
+                LS_reqId=6&LS_op=activate&LS_subId=5&LS_mode=MERGE&LS_item=itm1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt2\r
                 LS_reqId=7&LS_op=deactivate&PN_deviceId=devid&PN_subscriptionStatus=TRIGGERED\r
                 LS_reqId=8&LS_op=reset_badge&PN_deviceId=devid
                 REQOK,5
@@ -1055,14 +1055,14 @@ final class BatchTests: BaseTestCase {
                 bind_session\r
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=itm1&LS_schema=f1&LS_snapshot=true&LS_ack=false\r
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=itm1&LS_field=f1&LS_snapshot=true&LS_ack=false\r
                 LS_reqId=2&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 CONOK,sid,70000,5000,*
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 """, self.io.trace)
             XCTAssertEqual("""
                 CONNECTING
@@ -1125,7 +1125,7 @@ final class BatchTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=itm1&LS_schema=f1&LS_snapshot=true\r
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=itm1&LS_field=f1&LS_snapshot=true\r
                 LS_reqId=2&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 CONOK,sid,70000,5000,*
                 MPNREG,devid,adapter
@@ -1133,10 +1133,10 @@ final class BatchTests: BaseTestCase {
                 REQOK,2
                 ctrl.dispose
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered\r
-                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered\r
-                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_group=itm1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt1\r
-                LS_reqId=6&LS_op=activate&LS_subId=5&LS_mode=MERGE&LS_group=itm1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt2\r
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered\r
+                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered\r
+                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_item=itm1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt1\r
+                LS_reqId=6&LS_op=activate&LS_subId=5&LS_mode=MERGE&LS_item=itm1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt2\r
                 LS_reqId=7&LS_op=deactivate&PN_deviceId=devid&PN_subscriptionStatus=TRIGGERED\r
                 LS_reqId=8&LS_op=reset_badge&PN_deviceId=devid
                 REQOK,3
@@ -1213,7 +1213,7 @@ final class BatchTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=itm1&LS_schema=f1&LS_snapshot=true\r
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=itm1&LS_field=f1&LS_snapshot=true\r
                 LS_reqId=2&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 CONOK,sid,70000,5000,*
                 MPNREG,devid,adapter
@@ -1221,10 +1221,10 @@ final class BatchTests: BaseTestCase {
                 REQOK,2
                 ctrl.dispose
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered\r
-                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered\r
-                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_group=itm1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt1\r
-                LS_reqId=6&LS_op=activate&LS_subId=5&LS_mode=MERGE&LS_group=itm1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt2\r
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered\r
+                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered\r
+                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_item=itm1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt1\r
+                LS_reqId=6&LS_op=activate&LS_subId=5&LS_mode=MERGE&LS_item=itm1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt2\r
                 LS_reqId=7&LS_op=deactivate&PN_deviceId=devid&PN_subscriptionStatus=TRIGGERED\r
                 LS_reqId=8&LS_op=reset_badge&PN_deviceId=devid
                 REQOK,3

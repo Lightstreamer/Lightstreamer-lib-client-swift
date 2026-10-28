@@ -746,8 +746,8 @@ class MpnSubscriptionManager: Encodable {
         req.LS_op("activate")
         req.LS_subId(m_subId)
         req.LS_mode(m_subscription.mode.rawValue)
-        req.LS_group(items.joined(separator: " "))
-        req.LS_schema(fields.joined(separator: " "))
+        req.LS_item(items)
+        req.LS_field(fields)
         if let adapter = m_subscription.dataAdapter {
             req.LS_data_adapter(adapter)
         }
@@ -806,8 +806,8 @@ class MpnSubscriptionManager: Encodable {
         req.LS_reqId(m_lastConfigureReqId!)
         req.LS_op("pn_reconf")
         req.LS_mode(m_subscription.mode.rawValue)
-        req.LS_group(items.joined(separator: " "))
-        req.LS_schema(fields.joined(separator: " "))
+        req.LS_item(items)
+        req.LS_field(fields)
         if let adapter = m_subscription.dataAdapter {
             req.LS_data_adapter(adapter)
         }

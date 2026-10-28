@@ -47,7 +47,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2
                 """, self.io.trace)
         }
     }
@@ -111,7 +111,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2
                 REQERR,1,-5,error
                 ctrl.dispose
                 """, self.io.trace)
@@ -154,7 +154,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
@@ -198,7 +198,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
@@ -245,7 +245,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=item&LS_field=key&command&LS_snapshot=true
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
@@ -291,7 +291,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
@@ -339,7 +339,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=true
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
@@ -388,7 +388,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=true
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
@@ -440,7 +440,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=true
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
@@ -494,7 +494,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=true
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
@@ -546,7 +546,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
@@ -594,7 +594,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
@@ -642,7 +642,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
@@ -689,7 +689,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2
                 REQOK,1
                 ctrl.dispose
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
@@ -732,7 +732,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2
                 REQOK,1
                 ctrl.dispose
                 http.dispose
@@ -777,7 +777,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
@@ -829,7 +829,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
@@ -882,7 +882,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
@@ -934,7 +934,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*
@@ -982,7 +982,7 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=item&LS_field=f1&f2&LS_snapshot=true
                 REQOK,1
                 ctrl.dispose
                 CONOK,sid,70000,5000,*

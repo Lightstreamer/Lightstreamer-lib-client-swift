@@ -1,7 +1,46 @@
 import XCTest
-import LightstreamerClient
+@testable import LightstreamerClient
 
 final class SubscriptionListTests: XCTestCase {
+    func testEveryNonEmptyNameIsAcceptedWithoutChangingBytes() {
+        let names = ["123", " ", " leading and trailing ", "&=%+?#/", "\t\r\n\0", "東京😀", "é", "e\u{301}"]
+        let sub = Subscription(subscriptionMode: .MERGE, items: names, fields: names)
+        sub.items = names.reversed()
+        sub.fields = names.reversed()
+        XCTAssertEqual(names.reversed().map { Array($0.utf8) }, sub.items!.map { Array($0.utf8) })
+        XCTAssertEqual(names.reversed().map { Array($0.utf8) }, sub.fields!.map { Array($0.utf8) })
+        for name in names {
+            let single = Subscription(subscriptionMode: .MERGE, item: name, fields: [name])
+            XCTAssertEqual(Array(name.utf8), Array(single.items![0].utf8))
+            let mpnSingle = MPNSubscription(subscriptionMode: .MERGE, item: name, fields: [name])
+            XCTAssertEqual(Array(name.utf8), Array(mpnSingle.items![0].utf8))
+        }
+        let command = Subscription(subscriptionMode: .COMMAND, item: "123", fields: ["key", "command"])
+        command.commandSecondLevelFields = names
+        XCTAssertEqual(names.map { Array($0.utf8) }, command.commandSecondLevelFields!.map { Array($0.utf8) })
+        for mode: MPNSubscription.Mode in [.MERGE, .DISTINCT] {
+            let mpn = MPNSubscription(subscriptionMode: mode, items: names, fields: names)
+            mpn.items = names.reversed()
+            mpn.fields = names.reversed()
+            let copy = MPNSubscription(MPNSubscription: mpn)
+            XCTAssertEqual(names.reversed().map { Array($0.utf8) }, copy.items!.map { Array($0.utf8) })
+            XCTAssertEqual(names.reversed().map { Array($0.utf8) }, copy.fields!.map { Array($0.utf8) })
+        }
+        let converted = MPNSubscription(subscription: sub)
+        XCTAssertEqual(sub.items!.map { Array($0.utf8) }, converted.items!.map { Array($0.utf8) })
+        XCTAssertEqual(sub.fields!.map { Array($0.utf8) }, converted.fields!.map { Array($0.utf8) })
+    }
+
+    func testEmptyNamesAreStillInvalid() {
+        XCTAssertFalse(isValidItem(""))
+        XCTAssertFalse(isValidField(""))
+        XCTAssertFalse(allValidItems(["valid", ""]))
+        XCTAssertFalse(allValidFields(["", "valid"]))
+        XCTAssertTrue(allValidItems(nil))
+        XCTAssertTrue(allValidFields(nil))
+        XCTAssertFalse(notEmpty([String]()))
+    }
+
     func testListConstructorsAndDelayedConfiguration() {
         let single = Subscription(subscriptionMode: .MERGE, item: "group", fields: ["schema"])
         XCTAssertEqual(["group"], single.items)

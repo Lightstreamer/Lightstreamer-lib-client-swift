@@ -318,9 +318,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 """, self.io.trace)
             XCTAssertEqual("""
                 dev.onStatus REGISTERED 0
@@ -349,9 +349,9 @@ final class MpnTests: BaseTestCase {
                 REQOK,1
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 """, self.io.trace)
             XCTAssertEqual("""
                 dev.onStatus REGISTERED 0
@@ -379,9 +379,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,1,1,2
                 U,1,1,ACTIVE|100
                 """, self.io.trace)
@@ -411,9 +411,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,1,1,2
                 U,1,1,SUSPENDED|100
                 """, self.io.trace)
@@ -446,9 +446,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,1,1,2
                 U,1,1,SUSPENDED|100
                 U,1,1,ACTIVE|110
@@ -485,9 +485,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
                 LS_reqId=4&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok&PN_newDeviceToken=tok2&LS_cause=refresh.token
                 MPNREG,devid,adapter
@@ -521,9 +521,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
                 LS_reqId=4&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok&PN_newDeviceToken=tok2&LS_cause=refresh.token
                 REQOK,4
@@ -558,9 +558,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
                 LS_reqId=4&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok&PN_newDeviceToken=tok2&LS_cause=refresh.token
                 REQERR,4,-5,error
@@ -599,9 +599,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
                 LS_reqId=4&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok&PN_newDeviceToken=tok2&LS_cause=refresh.token
                 REQERR,4,-5,error
@@ -638,9 +638,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
                 LS_reqId=4&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok&PN_newDeviceToken=tok2&LS_cause=refresh.token
                 MPNREG,devid2,adapter
@@ -675,9 +675,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
                 LS_reqId=4&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok&PN_newDeviceToken=tok2&LS_cause=refresh.token
                 MPNREG,devid,adapter2
@@ -717,9 +717,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,1,1,2
                 U,1,1,ACTIVE|100
                 control\r
@@ -763,9 +763,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 REQERR,2,-5,error
                 control\r
                 LS_reqId=4&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
@@ -801,9 +801,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,1,1,2
                 UNSUB,1
                 control\r
@@ -839,9 +839,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 REQERR,3,-5,error
                 control\r
                 LS_reqId=4&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
@@ -877,9 +877,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBCMD,2,1,2,1,2
                 UNSUB,2
                 control\r
@@ -914,13 +914,13 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBCMD,2,1,2,1,2
                 U,2,1,sub1|ADD
                 control\r
-                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_group=sub1&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_item=sub1&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 REQERR,4,-5,error
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -954,9 +954,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
@@ -968,9 +968,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=4&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok&PN_newDeviceToken=tok&LS_cause=restore.token
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=6&LS_op=add&LS_subId=4&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=6&LS_op=add&LS_subId=4&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 """, self.io.trace)
             XCTAssertEqual("""
                 dev.onStatus REGISTERED 0
@@ -1010,9 +1010,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
@@ -1033,9 +1033,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=5&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok&PN_newDeviceToken=tok&LS_cause=restore.token
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=6&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=6&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=7&LS_op=add&LS_subId=4&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=7&LS_op=add&LS_subId=4&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 """, self.io.trace)
             XCTAssertEqual("""
                 dev.onStatus REGISTERED 0
@@ -1071,9 +1071,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
@@ -1119,9 +1119,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
@@ -1134,9 +1134,9 @@ final class MpnTests: BaseTestCase {
                 REQOK,4
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=6&LS_op=add&LS_subId=4&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=6&LS_op=add&LS_subId=4&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 """, self.io.trace)
             XCTAssertEqual("""
                 dev.onStatus REGISTERED 0
@@ -1171,9 +1171,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
@@ -1218,9 +1218,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
@@ -1265,9 +1265,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
@@ -1312,9 +1312,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
@@ -1355,9 +1355,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,1,1,2
                 U,1,1,ACTIVE|100
                 control\r
@@ -1390,9 +1390,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
                 LS_reqId=4&LS_op=reset_badge&PN_deviceId=devid
                 SUBOK,1,1,2
@@ -1430,9 +1430,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,1,1,2
                 U,1,1,ACTIVE|100
                 control\r
@@ -1471,9 +1471,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,1,1,2
                 U,1,1,ACTIVE|100
                 control\r
@@ -1514,9 +1514,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,1,1,2
                 U,1,1,ACTIVE|100
                 control\r
@@ -1569,9 +1569,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,1,1,2
                 U,1,1,ACTIVE|100
                 control\r
@@ -1579,7 +1579,7 @@ final class MpnTests: BaseTestCase {
                 control\r
                 LS_reqId=5&LS_op=deactivate&PN_deviceId=devid
                 control\r
-                LS_reqId=6&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=6&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 ws.dispose
                 ws.init http://server/lightstreamer
                 wsok
@@ -1591,9 +1591,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=7&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok&PN_newDeviceToken=tok&LS_cause=restore.token
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=8&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=8&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=9&LS_op=add&LS_subId=5&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=9&LS_op=add&LS_subId=5&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
                 LS_reqId=10&LS_op=deactivate&PN_deviceId=devid
                 control\r
@@ -1651,9 +1651,9 @@ final class MpnTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,1,1,2
                 U,1,1,ACTIVE|100
                 control\r
@@ -1661,7 +1661,7 @@ final class MpnTests: BaseTestCase {
                 control\r
                 LS_reqId=5&LS_op=deactivate&PN_deviceId=devid
                 control\r
-                LS_reqId=6&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=6&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 ws.dispose
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=3&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
@@ -1676,8 +1676,8 @@ final class MpnTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=7&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false\r
-                LS_reqId=8&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt\r
+                LS_reqId=7&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false\r
+                LS_reqId=8&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt\r
                 LS_reqId=9&LS_op=deactivate&PN_deviceId=devid\r
                 LS_reqId=10&LS_op=reset_badge&PN_deviceId=devid
                 """, self.io.trace)

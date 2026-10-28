@@ -1227,7 +1227,7 @@ cancel recovery.timeout
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=itm&LS_schema=fld&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=itm&LS_field=fld&LS_snapshot=true&LS_ack=false
                 SUBOK,1,1,1
                 U,1,1,a
                 EOS,1,1
@@ -1289,7 +1289,7 @@ cancel recovery.timeout
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=itm&LS_schema=fld&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=itm&LS_field=fld&LS_snapshot=true&LS_ack=false
                 ws.dispose
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
@@ -1365,7 +1365,7 @@ cancel recovery.timeout
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=itm&LS_schema=fld&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=itm&LS_field=fld&LS_snapshot=true&LS_ack=false
                 SUBOK,1,1,1
                 U,1,1,a
                 EOS,1,1
@@ -1434,7 +1434,7 @@ cancel recovery.timeout
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=itm&LS_schema=key%20command&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=itm&LS_field=key&command&LS_snapshot=true&LS_ack=false
                 SUBCMD,1,1,2,1,2
                 U,1,1,a
                 EOS,1,1
@@ -1496,7 +1496,7 @@ cancel recovery.timeout
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=itm&LS_schema=key%20command&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=itm&LS_field=key&command&LS_snapshot=true&LS_ack=false
                 ws.dispose
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
                 LS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
@@ -1572,7 +1572,7 @@ cancel recovery.timeout
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=itm&LS_schema=key%20command&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=itm&LS_field=key&command&LS_snapshot=true&LS_ack=false
                 SUBCMD,1,1,2,1,2
                 U,1,1,a
                 EOS,1,1
@@ -1703,11 +1703,11 @@ cancel recovery.timeout
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=activate&LS_subId=1&LS_mode=DISTINCT&LS_group=itm&LS_schema=fld&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=2&LS_op=activate&LS_subId=1&LS_mode=DISTINCT&LS_item=itm&LS_field=fld&PN_deviceId=devid&PN_notificationFormat=fmt
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 MPNOK,1,sub1
                 MPNCONF,sub1
                 MPNDEL,sub1
@@ -1859,11 +1859,11 @@ cancel recovery.timeout
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=activate&LS_subId=1&LS_mode=DISTINCT&LS_group=itm&LS_schema=fld&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=2&LS_op=activate&LS_subId=1&LS_mode=DISTINCT&LS_item=itm&LS_field=fld&PN_deviceId=devid&PN_notificationFormat=fmt
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 MPNOK,1,sub1
                 MPNCONF,sub1
                 MPNDEL,sub1

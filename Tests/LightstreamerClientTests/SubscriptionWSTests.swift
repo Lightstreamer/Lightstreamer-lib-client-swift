@@ -41,7 +41,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 """, self.io.trace)
         }
     }
@@ -68,7 +68,7 @@ final class SubscriptionWSTests: BaseTestCase {
               WSOK
               CONOK,sid,70000,5000,*
               control\r
-              LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%2Bf2&LS_ack=false
+              LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1%2Bf2&LS_ack=false
               """, self.io.trace)
       }
   }
@@ -100,7 +100,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=group&LS_schema=schema&LS_data_adapter=adapter&LS_selector=selector&LS_requested_buffer_size=123&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=group&LS_field=schema&LS_data_adapter=adapter&LS_selector=selector&LS_requested_buffer_size=123&LS_ack=false
                 """, self.io.trace)
         }
     }
@@ -130,7 +130,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=group&LS_schema=schema&LS_requested_buffer_size=unlimited&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=group&LS_field=schema&LS_requested_buffer_size=unlimited&LS_ack=false
                 """, self.io.trace)
         }
     }
@@ -192,7 +192,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 REQERR,1,-5,error
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -229,7 +229,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 SUBOK,1,1,2
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -265,7 +265,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 SUBOK,1,10,2
                 control\r
                 LS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false
@@ -304,7 +304,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 REQOK,1
                 SUBOK,1,10,2
                 control\r
@@ -343,7 +343,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 SUBOK,1,1,20
                 control\r
                 LS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false
@@ -382,7 +382,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 REQOK,1
                 SUBOK,1,1,20
                 control\r
@@ -426,7 +426,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=i2%20i1&LS_schema=f3%20f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=i2&i1&LS_field=f3&f1&f2&LS_ack=false
                 SUBOK,1,2,3
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -463,7 +463,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=item&LS_field=key&command&LS_snapshot=true&LS_ack=false
                 SUBCMD,1,1,2,1,2
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -499,7 +499,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=item&LS_field=key&command&LS_snapshot=true&LS_ack=false
                 SUBCMD,1,10,2,1,2
                 control\r
                 LS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false
@@ -538,7 +538,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=item&LS_field=key&command&LS_snapshot=true&LS_ack=false
                 REQOK,1
                 SUBCMD,1,10,2,1,2
                 control\r
@@ -577,7 +577,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=item&LS_field=key&command&LS_snapshot=true&LS_ack=false
                 SUBCMD,1,1,20,1,2
                 control\r
                 LS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false
@@ -616,7 +616,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=item&LS_field=key&command&LS_snapshot=true&LS_ack=false
                 REQOK,1
                 SUBCMD,1,1,20,1,2
                 control\r
@@ -657,7 +657,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 SUBOK,1,1,2
                 CONF,1,unlimited,filtered
                 """, self.io.trace)
@@ -697,7 +697,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=true&LS_ack=false
                 SUBOK,1,1,2
                 U,1,1,a,b
                 """, self.io.trace)
@@ -738,7 +738,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=true&LS_ack=false
                 SUBOK,1,1,2
                 U,1,1,a,b
                 EOS,1,1
@@ -782,7 +782,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=true&LS_ack=false
                 SUBOK,1,1,2
                 U,1,1,a,b
                 EOS,1,1
@@ -828,7 +828,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=true&LS_ack=false
                 SUBOK,1,1,2
                 U,1,1,a,b
                 EOS,1,1
@@ -872,7 +872,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 SUBOK,1,1,2
                 control\r
                 LS_reqId=2&LS_op=destroy&LS_close_socket=true&LS_cause=api
@@ -914,7 +914,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 SUBOK,1,1,2
                 UNSUB,1
                 """, self.io.trace)
@@ -956,7 +956,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 SUBOK,1,1,2
                 control\r
                 LS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false
@@ -998,7 +998,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 SUBOK,1,1,2
                 control\r
                 LS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false
@@ -1041,7 +1041,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 SUBOK,1,1,2
                 control\r
                 LS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false
@@ -1081,7 +1081,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=item&LS_field=f1&f2&LS_snapshot=true&LS_ack=false
                 SUBOK,1,1,2
                 control\r
                 LS_reqId=2&LS_subId=1&LS_op=reconf&LS_requested_max_frequency=12.3
@@ -1117,7 +1117,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true&LS_requested_max_frequency=12.3&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=item&LS_field=f1&f2&LS_snapshot=true&LS_requested_max_frequency=12.3&LS_ack=false
                 SUBOK,1,1,2
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -1150,7 +1150,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true&LS_requested_max_frequency=unlimited&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=item&LS_field=f1&f2&LS_snapshot=true&LS_requested_max_frequency=unlimited&LS_ack=false
                 SUBOK,1,1,2
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -1183,7 +1183,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=item&LS_field=f1&f2&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,1,1,2
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -1218,7 +1218,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=item&LS_field=f1&f2&LS_snapshot=true&LS_ack=false
                 SUBOK,1,1,2
                 control\r
                 LS_reqId=2&LS_subId=1&LS_op=reconf&LS_requested_max_frequency=12.3
@@ -1257,7 +1257,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true&LS_requested_max_frequency=unlimited&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=item&LS_field=f1&f2&LS_snapshot=true&LS_requested_max_frequency=unlimited&LS_ack=false
                 SUBOK,1,1,2
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -1292,7 +1292,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=item&LS_field=f1&f2&LS_snapshot=true&LS_ack=false
                 SUBOK,1,1,2
                 control\r
                 LS_reqId=2&LS_subId=1&LS_op=reconf&LS_requested_max_frequency=12.3
@@ -1331,7 +1331,7 @@ final class SubscriptionWSTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=item&LS_field=f1&f2&LS_snapshot=true&LS_ack=false
                 SUBOK,1,1,2
                 control\r
                 LS_reqId=2&LS_subId=1&LS_op=reconf&LS_requested_max_frequency=12.3

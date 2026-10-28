@@ -182,7 +182,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=i1%20i2&LS_schema=f1%20f2%20f3%20f4&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=i1&i2&LS_field=f1&f2&f3&f4&LS_ack=false
                 SUBOK,1,2,4
                 U,1,1,#|#|$|z
                 U,1,1,|n|#|#
@@ -276,7 +276,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=i1%20i2&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=i1&i2&LS_field=f1&f2&LS_ack=false
                 SUBOK,1,2,2
                 U,1,1,a|b
                 U,1,2,c|d
@@ -401,7 +401,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=i1%20i2&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=i1&i2&LS_field=f1&f2&LS_snapshot=true&LS_ack=false
                 SUBOK,1,2,2
                 U,1,1,a|b
                 U,1,2,c|d
@@ -525,7 +525,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=i1%20i2&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=i1&i2&LS_field=f1&f2&LS_snapshot=false&LS_ack=false
                 SUBOK,1,2,2
                 U,1,1,a|b
                 U,1,2,c|d
@@ -643,7 +643,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=i1%20i2&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=i1&i2&LS_field=f1&f2&LS_snapshot=true&LS_ack=false
                 SUBOK,1,2,2
                 U,1,1,a|b
                 U,1,2,c|d
@@ -773,7 +773,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=i1%20i2&LS_schema=f1%20f2&LS_snapshot=33&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=i1&i2&LS_field=f1&f2&LS_snapshot=33&LS_ack=false
                 SUBOK,1,2,2
                 U,1,1,a|b
                 U,1,2,c|d
@@ -892,7 +892,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=i1%20i2&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=i1&i2&LS_field=f1&f2&LS_snapshot=false&LS_ack=false
                 SUBOK,1,2,2
                 U,1,1,a|b
                 U,1,2,c|d
@@ -1011,7 +1011,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=i1%20i2&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=i1&i2&LS_field=f1&f2&LS_snapshot=true&LS_ack=false
                 SUBOK,1,2,2
                 U,1,1,a|b
                 U,1,2,c|d
@@ -1175,7 +1175,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|k1|ADD
                 U,1,2,c|d|k2|ADD
@@ -1316,7 +1316,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|k1|ADD
                 U,1,1,c||k2|
@@ -1440,7 +1440,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|k1|ADD
                 U,1,1,c|d|k2|
@@ -1563,7 +1563,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,x|y|k1|DELETE
                 """, self.io.trace)
@@ -1635,7 +1635,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=true&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|k1|ADD
                 U,1,2,c|d|k2|ADD
@@ -1788,7 +1788,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=true&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|k1|ADD
                 CS,1,1
@@ -1889,7 +1889,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=i1%20i2&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=i1&i2&LS_field=f1&f2&LS_ack=false
                 SUBOK,1,2,2
                 U,1,1,a|b
                 control\r
@@ -1902,7 +1902,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=i1%20i2&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=i1&i2&LS_field=f1&f2&LS_ack=false
                 SUBOK,1,2,2
                 U,1,1,c|d
                 """, self.io.trace)
@@ -1986,7 +1986,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=i1%20i2&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=i1&i2&LS_field=f1&f2&LS_snapshot=true&LS_ack=false
                 SUBOK,1,2,2
                 U,1,1,a|b
                 control\r
@@ -1999,7 +1999,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=i1%20i2&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=i1&i2&LS_field=f1&f2&LS_snapshot=true&LS_ack=false
                 SUBOK,1,2,2
                 U,1,1,c|d
                 """, self.io.trace)
@@ -2084,7 +2084,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=i1%20i2&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=i1&i2&LS_field=f1&f2&LS_snapshot=false&LS_ack=false
                 SUBOK,1,2,2
                 U,1,1,a|b
                 control\r
@@ -2097,7 +2097,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=i1%20i2&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=i1&i2&LS_field=f1&f2&LS_snapshot=false&LS_ack=false
                 SUBOK,1,2,2
                 U,1,1,c|d
                 """, self.io.trace)
@@ -2180,7 +2180,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|k1|UPDATE
                 control\r
@@ -2193,7 +2193,7 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,c|d|k1|UPDATE
                 """, self.io.trace)
@@ -2301,11 +2301,11 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
                 SUBOK,2,1,2
                 U,2,1,c|d
                 control\r
@@ -2318,11 +2318,11 @@ final class UpdateTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=4&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=4&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,A|B|item1|ADD
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
                 SUBOK,3,1,2
                 U,3,1,C|D
                 """, self.io.trace)

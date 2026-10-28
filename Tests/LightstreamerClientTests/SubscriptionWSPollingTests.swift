@@ -54,7 +54,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
                 bind_session\r
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 CONOK,sid,70000,5000,*
                 """, self.io.trace)
         }
@@ -132,7 +132,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
                 bind_session\r
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 CONOK,sid,70000,5000,*
                 REQERR,1,-5,error
                 """, self.io.trace)
@@ -177,7 +177,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
                 bind_session\r
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,2
                 """, self.io.trace)
@@ -221,7 +221,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
                 bind_session\r
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,20
                 control\r
@@ -268,7 +268,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
                 bind_session\r
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=item&LS_field=key&command&LS_snapshot=true&LS_ack=false
                 CONOK,sid,70000,5000,*
                 SUBCMD,1,1,2,1,2
                 """, self.io.trace)
@@ -314,7 +314,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
                 bind_session\r
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,2
                 CONF,1,unlimited,filtered
@@ -362,7 +362,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
                 bind_session\r
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=true&LS_ack=false
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,2
                 U,1,1,a,b
@@ -411,7 +411,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
                 bind_session\r
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=true&LS_ack=false
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,2
                 U,1,1,a,b
@@ -463,7 +463,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
                 bind_session\r
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=true&LS_ack=false
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,2
                 U,1,1,a,b
@@ -517,7 +517,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
                 bind_session\r
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=true&LS_ack=false
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,2
                 U,1,1,a,b
@@ -569,7 +569,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
                 bind_session\r
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,2
                 control\r
@@ -619,7 +619,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
                 bind_session\r
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,2
                 UNSUB,1
@@ -667,7 +667,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
                 bind_session\r
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,2
                 control\r
@@ -717,7 +717,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
                 bind_session\r
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,2
                 control\r
@@ -768,7 +768,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
                 bind_session\r
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=item&LS_schema=f1%20f2&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=item&LS_field=f1&f2&LS_ack=false
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,2
                 control\r
@@ -817,7 +817,7 @@ final class SubscriptionWSPollingTests: BaseTestCase {
                 bind_session\r
                 LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=item&LS_field=f1&f2&LS_snapshot=true&LS_ack=false
                 CONOK,sid,70000,5000,*
                 SUBOK,1,1,2
                 control\r

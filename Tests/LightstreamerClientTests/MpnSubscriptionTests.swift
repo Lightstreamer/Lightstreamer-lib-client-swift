@@ -72,9 +72,9 @@ final class MpnSubscriptionTests: BaseTestCase {
         LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
         MPNREG,devid,adapter
         control\r
-        LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+        LS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
         control\r
-        LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+        LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
         
         """
     
@@ -115,7 +115,7 @@ final class MpnSubscriptionTests: BaseTestCase {
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 EOS,2,1
                 U,2,1,SUB-sub3|DELETE
                 """, self.io.trace)
@@ -158,11 +158,11 @@ final class MpnSubscriptionTests: BaseTestCase {
                 LS_reqId=1&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=2&LS_op=activate&LS_subId=1&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=2&LS_op=activate&LS_subId=1&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 """, self.io.trace)
             XCTAssertEqual("""
                 mpn.onStatusChange ACTIVE 0
@@ -271,7 +271,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 """, self.io.trace)
             XCTAssertEqual("""
                 mpn.onStatusChange ACTIVE 0
@@ -298,7 +298,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 REQERR,4,-5,error
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -330,7 +330,7 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 REQOK,4
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -359,7 +359,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 REQOK,4
                 MPNOK,3,sub3
                 """, self.io.trace)
@@ -391,7 +391,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -447,12 +447,12 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,4,1,10
                 U,4,1,ACTIVE|100|fmt|#|i1|f1|#|MERGE|#|#
                 """, self.io.trace)
@@ -513,12 +513,12 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
                 MPNOK,3,sub3
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,4,1,10
                 U,4,1,ACTIVE|100|fmt|trg|i1|f1|#|MERGE|#|#
                 U,4,1,TRIGGERED|110||||||||
@@ -585,12 +585,12 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
                 MPNOK,3,sub3
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,4,1,10
                 U,4,1,ACTIVE|100|fmt|trg|i1|f1|#|MERGE|#|#
                 U,4,1,TRIGGERED|110||||||||
@@ -662,12 +662,12 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
                 MPNOK,3,sub3
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,4,1,10
                 U,4,1,ACTIVE|100|fmt|trg|i1|f1|#|MERGE|#|#
                 U,4,1,|110||||||||
@@ -739,12 +739,12 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
                 MPNOK,3,sub3
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,4,1,10
                 U,4,1,ACTIVE|100|format|trigger|item item2|field field2|adapter|DISTINCT|unlimited|unlimited
                 """, self.io.trace)
@@ -811,12 +811,12 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
                 MPNOK,3,sub3
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,4,1,10
                 U,4,1,ACTIVE|100|format|trigger|item|field|adapter|DISTINCT|123|45.6
                 """, self.io.trace)
@@ -864,12 +864,12 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,4,1,10
                 control\r
                 LS_reqId=6&LS_op=deactivate&PN_deviceId=devid&PN_subscriptionId=sub3
@@ -916,12 +916,12 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,4,1,10
                 control\r
                 LS_reqId=6&LS_op=deactivate&PN_deviceId=devid&PN_subscriptionId=sub3
@@ -968,12 +968,12 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,4,1,10
                 control\r
                 LS_reqId=6&LS_op=deactivate&PN_deviceId=devid&PN_subscriptionId=sub3
@@ -1020,12 +1020,12 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,4,1,10
                 control\r
                 LS_reqId=6&LS_op=deactivate&PN_deviceId=devid&PN_subscriptionId=sub3
@@ -1072,12 +1072,12 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,4,1,10
                 control\r
                 LS_reqId=6&LS_op=deactivate&PN_deviceId=devid&PN_subscriptionId=sub3
@@ -1120,12 +1120,12 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,4,1,10
                 control\r
                 LS_reqId=6&LS_op=deactivate&PN_deviceId=devid&PN_subscriptionId=sub3
@@ -1172,7 +1172,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 SUBCMD,2,1,2,1,2
                 ws.dispose
@@ -1186,13 +1186,13 @@ final class MpnSubscriptionTests: BaseTestCase {
                 LS_reqId=5&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok&PN_newDeviceToken=tok&LS_cause=restore.token
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=6&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=6&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=7&LS_op=add&LS_subId=5&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=7&LS_op=add&LS_subId=5&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBCMD,5,1,2,1,2
                 U,5,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=8&LS_op=add&LS_subId=6&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=8&LS_op=add&LS_subId=6&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 """, self.io.trace)
             XCTAssertEqual("""
                 mpn.onStatusChange ACTIVE 0
@@ -1234,7 +1234,7 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 SUBCMD,2,1,2,1,2
                 ws.dispose
@@ -1248,9 +1248,9 @@ final class MpnSubscriptionTests: BaseTestCase {
                 LS_reqId=5&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok&PN_newDeviceToken=tok&LS_cause=restore.token
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=6&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=6&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=7&LS_op=add&LS_subId=5&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=7&LS_op=add&LS_subId=5&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBCMD,5,1,2,1,2
                 EOS,5,1
                 """, self.io.trace)
@@ -1302,7 +1302,7 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 SUBCMD,2,1,2,1,2
                 control\r
@@ -1318,13 +1318,13 @@ final class MpnSubscriptionTests: BaseTestCase {
                 LS_reqId=6&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok&PN_newDeviceToken=tok&LS_cause=restore.token
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=7&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=7&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=8&LS_op=add&LS_subId=5&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=8&LS_op=add&LS_subId=5&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBCMD,5,1,2,1,2
                 U,5,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=9&LS_op=add&LS_subId=6&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=9&LS_op=add&LS_subId=6&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 """, self.io.trace)
             XCTAssertEqual("""
                 mpn.onStatusChange ACTIVE 0
@@ -1370,7 +1370,7 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 SUBCMD,2,1,2,1,2
                 control\r
@@ -1387,9 +1387,9 @@ final class MpnSubscriptionTests: BaseTestCase {
                 LS_reqId=6&LS_op=register&PN_type=Apple&PN_appId=testApp&PN_deviceToken=tok&PN_newDeviceToken=tok&LS_cause=restore.token
                 MPNREG,devid,adapter
                 control\r
-                LS_reqId=7&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=DEV-devid&LS_schema=status%20status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=7&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 control\r
-                LS_reqId=8&LS_op=add&LS_subId=5&LS_mode=COMMAND&LS_group=SUBS-devid&LS_schema=key%20command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=8&LS_op=add&LS_subId=5&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBCMD,5,1,2,1,2
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -1431,10 +1431,10 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 control\r
-                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_notificationFormat=new%20fmt
+                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_notificationFormat=new%20fmt
                 """, self.io.trace)
             XCTAssertEqual("""
                 mpn.onStatusChange ACTIVE 0
@@ -1471,10 +1471,10 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 control\r
-                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_notificationFormat=new%20fmt
+                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_notificationFormat=new%20fmt
                 REQOK,5
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -1512,10 +1512,10 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 control\r
-                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_notificationFormat=new%20fmt
+                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_notificationFormat=new%20fmt
                 REQERR,5,-5,error
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -1556,13 +1556,13 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 control\r
-                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_notificationFormat=fmt2
+                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_notificationFormat=fmt2
                 REQOK,5
                 control\r
-                LS_reqId=6&LS_op=pn_reconf&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_notificationFormat=fmt3
+                LS_reqId=6&LS_op=pn_reconf&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_notificationFormat=fmt3
                 REQOK,6
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -1602,13 +1602,13 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 control\r
-                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_notificationFormat=fmt2
+                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_notificationFormat=fmt2
                 REQERR,5,-5,error
                 control\r
-                LS_reqId=6&LS_op=pn_reconf&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_notificationFormat=fmt3
+                LS_reqId=6&LS_op=pn_reconf&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_notificationFormat=fmt3
                 REQOK,6
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -1647,10 +1647,10 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 control\r
-                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_notificationFormat=new%20fmt
+                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_notificationFormat=new%20fmt
                 ws.dispose
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -1689,10 +1689,10 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
                 MPNOK,3,sub3
                 control\r
-                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_trigger=new%20trg
+                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_trigger=new%20trg
                 """, self.io.trace)
             XCTAssertEqual("""
                 mpn.onStatusChange ACTIVE 0
@@ -1729,10 +1729,10 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
                 MPNOK,3,sub3
                 control\r
-                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_trigger=
+                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_trigger=
                 """, self.io.trace)
             XCTAssertEqual("""
                 mpn.onStatusChange ACTIVE 0
@@ -1770,10 +1770,10 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
                 MPNOK,3,sub3
                 control\r
-                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_trigger=new%20trg
+                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_trigger=new%20trg
                 REQOK,5
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -1812,10 +1812,10 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
                 MPNOK,3,sub3
                 control\r
-                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_trigger=new%20trg
+                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_trigger=new%20trg
                 REQERR,5,-5,error
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -1857,13 +1857,13 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
                 MPNOK,3,sub3
                 control\r
-                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_trigger=trg2
+                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_trigger=trg2
                 REQOK,5
                 control\r
-                LS_reqId=6&LS_op=pn_reconf&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_trigger=trg3
+                LS_reqId=6&LS_op=pn_reconf&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_trigger=trg3
                 REQOK,6
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -1904,13 +1904,13 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
                 MPNOK,3,sub3
                 control\r
-                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_trigger=trg2
+                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_trigger=trg2
                 REQERR,5,-5,error
                 control\r
-                LS_reqId=6&LS_op=pn_reconf&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_trigger=trg3
+                LS_reqId=6&LS_op=pn_reconf&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_trigger=trg3
                 REQOK,6
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -1950,10 +1950,10 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_trigger=trg
                 MPNOK,3,sub3
                 control\r
-                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_trigger=new%20trg
+                LS_reqId=5&LS_op=pn_reconf&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_subscriptionId=sub3&PN_trigger=new%20trg
                 ws.dispose
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -2002,20 +2002,20 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 control\r
-                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 MPNOK,4,sub4
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,5,1,10
                 U,5,1,ACTIVE|100|fmt1|#|i1|f1|#|MERGE|#|#
                 U,2,1,SUB-sub4|ADD
                 control\r
-                LS_reqId=7&LS_op=add&LS_subId=6&LS_mode=MERGE&LS_group=SUB-sub4&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=7&LS_op=add&LS_subId=6&LS_mode=MERGE&LS_item=SUB-sub4&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,6,1,10
                 U,6,1,ACTIVE|100|fmt2|#|i1|f1|#|MERGE|#|#
                 """, self.io.trace)
@@ -2071,15 +2071,15 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 control\r
-                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_coalescing=true
+                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_coalescing=true
                 MPNOK,3,sub3
                 MPNOK,4,sub3
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,5,1,10
                 U,5,1,ACTIVE|100|fmt1|#|i1|f1|#|MERGE|#|#
                 """, self.io.trace)
@@ -2135,15 +2135,15 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 control\r
-                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_coalescing=true
+                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt&PN_coalescing=true
                 MPNOK,3,sub3
                 MPNOK,4,sub3
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 U,2,1,SUB-sub3|DELETE
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -2206,18 +2206,18 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 control\r
-                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 MPNOK,4,sub4
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 U,2,1,SUB-sub4|ADD
                 control\r
-                LS_reqId=7&LS_op=add&LS_subId=6&LS_mode=MERGE&LS_group=SUB-sub4&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=7&LS_op=add&LS_subId=6&LS_mode=MERGE&LS_item=SUB-sub4&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,5,1,10
                 SUBOK,6,1,10
                 U,5,1,ACTIVE|100|fmt|#|i1|f1|#|MERGE|#|#
@@ -2286,18 +2286,18 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 control\r
-                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 MPNOK,4,sub4
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 U,2,1,SUB-sub4|ADD
                 control\r
-                LS_reqId=7&LS_op=add&LS_subId=6&LS_mode=MERGE&LS_group=SUB-sub4&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=7&LS_op=add&LS_subId=6&LS_mode=MERGE&LS_item=SUB-sub4&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,5,1,10
                 SUBOK,6,1,10
                 U,5,1,ACTIVE|100|fmt|#|i1|f1|#|MERGE|#|#
@@ -2366,18 +2366,18 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 control\r
-                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 MPNOK,4,sub4
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 U,2,1,SUB-sub4|ADD
                 control\r
-                LS_reqId=7&LS_op=add&LS_subId=6&LS_mode=MERGE&LS_group=SUB-sub4&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=7&LS_op=add&LS_subId=6&LS_mode=MERGE&LS_item=SUB-sub4&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,5,1,10
                 SUBOK,6,1,10
                 U,5,1,ACTIVE|100|fmt|#|i1|f1|#|MERGE|#|#
@@ -2446,18 +2446,18 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 control\r
-                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 MPNOK,4,sub4
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 U,2,1,SUB-sub4|ADD
                 control\r
-                LS_reqId=7&LS_op=add&LS_subId=6&LS_mode=MERGE&LS_group=SUB-sub4&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=7&LS_op=add&LS_subId=6&LS_mode=MERGE&LS_item=SUB-sub4&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,5,1,10
                 SUBOK,6,1,10
                 U,5,1,ACTIVE|100|fmt|#|i1|f1|#|MERGE|#|#
@@ -2526,18 +2526,18 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 control\r
-                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 MPNOK,4,sub4
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 U,2,1,SUB-sub4|ADD
                 control\r
-                LS_reqId=7&LS_op=add&LS_subId=6&LS_mode=MERGE&LS_group=SUB-sub4&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=7&LS_op=add&LS_subId=6&LS_mode=MERGE&LS_item=SUB-sub4&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,5,1,10
                 SUBOK,6,1,10
                 U,5,1,ACTIVE|100|fmt|#|i1|f1|#|MERGE|#|#
@@ -2608,18 +2608,18 @@ final class MpnSubscriptionTests: BaseTestCase {
         asyncAssert(after: 0.5) {
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 control\r
-                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 MPNOK,4,sub4
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 U,2,1,SUB-sub4|ADD
                 control\r
-                LS_reqId=7&LS_op=add&LS_subId=6&LS_mode=MERGE&LS_group=SUB-sub4&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=7&LS_op=add&LS_subId=6&LS_mode=MERGE&LS_item=SUB-sub4&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,5,1,10
                 SUBOK,6,1,10
                 U,5,1,ACTIVE|100|fmt|#|i1|f1|#|MERGE|#|#
@@ -2708,7 +2708,7 @@ final class MpnSubscriptionTests: BaseTestCase {
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,3,1,10
                 EOS,2,1
                 """, self.io.trace)
@@ -2744,10 +2744,10 @@ final class MpnSubscriptionTests: BaseTestCase {
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 U,2,1,SUB-sub4|
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=SUB-sub4&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=SUB-sub4&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,3,1,10
                 SUBOK,4,1,10
                 EOS,2,1
@@ -2794,7 +2794,7 @@ final class MpnSubscriptionTests: BaseTestCase {
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,3,1,10
                 U,3,1,ACTIVE|100|fmt|trg|i1|f1|adt|MERGE|unlimited|unlimited
                 EOS,2,1
@@ -2843,10 +2843,10 @@ final class MpnSubscriptionTests: BaseTestCase {
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 U,2,1,SUB-sub4|ADD
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=SUB-sub4&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=SUB-sub4&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,3,1,10
                 U,3,1,ACTIVE|100|fmt|trg|i1|f1|adt|MERGE|unlimited|unlimited
                 EOS,2,1
@@ -2907,10 +2907,10 @@ final class MpnSubscriptionTests: BaseTestCase {
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 U,2,1,SUB-sub4|ADD
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=SUB-sub4&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=SUB-sub4&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,3,1,10
                 SUBOK,4,1,10
                 U,3,1,ACTIVE|100|fmt|trg|i1|f1|adt|MERGE|unlimited|unlimited
@@ -2977,14 +2977,14 @@ final class MpnSubscriptionTests: BaseTestCase {
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,3,1,10
                 EOS,2,1
                 U,2,1,SUB-sub3|UPDATE
                 U,3,1,ACTIVE|100|fmt|trg|i1|f1|adt|MERGE|unlimited|unlimited
                 U,2,1,SUB-sub4|ADD
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=SUB-sub4&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=SUB-sub4&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,4,1,10
                 U,2,1,SUB-sub4|UPDATE
                 U,4,1,ACTIVE|100|fmt|trg|i1|f1|adt|MERGE|unlimited|unlimited
@@ -3050,12 +3050,12 @@ final class MpnSubscriptionTests: BaseTestCase {
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,3,1,10
                 EOS,2,1
                 U,2,1,SUB-sub4|ADD
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=SUB-sub4&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=SUB-sub4&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,4,1,10
                 U,2,1,SUB-sub4|UPDATE
                 U,4,1,ACTIVE|100|fmt|trg|i1|f1|adt|MERGE|unlimited|unlimited
@@ -3109,12 +3109,12 @@ final class MpnSubscriptionTests: BaseTestCase {
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=4&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,3,1,10
                 EOS,2,1
                 U,2,1,SUB-sub4|ADD
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=SUB-sub4&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=SUB-sub4&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,4,1,10
                 U,2,1,SUB-sub4|UPDATE
                 U,4,1,TRIGGERED|100|fmt|trg|i1|f1|adt|MERGE|unlimited|unlimited
@@ -3191,17 +3191,17 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,4,1,10
                 U,4,1,ACTIVE|100|fmt1-sub3|#|i1|f1|#|MERGE|#|#
                 U,2,1,SUB-sub4|ADD
                 control\r
-                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_group=SUB-sub4&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_item=SUB-sub4&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 EOS,2,1
                 U,4,1,ACTIVE|100|fmt2-sub3|#|i1|f1|#|MERGE|#|#
                 SUBOK,5,1,10
@@ -3287,20 +3287,20 @@ final class MpnSubscriptionTests: BaseTestCase {
             
             XCTAssertEqual(self.preamble + """
                 control\r
-                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 control\r
-                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_group=i1&LS_schema=f1&PN_deviceId=devid&PN_notificationFormat=fmt
+                LS_reqId=5&LS_op=activate&LS_subId=4&LS_mode=MERGE&LS_item=i1&LS_field=f1&PN_deviceId=devid&PN_notificationFormat=fmt
                 MPNOK,3,sub3
                 MPNOK,4,sub4
                 SUBCMD,2,1,2,1,2
                 U,2,1,SUB-sub3|ADD
                 control\r
-                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_group=SUB-sub3&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=6&LS_op=add&LS_subId=5&LS_mode=MERGE&LS_item=SUB-sub3&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,5,1,10
                 U,5,1,ACTIVE|100|fmt1|#|i1|f1|#|MERGE|#|#
                 U,2,1,SUB-sub4|ADD
                 control\r
-                LS_reqId=7&LS_op=add&LS_subId=6&LS_mode=MERGE&LS_group=SUB-sub4&LS_schema=status%20status_timestamp%20notification_format%20trigger%20group%20schema%20adapter%20mode%20requested_buffer_size%20requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
+                LS_reqId=7&LS_op=add&LS_subId=6&LS_mode=MERGE&LS_item=SUB-sub4&LS_field=status&status_timestamp&notification_format&trigger&group&schema&adapter&mode&requested_buffer_size&requested_max_frequency&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false
                 SUBOK,6,1,10
                 U,6,1,TRIGGERED|100|fmt2|#|i1|f1|#|MERGE|#|#
                 """, self.io.trace)
@@ -3358,13 +3358,13 @@ final class MpnSubscriptionTests: BaseTestCase {
             copy.items = restored.items
 
             restored.notificationFormat = "new format"
-            XCTAssertTrue(self.io.trace.contains("LS_op=pn_reconf&LS_mode=MERGE&LS_group=i2%20i1&LS_schema=f2%20f1&LS_data_adapter=adt"))
+            XCTAssertTrue(self.io.trace.contains("LS_op=pn_reconf&LS_mode=MERGE&LS_item=i2&i1&LS_field=f2&f1&LS_data_adapter=adt"))
 
             copy.notificationFormat = "copy format"
             self.client.subscribeMPN(copy, coalescing: true)
             XCTAssertTrue(self.io.trace.components(separatedBy: "\n").contains {
                 $0.contains("LS_op=activate") &&
-                $0.contains("LS_group=i2%20i1&LS_schema=f2%20f1&LS_data_adapter=adt") &&
+                $0.contains("LS_item=i2&i1&LS_field=f2&f1&LS_data_adapter=adt") &&
                 $0.contains("PN_notificationFormat=copy%20format") &&
                 $0.contains("PN_coalescing=true")
             })

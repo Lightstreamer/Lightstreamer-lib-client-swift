@@ -17,7 +17,40 @@ import Foundation
 
 class LsRequestBuilder: CustomStringConvertible {
     
-    var params = [URLQueryItem]()
+    private enum Parameter: CustomStringConvertible {
+        case scalar(String, String)
+        case names(String, [String])
+
+        var description: String {
+            switch self {
+            case .scalar(let key, let value):
+                return "\(key)=\(value)"
+            case .names(let key, let names):
+                return "\(key)=\(names)"
+            }
+        }
+
+        var encodedString: String {
+            switch self {
+            case .scalar(let key, let value):
+                let encodedKey = key.addingPercentEncoding(withAllowedCharacters: LsRequestBuilder.unreserved)!
+                let encodedValue = value.addingPercentEncoding(withAllowedCharacters: LsRequestBuilder.unreserved)!
+                return encodedKey + "=" + encodedValue
+            case .names(let key, let names):
+                // The ampersands are TLCP syntax, not part of a query-item value.
+                let encodedKey = key.addingPercentEncoding(withAllowedCharacters: LsRequestBuilder.unreserved)!
+                let encodedNames = names.map {
+                    $0.addingPercentEncoding(withAllowedCharacters: LsRequestBuilder.unreserved)!
+                }
+                return encodedKey + "=" + encodedNames.joined(separator: "&")
+            }
+        }
+    }
+
+    private var params = [Parameter]()
+    private static let unreserved = CharacterSet(
+        charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~"
+    )
     
     public var description: String {
         String(describing: params)
@@ -63,12 +96,12 @@ class LsRequestBuilder: CustomStringConvertible {
         addParam("LS_mode", val)
     }
     
-    func LS_group(_ val: String) {
-        addParam("LS_group", val)
+    func LS_item(_ names: [String]) {
+        params.append(.names("LS_item", names))
     }
     
-    func LS_schema(_ val: String) {
-        addParam("LS_schema", val)
+    func LS_field(_ names: [String]) {
+        params.append(.names("LS_field", names))
     }
     
     func LS_data_adapter(_ val: String) {
@@ -220,7 +253,7 @@ class LsRequestBuilder: CustomStringConvertible {
     }
     
     func addParam(_ key: String, _ val: String) {
-        params.append(URLQueryItem(name: key, value: val))
+        params.append(.scalar(key, val))
     }
     
     func addParam(_ key: String, _ val: Int) {
@@ -236,8 +269,6 @@ class LsRequestBuilder: CustomStringConvertible {
     }
     
     var encodedString: String {
-        var components = URLComponents()
-        components.queryItems = params
-        return components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B") ?? ""
+        params.map { $0.encodedString }.joined(separator: "&")
     }
 }

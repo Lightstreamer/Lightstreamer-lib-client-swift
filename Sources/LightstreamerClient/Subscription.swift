@@ -959,7 +959,7 @@ public class Subscription: CustomStringConvertible {
 
      **Lifecycle:** this property can only be set while the Subscription instance is in its "inactive" state.
 
-     - Precondition: the field names in the "Field List" must not contain a space or be empty/nil.
+     - Precondition: each field name must be non-empty. Names may contain any character.
 
      - Precondition: the Subscription must be currently "inactive".
 
@@ -1024,7 +1024,7 @@ public class Subscription: CustomStringConvertible {
 
      **Lifecycle:** this property can only be set while the Subscription instance is in its "inactive" state.
 
-     - Precondition: the field names in the list must not contain a space or be empty/nil.
+     - Precondition: each field name must be non-empty. Names may contain any character.
 
      - Precondition: the Subscription must be currently "inactive".
      */
@@ -1054,7 +1054,7 @@ public class Subscription: CustomStringConvertible {
 
      **Lifecycle:** this property can only be set while the Subscription instance is in its "inactive" state.
 
-     - Precondition: the item names in the "Item List" must not contain a space or be a number or be empty/nil.
+     - Precondition: each item name must be non-empty. Names may contain any character.
 
      - Precondition: the Subscription must be currently "inactive".
      */
@@ -1758,11 +1758,11 @@ func notEmpty(_ newValue: [String]?) -> Bool {
 }
 
 func isValidItem(_ item: String) -> Bool {
-    !item.isEmpty && !item.contains(where: { $0 == " " }) && !CharacterSet(charactersIn: item).isSubset(of: CharacterSet(charactersIn: "0123456789"))
+    !item.isEmpty
 }
 
 func isValidField(_ field: String) -> Bool {
-    !field.isEmpty && !field.contains(where: { $0 == " " })
+    !field.isEmpty
 }
 
 func allValidFields(_ newValue: [String]?) -> Bool {

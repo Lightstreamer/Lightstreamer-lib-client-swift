@@ -63,11 +63,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f3%20f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f3&f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
                 """, self.io.trace)
             XCTAssertEqual("""
                 onSUB
@@ -157,11 +157,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|UPDATE
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f3%20f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f3&f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
                 """, self.io.trace)
             XCTAssertEqual("""
                 onSUB
@@ -228,7 +228,7 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|DELETE
                 """, self.io.trace)
@@ -286,8 +286,8 @@ final class Update2LevelTests: BaseTestCase {
         XCTAssertEqual(4, sub.commandPosition)
         XCTAssertEqual(2, sub.nItems)
         XCTAssertEqual(4, sub.nFields)
-        ws.onText("U,1,1,a|b|123|ADD")
-        XCTAssertEqual(.s3, state(client, subId: 1, itemPos: 1, keyName: "123"))
+        ws.onText("U,1,1,a|b|$|ADD")
+        XCTAssertEqual(.s3, state(client, subId: 1, itemPos: 1, keyName: ""))
         
         asyncAssert {
             XCTAssertEqual("""
@@ -298,14 +298,14 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
-                U,1,1,a|b|123|ADD
+                U,1,1,a|b|$|ADD
                 """, self.io.trace)
             XCTAssertEqual("""
                 onSUB
                 onU 0
-                onError2Level 123 14 The received key value is not a valid name for an Item
+                onError2Level  14 The received key value is not a valid name for an Item
                 """, self.subDelegate.trace)
             
             XCTAssertEqual(1, self.subDelegate.updates.count)
@@ -314,17 +314,17 @@ final class Update2LevelTests: BaseTestCase {
             XCTAssertEqual("i1", u.itemName)
             XCTAssertEqual(1, u.itemPos)
             XCTAssertEqual(false, u.isSnapshot)
-            XCTAssertEqual(["f1":"a","f2":"b","key":"123","command":"ADD"], u.changedFields)
-            XCTAssertEqual([1:"a",2:"b",3:"123",4:"ADD"], u.changedFieldsByPositions)
-            XCTAssertEqual(["f1":"a","f2":"b","key":"123","command":"ADD"], u.fields)
-            XCTAssertEqual([1:"a",2:"b",3:"123",4:"ADD"], u.fieldsByPositions)
+            XCTAssertEqual(["f1":"a","f2":"b","key":"","command":"ADD"], u.changedFields)
+            XCTAssertEqual([1:"a",2:"b",3:"",4:"ADD"], u.changedFieldsByPositions)
+            XCTAssertEqual(["f1":"a","f2":"b","key":"","command":"ADD"], u.fields)
+            XCTAssertEqual([1:"a",2:"b",3:"",4:"ADD"], u.fieldsByPositions)
             XCTAssertEqual("a", u.value(withFieldPos: 1))
             XCTAssertEqual("b", u.value(withFieldPos: 2))
-            XCTAssertEqual("123", u.value(withFieldPos: 3))
+            XCTAssertEqual("", u.value(withFieldPos: 3))
             XCTAssertEqual("ADD", u.value(withFieldPos: 4))
             XCTAssertEqual("a", u.value(withFieldName: "f1"))
             XCTAssertEqual("b", u.value(withFieldName: "f2"))
-            XCTAssertEqual("123", u.value(withFieldName: "key"))
+            XCTAssertEqual("", u.value(withFieldName: "key"))
             XCTAssertEqual("ADD", u.value(withFieldName: "command"))
             XCTAssertEqual(true, u.isValueChanged(withFieldPos: 1))
             XCTAssertEqual(true, u.isValueChanged(withFieldPos: 2))
@@ -357,10 +357,10 @@ final class Update2LevelTests: BaseTestCase {
         XCTAssertEqual(4, sub.commandPosition)
         XCTAssertEqual(2, sub.nItems)
         XCTAssertEqual(4, sub.nFields)
-        ws.onText("U,1,1,a|b|123|ADD")
-        XCTAssertEqual(.s3, state(client, subId: 1, itemPos: 1, keyName: "123"))
+        ws.onText("U,1,1,a|b|$|ADD")
+        XCTAssertEqual(.s3, state(client, subId: 1, itemPos: 1, keyName: ""))
         ws.onText("U,1,1,A|B||UPDATE")
-        XCTAssertEqual(.s3, state(client, subId: 1, itemPos: 1, keyName: "123"))
+        XCTAssertEqual(.s3, state(client, subId: 1, itemPos: 1, keyName: ""))
         
         asyncAssert {
             XCTAssertEqual("""
@@ -371,15 +371,15 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
-                U,1,1,a|b|123|ADD
+                U,1,1,a|b|$|ADD
                 U,1,1,A|B||UPDATE
                 """, self.io.trace)
             XCTAssertEqual("""
                 onSUB
                 onU 0
-                onError2Level 123 14 The received key value is not a valid name for an Item
+                onError2Level  14 The received key value is not a valid name for an Item
                 onU 1
                 """, self.subDelegate.trace)
             
@@ -389,17 +389,17 @@ final class Update2LevelTests: BaseTestCase {
             XCTAssertEqual("i1", u.itemName)
             XCTAssertEqual(1, u.itemPos)
             XCTAssertEqual(false, u.isSnapshot)
-            XCTAssertEqual(["f1":"a","f2":"b","key":"123","command":"ADD"], u.changedFields)
-            XCTAssertEqual([1:"a",2:"b",3:"123",4:"ADD"], u.changedFieldsByPositions)
-            XCTAssertEqual(["f1":"a","f2":"b","key":"123","command":"ADD"], u.fields)
-            XCTAssertEqual([1:"a",2:"b",3:"123",4:"ADD"], u.fieldsByPositions)
+            XCTAssertEqual(["f1":"a","f2":"b","key":"","command":"ADD"], u.changedFields)
+            XCTAssertEqual([1:"a",2:"b",3:"",4:"ADD"], u.changedFieldsByPositions)
+            XCTAssertEqual(["f1":"a","f2":"b","key":"","command":"ADD"], u.fields)
+            XCTAssertEqual([1:"a",2:"b",3:"",4:"ADD"], u.fieldsByPositions)
             XCTAssertEqual("a", u.value(withFieldPos: 1))
             XCTAssertEqual("b", u.value(withFieldPos: 2))
-            XCTAssertEqual("123", u.value(withFieldPos: 3))
+            XCTAssertEqual("", u.value(withFieldPos: 3))
             XCTAssertEqual("ADD", u.value(withFieldPos: 4))
             XCTAssertEqual("a", u.value(withFieldName: "f1"))
             XCTAssertEqual("b", u.value(withFieldName: "f2"))
-            XCTAssertEqual("123", u.value(withFieldName: "key"))
+            XCTAssertEqual("", u.value(withFieldName: "key"))
             XCTAssertEqual("ADD", u.value(withFieldName: "command"))
             XCTAssertEqual(true, u.isValueChanged(withFieldPos: 1))
             XCTAssertEqual(true, u.isValueChanged(withFieldPos: 2))
@@ -416,15 +416,15 @@ final class Update2LevelTests: BaseTestCase {
             XCTAssertEqual(false, u.isSnapshot)
             XCTAssertEqual(["f1":"A","f2":"B","command":"UPDATE"], u.changedFields)
             XCTAssertEqual([1:"A",2:"B",4:"UPDATE"], u.changedFieldsByPositions)
-            XCTAssertEqual(["f1":"A","f2":"B","key":"123","command":"UPDATE"], u.fields)
-            XCTAssertEqual([1:"A",2:"B",3:"123",4:"UPDATE"], u.fieldsByPositions)
+            XCTAssertEqual(["f1":"A","f2":"B","key":"","command":"UPDATE"], u.fields)
+            XCTAssertEqual([1:"A",2:"B",3:"",4:"UPDATE"], u.fieldsByPositions)
             XCTAssertEqual("A", u.value(withFieldPos: 1))
             XCTAssertEqual("B", u.value(withFieldPos: 2))
-            XCTAssertEqual("123", u.value(withFieldPos: 3))
+            XCTAssertEqual("", u.value(withFieldPos: 3))
             XCTAssertEqual("UPDATE", u.value(withFieldPos: 4))
             XCTAssertEqual("A", u.value(withFieldName: "f1"))
             XCTAssertEqual("B", u.value(withFieldName: "f2"))
-            XCTAssertEqual("123", u.value(withFieldName: "key"))
+            XCTAssertEqual("", u.value(withFieldName: "key"))
             XCTAssertEqual("UPDATE", u.value(withFieldName: "command"))
             XCTAssertEqual(true, u.isValueChanged(withFieldPos: 1))
             XCTAssertEqual(true, u.isValueChanged(withFieldPos: 2))
@@ -457,8 +457,8 @@ final class Update2LevelTests: BaseTestCase {
         XCTAssertEqual(4, sub.commandPosition)
         XCTAssertEqual(2, sub.nItems)
         XCTAssertEqual(4, sub.nFields)
-        ws.onText("U,1,1,a|b|123|ADD")
-        XCTAssertEqual(.s3, state(client, subId: 1, itemPos: 1, keyName: "123"))
+        ws.onText("U,1,1,a|b|$|ADD")
+        XCTAssertEqual(.s3, state(client, subId: 1, itemPos: 1, keyName: ""))
         ws.onText("U,1,1,A|B||DELETE")
         
         asyncAssert {
@@ -470,15 +470,15 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
-                U,1,1,a|b|123|ADD
+                U,1,1,a|b|$|ADD
                 U,1,1,A|B||DELETE
                 """, self.io.trace)
             XCTAssertEqual("""
                 onSUB
                 onU 0
-                onError2Level 123 14 The received key value is not a valid name for an Item
+                onError2Level  14 The received key value is not a valid name for an Item
                 onU 1
                 """, self.subDelegate.trace)
             
@@ -488,17 +488,17 @@ final class Update2LevelTests: BaseTestCase {
             XCTAssertEqual("i1", u.itemName)
             XCTAssertEqual(1, u.itemPos)
             XCTAssertEqual(false, u.isSnapshot)
-            XCTAssertEqual(["f1":"a","f2":"b","key":"123","command":"ADD"], u.changedFields)
-            XCTAssertEqual([1:"a",2:"b",3:"123",4:"ADD"], u.changedFieldsByPositions)
-            XCTAssertEqual(["f1":"a","f2":"b","key":"123","command":"ADD"], u.fields)
-            XCTAssertEqual([1:"a",2:"b",3:"123",4:"ADD"], u.fieldsByPositions)
+            XCTAssertEqual(["f1":"a","f2":"b","key":"","command":"ADD"], u.changedFields)
+            XCTAssertEqual([1:"a",2:"b",3:"",4:"ADD"], u.changedFieldsByPositions)
+            XCTAssertEqual(["f1":"a","f2":"b","key":"","command":"ADD"], u.fields)
+            XCTAssertEqual([1:"a",2:"b",3:"",4:"ADD"], u.fieldsByPositions)
             XCTAssertEqual("a", u.value(withFieldPos: 1))
             XCTAssertEqual("b", u.value(withFieldPos: 2))
-            XCTAssertEqual("123", u.value(withFieldPos: 3))
+            XCTAssertEqual("", u.value(withFieldPos: 3))
             XCTAssertEqual("ADD", u.value(withFieldPos: 4))
             XCTAssertEqual("a", u.value(withFieldName: "f1"))
             XCTAssertEqual("b", u.value(withFieldName: "f2"))
-            XCTAssertEqual("123", u.value(withFieldName: "key"))
+            XCTAssertEqual("", u.value(withFieldName: "key"))
             XCTAssertEqual("ADD", u.value(withFieldName: "command"))
             XCTAssertEqual(true, u.isValueChanged(withFieldPos: 1))
             XCTAssertEqual(true, u.isValueChanged(withFieldPos: 2))
@@ -515,15 +515,15 @@ final class Update2LevelTests: BaseTestCase {
             XCTAssertEqual(false, u.isSnapshot)
             XCTAssertEqual(["f1":nil,"f2":nil,"command":"DELETE"], u.changedFields)
             XCTAssertEqual([1:nil,2:nil,4:"DELETE"], u.changedFieldsByPositions)
-            XCTAssertEqual(["f1":nil,"f2":nil,"key":"123","command":"DELETE"], u.fields)
-            XCTAssertEqual([1:nil,2:nil,3:"123",4:"DELETE"], u.fieldsByPositions)
+            XCTAssertEqual(["f1":nil,"f2":nil,"key":"","command":"DELETE"], u.fields)
+            XCTAssertEqual([1:nil,2:nil,3:"",4:"DELETE"], u.fieldsByPositions)
             XCTAssertEqual(nil, u.value(withFieldPos: 1))
             XCTAssertEqual(nil, u.value(withFieldPos: 2))
-            XCTAssertEqual("123", u.value(withFieldPos: 3))
+            XCTAssertEqual("", u.value(withFieldPos: 3))
             XCTAssertEqual("DELETE", u.value(withFieldPos: 4))
             XCTAssertEqual(nil, u.value(withFieldName: "f1"))
             XCTAssertEqual(nil, u.value(withFieldName: "f2"))
-            XCTAssertEqual("123", u.value(withFieldName: "key"))
+            XCTAssertEqual("", u.value(withFieldName: "key"))
             XCTAssertEqual("DELETE", u.value(withFieldName: "command"))
             XCTAssertEqual(true, u.isValueChanged(withFieldPos: 1))
             XCTAssertEqual(true, u.isValueChanged(withFieldPos: 2))
@@ -569,11 +569,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f3%20f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f3&f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
                 U,1,1,|||UPDATE
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -668,11 +668,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f3%20f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f3&f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
                 REQERR,2,-5,error
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -746,11 +746,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f3%20f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f3&f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
                 REQERR,2,-5,error
                 U,1,1,A|B||UPDATE
                 """, self.io.trace)
@@ -848,11 +848,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f3%20f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f3&f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
                 U,1,1,|||DELETE
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -953,11 +953,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
                 SUBOK,2,1,2
                 U,2,1,c|d
                 U,1,1,A|||UPDATE
@@ -1145,11 +1145,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
                 SUBOK,2,1,2
                 U,2,1,c|d
                 U,1,1,A|||UPDATE
@@ -1299,11 +1299,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
                 SUBOK,2,1,2
                 U,1,1,A|||DELETE
                 control\r
@@ -1415,11 +1415,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
                 SUBOK,2,1,2
                 U,2,1,c|d
                 U,1,1,|||DELETE
@@ -1570,18 +1570,18 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=true&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=true&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f3%20f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f3&f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
                 EOS,1,1
                 U,1,1,c|d|item2|ADD
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_group=item2&LS_schema=f3%20f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_item=item2&LS_field=f3&f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
                 U,1,2,e|f|item3|ADD
                 control\r
-                LS_reqId=4&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=item3&LS_schema=f3%20f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
+                LS_reqId=4&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=item3&LS_field=f3&f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
                 """, self.io.trace)
             XCTAssertEqual("""
                 onSUB
@@ -1707,14 +1707,14 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f3%20f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f3&f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
                 U,1,2,c|d|item2|ADD
                 control\r
-                LS_reqId=3&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_group=item2&LS_schema=f3%20f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
+                LS_reqId=3&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_item=item2&LS_field=f3&f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
                 SUBOK,2,1,2
                 SUBOK,3,1,2
                 CS,1,1
@@ -1722,7 +1722,7 @@ final class Update2LevelTests: BaseTestCase {
                 LS_reqId=4&LS_subId=2&LS_op=delete&LS_ack=false
                 U,1,1,|||UPDATE
                 control\r
-                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=item1&LS_schema=f3%20f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
+                LS_reqId=5&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=item1&LS_field=f3&f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
                 U,1,2,|||UPDATE
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -1874,11 +1874,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f3%20f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f3&f4&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
                 SUBOK,2,1,2
                 UNSUB,2
                 U,1,1,|||DELETE
@@ -1970,7 +1970,7 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 OV,1,1,5
                 """, self.io.trace)
@@ -2017,11 +2017,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_data_adapter=adapter2&LS_snapshot=true&LS_ack=false
                 SUBOK,2,1,2
                 U,2,1,c|d
                 OV,2,1,5
@@ -2063,11 +2063,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 """, self.io.trace)
             XCTAssertEqual("""
                 onSUB
@@ -2103,11 +2103,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 CONF,1,111,filtered
                 """, self.io.trace)
             XCTAssertEqual("""
@@ -2146,11 +2146,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBOK,2,1,2
                 CONF,2,111,filtered
                 """, self.io.trace)
@@ -2191,11 +2191,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBOK,2,1,2
                 CONF,1,111,filtered
                 CONF,2,111,filtered
@@ -2237,11 +2237,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBOK,2,1,2
                 CONF,1,111,filtered
                 CONF,2,110,filtered
@@ -2283,11 +2283,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBOK,2,1,2
                 CONF,1,111,filtered
                 CONF,2,112,filtered
@@ -2329,11 +2329,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBOK,2,1,2
                 control\r
                 LS_reqId=3&LS_subId=2&LS_op=reconf&LS_requested_max_frequency=456.0
@@ -2379,11 +2379,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBOK,2,1,2
                 CONF,1,111,filtered
                 CONF,2,unlimited,filtered
@@ -2434,11 +2434,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBOK,2,1,2
                 CONF,1,unlimited,filtered
                 CONF,2,111,filtered
@@ -2485,11 +2485,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBOK,2,1,2
                 CONF,1,111,filtered
                 CONF,2,unlimited,filtered
@@ -2537,11 +2537,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBOK,2,1,2
                 CONF,1,111,filtered
                 CONF,2,unlimited,filtered
@@ -2591,11 +2591,11 @@ final class Update2LevelTests: BaseTestCase {
                 WSOK
                 CONOK,sid,70000,5000,*
                 control\r
-                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBCMD,1,2,4,3,4
                 U,1,1,a|b|item1|ADD
                 control\r
-                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_requested_max_frequency=123.0&LS_ack=false
                 SUBOK,2,1,2
                 CONF,2,unlimited,filtered
                 U,1,1,a|b|item1|DELETE
