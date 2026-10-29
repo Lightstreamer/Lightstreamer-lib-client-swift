@@ -51,6 +51,33 @@ final class CreateHTTPTests: BaseTestCase {
         }
     }
     
+    func testCONERR12_Disconnect() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        client.connect()
+
+        http.onText("CONERR,12,Metadata Adapter requires a newer SDK")
+
+        asyncAssert {
+            XCTAssertEqual("""
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_cause=api
+                CONERR,12,Metadata Adapter requires a newer SDK
+                http.dispose
+                """, self.http.trace)
+            XCTAssertEqual("""
+                CONNECTING
+                DISCONNECTED
+                onServerError 12 Metadata Adapter requires a newer SDK
+                """, self.delegate.trace)
+            XCTAssertEqual("""
+                transport.timeout 4000
+                cancel transport.timeout
+                """, self.scheduler.trace)
+            XCTAssertEqual(self.client.status, .DISCONNECTED)
+        }
+    }
+
     func testCONERR_Retry() {
         client = newClient("http://server")
         client.addDelegate(delegate)

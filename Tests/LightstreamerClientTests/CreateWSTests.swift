@@ -59,6 +59,38 @@ final class CreateWSTests: BaseTestCase {
         }
     }
     
+    func testCONERR12_Disconnect() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        client.connect()
+
+        ws.onOpen()
+        ws.onText("WSOK")
+        ws.onText("CONERR,12,Metadata Adapter requires a newer SDK")
+
+        asyncAssert {
+            XCTAssertEqual("""
+                ws.init http://server/lightstreamer
+                wsok
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
+                WSOK
+                CONERR,12,Metadata Adapter requires a newer SDK
+                ws.dispose
+                """, self.ws.trace)
+            XCTAssertEqual("", self.http.trace)
+            XCTAssertEqual("""
+                CONNECTING
+                DISCONNECTED
+                onServerError 12 Metadata Adapter requires a newer SDK
+                """, self.delegate.trace)
+            XCTAssertEqual("""
+                transport.timeout 4000
+                cancel transport.timeout
+                """, self.scheduler.trace)
+            XCTAssertEqual(self.client.status, .DISCONNECTED)
+        }
+    }
+
     func testCONERR_Retry() {
         client = newClient("http://server")
         client.addDelegate(delegate)

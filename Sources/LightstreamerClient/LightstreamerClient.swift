@@ -63,6 +63,8 @@ public protocol ClientDelegate: AnyObject {
 
      - 11 - streaming is not available because of Server license restrictions (this can only happen with special licenses).
 
+     - 12 - The Metadata Adapter mounted in the specified Adapter Set is incompatible with this protocol version because it uses the older callback-based Java In-Process Adapter SDK.
+
      - 21 - a request for this session has unexpectedly reached a wrong Server instance, which suggests that a routing issue may be in place.
 
      - 30-41 - the current connection or the whole session has been closed by external agents; the possible cause may be:

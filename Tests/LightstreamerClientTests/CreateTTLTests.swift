@@ -101,6 +101,40 @@ cancel transport.timeout
         }
     }
     
+    func testCONERR12_Disconnect() {
+        client = newClientWithMergedTraces("http://server")
+        client.addDelegate(delegate)
+        client.connect()
+
+        simulateError5WithoutCheckingTraces()
+        http.onText("CONERR,12,Metadata Adapter requires a newer SDK")
+
+        asyncAssert {
+            XCTAssertEqual("""
+                ws.init http://server/lightstreamer
+                wsok
+                create_session\r\nLS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
+                WSOK
+                CONERR,5,server busy
+                ws.dispose
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
+                LS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_cause=ws.conerr.5
+                CONERR,12,Metadata Adapter requires a newer SDK
+                http.dispose
+                """, self.io.trace)
+            XCTAssertEqual(self.delegatePreamble + """
+                CONNECTING
+                DISCONNECTED
+                onServerError 12 Metadata Adapter requires a newer SDK
+                """, self.delegate.trace)
+            XCTAssertEqual(self.schedulerPreamble + """
+                transport.timeout 60000
+                cancel transport.timeout
+                """, self.scheduler.trace)
+            XCTAssertEqual(self.client.status, .DISCONNECTED)
+        }
+    }
+
     func testCONERR_Retry() {
         client = newClientWithMergedTraces("http://server")
         client.addDelegate(delegate)

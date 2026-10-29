@@ -259,7 +259,9 @@ public protocol SubscriptionDelegate: AnyObject {
      Note that, in order to perform a new subscription attempt, `LightstreamerClient.unsubscribe(_:)` and `LightstreamerClient.subscribe(_:)` should be issued again, even if no change to the `Subscription` attributes has been applied.
      
      The error code can be one of the following:
-     
+
+     - 6 - Cannot evaluate a subscription request because the Data Adapter is disabled (only raised with Data Adapter interface version 9 or later).
+
      - 15 - "key" field not specified in the field list for a COMMAND mode subscription
      
      - 16 - "command" field not specified in the field list for a COMMAND mode subscription
@@ -285,7 +287,11 @@ public protocol SubscriptionDelegate: AnyObject {
      - 29 - RAW mode is not allowed by the current license terms (for special licenses only)
      
      - 30 - subscriptions are not allowed by the current license terms (for special licenses only)
-     
+
+     - 63 - Subscription refused by the Data Adapter (only raised with Data Adapter interface version 9 or later).
+
+     - 64 - An unchecked exception was thrown in the Data Adapter while managing a subscription request (only raised with Data Adapter interface version 9 or later).
+
      - 66 - an unexpected exception was thrown by the Metadata Adapter while authorizing the connection
      
      - 68 - the Server could not fulfill the request because of an internal error.
