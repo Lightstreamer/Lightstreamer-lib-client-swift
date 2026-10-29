@@ -218,6 +218,30 @@ public protocol ClientDelegate: AnyObject {
      - SeeAlso: `LightstreamerClient.connectionOptions`
      */
     func client(_ client: LightstreamerClient, didChangeProperty property: String)
+
+    /**
+     Event handler called for every Data Adapter state notification for each Data Adapter included in the session's Adapter Set.
+
+     The state values are `started`, `disabled`, `resumed`, `restarted`, and `terminated`. The expected sequence for each Data Adapter
+     is `started`, followed by zero or more repetitions of `disabled` followed by either `resumed` or `restarted`.
+     A `terminated` notification may occur at any time and may be followed by a new occurrence of that sequence.
+     Adapters based on older Adapter Interface versions may send only `started` and `terminated` notifications.
+
+     Notifications are independent of update activity: updates may precede the initial state notification and may still arrive while
+     the Data Adapter is disabled. Adapter state changes do not implicitly change the stale/resumed state of subscribed items.
+
+     As with other client events, notifications are dispatched asynchronously on the client's callback queue.
+     The default implementation does nothing.
+
+     - Parameter client: The `LightstreamerClient` instance.
+     - Parameter state: The state value received in the message.
+     - Parameter dataAdapterName: The Data Adapter name received in the message.
+     */
+    func client(_ client: LightstreamerClient, didChangeDataAdapterState state: String, forDataAdapter dataAdapterName: String)
+}
+
+public extension ClientDelegate {
+    func client(_ client: LightstreamerClient, didChangeDataAdapterState state: String, forDataAdapter dataAdapterName: String) {}
 }
 
 /**
@@ -2222,6 +2246,12 @@ public class LightstreamerClient {
                     let n = Double(bw)!
                     evtCONS(.limited(n))
                 }
+            } else if line.starts(with: "DATA_STATE,") {
+                // DATA_STATE,<state>,<data adapter name>
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
+                let state = String(args[1])
+                let dataAdapterName = String(args[2])
+                evtDATA_STATE(state, dataAdapterName)
             } else if line.starts(with: "MSGDONE") {
                 // MSGDONE,(*|<sequence>),<prog>,<response>
                 let args = line.split(separator: ",", omittingEmptySubsequences: false)
@@ -4408,6 +4438,30 @@ public class LightstreamerClient {
         }
     }
     
+    func evtDATA_STATE(_ state: String, _ dataAdapterName: String) {
+        synchronized {
+            let evt = "DATA_STATE"
+            if protocolLogger.isDebugEnabled {
+                protocolLogger.debug("\(evt) \(state) \(dataAdapterName)")
+            }
+            if inPushing() {
+                if isFreshData() {
+                    trace(evt)
+                    doDATA_STATE(state, dataAdapterName)
+                    if inStreaming() {
+                        evtRestartKeepalive()
+                    }
+                } else {
+                    trace(evt, cond: "stale")
+                    onStaleData()
+                    if inStreaming() {
+                        evtRestartKeepalive()
+                    }
+                }
+            }
+        }
+    }
+
     func evtMSGDONE(_ sequence: String, _ prog: Int, _ response: String) {
         synchronized {
             let evt = "MSGDONE"
@@ -7200,6 +7254,15 @@ public class LightstreamerClient {
     private func doPROG(_ prog: Int) {
         assert(prog <= rec_clientProg)
         rec_serverProg = prog
+    }
+
+    private func doDATA_STATE(_ state: String, _ dataAdapterName: String) {
+        onFreshData()
+        multicastDelegate.invokeDelegates { delegate in
+            callbackQueue.async {
+                delegate.client(self, didChangeDataAdapterState: state, forDataAdapter: dataAdapterName)
+            }
+        }
     }
     
     private func doMSGDONE(_ sequence: String, _ prog: Int, _ response: String) {
