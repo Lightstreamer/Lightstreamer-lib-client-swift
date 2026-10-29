@@ -238,10 +238,29 @@ public protocol ClientDelegate: AnyObject {
      - Parameter dataAdapterName: The Data Adapter name received in the message.
      */
     func client(_ client: LightstreamerClient, didChangeDataAdapterState state: String, forDataAdapter dataAdapterName: String)
+
+    /**
+     Event handler called for every Metadata Adapter state notification.
+
+     The state values are `started`, `disabled`, `resumed`, `restarted`, and `terminated`. The expected sequence is `started`,
+     followed by zero or more repetitions of `disabled` followed by either `resumed` or `restarted`.
+     A `terminated` notification may occur at any time and may be followed by a new occurrence of that sequence.
+     Adapters based on older Adapter Interface versions may send only `started` and `terminated` notifications.
+
+     Notifications are not synchronized with request handling: requests may be issued and succeed before the initial state notification.
+     
+     As with other client events, notifications are dispatched asynchronously on the client's callback queue.
+     The default implementation does nothing.
+
+     - Parameter client: The `LightstreamerClient` instance.
+     - Parameter state: The state value received in the message.
+     */
+    func client(_ client: LightstreamerClient, didChangeMetadataAdapterState state: String)
 }
 
 public extension ClientDelegate {
     func client(_ client: LightstreamerClient, didChangeDataAdapterState state: String, forDataAdapter dataAdapterName: String) {}
+    func client(_ client: LightstreamerClient, didChangeMetadataAdapterState state: String) {}
 }
 
 /**
@@ -2246,6 +2265,11 @@ public class LightstreamerClient {
                     let n = Double(bw)!
                     evtCONS(.limited(n))
                 }
+            } else if line.starts(with: "METADATA_STATE,") {
+                // METADATA_STATE,<state>
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
+                let state = String(args[1])
+                evtMETADATA_STATE(state)
             } else if line.starts(with: "DATA_STATE,") {
                 // DATA_STATE,<state>,<data adapter name>
                 let args = line.split(separator: ",", omittingEmptySubsequences: false)
@@ -4438,6 +4462,30 @@ public class LightstreamerClient {
         }
     }
     
+    func evtMETADATA_STATE(_ state: String) {
+        synchronized {
+            let evt = "METADATA_STATE"
+            if protocolLogger.isDebugEnabled {
+                protocolLogger.debug("\(evt) \(state)")
+            }
+            if inPushing() {
+                if isFreshData() {
+                    trace(evt)
+                    doMETADATA_STATE(state)
+                    if inStreaming() {
+                        evtRestartKeepalive()
+                    }
+                } else {
+                    trace(evt, cond: "stale")
+                    onStaleData()
+                    if inStreaming() {
+                        evtRestartKeepalive()
+                    }
+                }
+            }
+        }
+    }
+
     func evtDATA_STATE(_ state: String, _ dataAdapterName: String) {
         synchronized {
             let evt = "DATA_STATE"
@@ -7254,6 +7302,15 @@ public class LightstreamerClient {
     private func doPROG(_ prog: Int) {
         assert(prog <= rec_clientProg)
         rec_serverProg = prog
+    }
+
+    private func doMETADATA_STATE(_ state: String) {
+        onFreshData()
+        multicastDelegate.invokeDelegates { delegate in
+            callbackQueue.async {
+                delegate.client(self, didChangeMetadataAdapterState: state)
+            }
+        }
     }
 
     private func doDATA_STATE(_ state: String, _ dataAdapterName: String) {

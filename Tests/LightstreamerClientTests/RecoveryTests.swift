@@ -18,9 +18,9 @@ import XCTest
 @testable import LightstreamerClient
 
 final class RecoveryTests: BaseTestCase {
-    private let dataStateDelegate = DataStateDelegate()
+    private let adapterStateDelegate = AdapterStateDelegate()
 
-    private final class DataStateDelegate: ClientDelegate {
+    private final class AdapterStateDelegate: ClientDelegate {
         var trace = ""
 
         func clientDidAddDelegate(_ client: LightstreamerClient) {}
@@ -30,6 +30,10 @@ final class RecoveryTests: BaseTestCase {
         func client(_ client: LightstreamerClient, didReceiveServerError errorCode: Int, withMessage errorMessage: String) {}
         func client(_ client: LightstreamerClient, didChangeDataAdapterState state: String, forDataAdapter dataAdapterName: String) {
             let event = "onDataAdapterStateChange \(state) \(dataAdapterName)"
+            trace += trace.isEmpty ? event : "\n\(event)"
+        }
+        func client(_ client: LightstreamerClient, didChangeMetadataAdapterState state: String) {
+            let event = "onMetadataAdapterStateChange \(state)"
             trace += trace.isEmpty ? event : "\n\(event)"
         }
     }
@@ -69,11 +73,9 @@ cancel recovery.timeout
     }
 
     // Keep notification payloads and ordering identical to TestRecovery.hx.
-    // METADATA_STATE is not implemented yet, so only DATA_STATE callbacks are asserted:
-    // recovery positions are 3 instead of 4, and 2/5/6 instead of 3/7/9 in the skip case.
     func testDataAdapterState() {
         client = newClient("http://server", adapterSet: "TEST")
-        client.addDelegate(dataStateDelegate)
+        client.addDelegate(adapterStateDelegate)
         client.connect()
         ws.onOpen()
         ws.onText("WSOK")
@@ -99,19 +101,20 @@ cancel recovery.timeout
                 DATA_STATE, unknown%2C+state , adapter%2C+name\u{20}
                 ws.dispose
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_session=sid&LS_recovery_from=3&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
+                LS_session=sid&LS_recovery_from=4&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 """, self.io.trace)
             XCTAssertEqual("""
                 onDataAdapterStateChange started COUNT
+                onMetadataAdapterStateChange started
                 onDataAdapterStateChange started COUNT
                 onDataAdapterStateChange  unknown%2C+state   adapter%2C+name\u{20}
-                """, self.dataStateDelegate.trace)
+                """, self.adapterStateDelegate.trace)
         }
     }
 
     func testDataAdapterState_Skip() {
         client = newClient("http://server", adapterSet: "TEST")
-        client.addDelegate(dataStateDelegate)
+        client.addDelegate(adapterStateDelegate)
         client.connect()
         ws.onOpen()
         ws.onText("WSOK")
@@ -135,8 +138,7 @@ cancel recovery.timeout
         scheduler.fireRetryTimeout()
 
         http.onText("CONOK,sid,70000,5000,*")
-        // Haxe uses PROG,3, which also counts the initial METADATA_STATE notification.
-        http.onText("PROG,2")
+        http.onText("PROG,3")
         http.onText("DATA_STATE, resumed%2C+state , COUNT%2C+ ")
         http.onText("DATA_STATE, resumed%2C+state , COUNT%2C+ ")
         http.onText("DATA_STATE,resumed,OTHER")
@@ -159,7 +161,7 @@ cancel recovery.timeout
                 DATA_STATE,disabled,OTHER
                 ws.dispose
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_session=sid&LS_recovery_from=2&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
+                LS_session=sid&LS_recovery_from=3&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
                 CONOK,sid,70000,5000,*
                 PROG,0
                 DATA_STATE,started,COUNT
@@ -171,9 +173,9 @@ cancel recovery.timeout
                 METADATA_STATE,resumed
                 http.dispose
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_session=sid&LS_recovery_from=5&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=recovery.error
+                LS_session=sid&LS_recovery_from=7&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=recovery.error
                 CONOK,sid,70000,5000,*
-                PROG,2
+                PROG,3
                 DATA_STATE, resumed%2C+state , COUNT%2C+\u{20}
                 DATA_STATE, resumed%2C+state , COUNT%2C+\u{20}
                 DATA_STATE,resumed,OTHER
@@ -182,16 +184,124 @@ cancel recovery.timeout
                 METADATA_STATE,terminated
                 http.dispose
                 http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
-                LS_session=sid&LS_recovery_from=6&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=recovery.error
+                LS_session=sid&LS_recovery_from=9&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=recovery.error
                 """, self.io.trace)
             XCTAssertEqual("""
                 onDataAdapterStateChange started COUNT
+                onMetadataAdapterStateChange started
                 onDataAdapterStateChange disabled OTHER
                 onDataAdapterStateChange  resumed%2C+state   COUNT%2C+\u{20}
                 onDataAdapterStateChange  resumed%2C+state   COUNT%2C+\u{20}
                 onDataAdapterStateChange resumed OTHER
+                onMetadataAdapterStateChange resumed
                 onDataAdapterStateChange terminated COUNT
-                """, self.dataStateDelegate.trace)
+                onMetadataAdapterStateChange terminated
+                """, self.adapterStateDelegate.trace)
+        }
+    }
+
+    func testMetadataAdapterState() {
+        client = newClient("http://server", adapterSet: "TEST")
+        client.addDelegate(adapterStateDelegate)
+        client.connect()
+        ws.onOpen()
+        ws.onText("WSOK")
+        ws.onText("CONOK,sid,70000,5000,*")
+        ws.onText("METADATA_STATE,started")
+        ws.onText("METADATA_STATE,started")
+        ws.onText("METADATA_STATE, unknown%2C+state ")
+        ws.onError()
+        scheduler.fireRecoveryTimeout()
+
+        asyncAssert {
+            XCTAssertEqual("""
+                ws.init http://server/lightstreamer
+                wsok
+                create_session\r
+                LS_adapter_set=TEST&LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
+                WSOK
+                CONOK,sid,70000,5000,*
+                METADATA_STATE,started
+                METADATA_STATE,started
+                METADATA_STATE, unknown%2C+state\u{20}
+                ws.dispose
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
+                LS_session=sid&LS_recovery_from=3&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
+                """, self.io.trace)
+            XCTAssertEqual("""
+                onMetadataAdapterStateChange started
+                onMetadataAdapterStateChange started
+                onMetadataAdapterStateChange  unknown%2C+state\u{20}
+                """, self.adapterStateDelegate.trace)
+        }
+    }
+
+    func testMetadataAdapterState_Skip() {
+        client = newClient("http://server", adapterSet: "TEST")
+        client.addDelegate(adapterStateDelegate)
+        client.connect()
+        ws.onOpen()
+        ws.onText("WSOK")
+        ws.onText("CONOK,sid,70000,5000,*")
+        ws.onText("METADATA_STATE,started")
+        ws.onText("METADATA_STATE,disabled")
+        ws.onError()
+        scheduler.fireRecoveryTimeout()
+
+        http.onText("CONOK,sid,70000,5000,*")
+        http.onText("PROG,0")
+        http.onText("METADATA_STATE,started")
+        http.onText("METADATA_STATE,disabled")
+        http.onText("METADATA_STATE,resumed")
+        http.onText("METADATA_STATE,resumed")
+        http.onError()
+        scheduler.fireRetryTimeout()
+
+        http.onText("CONOK,sid,70000,5000,*")
+        http.onText("PROG,2")
+        http.onText("METADATA_STATE,resumed")
+        http.onText("METADATA_STATE,resumed")
+        http.onText("METADATA_STATE,terminated")
+        http.onText("LOOP,0")
+
+        asyncAssert {
+            XCTAssertEqual("""
+                ws.init http://server/lightstreamer
+                wsok
+                create_session\r
+                LS_adapter_set=TEST&LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
+                WSOK
+                CONOK,sid,70000,5000,*
+                METADATA_STATE,started
+                METADATA_STATE,disabled
+                ws.dispose
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
+                LS_session=sid&LS_recovery_from=2&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error
+                CONOK,sid,70000,5000,*
+                PROG,0
+                METADATA_STATE,started
+                METADATA_STATE,disabled
+                METADATA_STATE,resumed
+                METADATA_STATE,resumed
+                http.dispose
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
+                LS_session=sid&LS_recovery_from=4&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=recovery.error
+                CONOK,sid,70000,5000,*
+                PROG,2
+                METADATA_STATE,resumed
+                METADATA_STATE,resumed
+                METADATA_STATE,terminated
+                LOOP,0
+                http.dispose
+                ws.init http://server/lightstreamer
+                """, self.io.trace)
+            XCTAssertEqual("""
+                onMetadataAdapterStateChange started
+                onMetadataAdapterStateChange disabled
+                onMetadataAdapterStateChange resumed
+                onMetadataAdapterStateChange resumed
+                onMetadataAdapterStateChange terminated
+                """, self.adapterStateDelegate.trace)
         }
     }
 
