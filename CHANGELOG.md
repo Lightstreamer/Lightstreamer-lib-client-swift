@@ -1,5 +1,35 @@
 # SDK for Swift Clients CHANGELOG
 
+## Unreleased
+*Compatible with Lightstreamer Server since 8.0.0.*<br>
+*Compatible with iOS 13+.*<br>
+*Compatible with macOS 10.15+.*<br>
+*Compatible with watchOS 6+.*<br>
+*Compatible with tvOS 13+.*<br>
+*Not compatible with code developed for the previous version.*<br>
+*Requires a Metadata Adapter based on the v9+ Java In-Process Adapter SDK. A pre-v9 Metadata Adapter requires `support_LiteralBased_subscriptions` to be enabled for that adapter (see compatibility notes below).*
+
+**Changed (breaking):** Removed Item Group and Field Schema support, including the `itemGroup` and `fieldSchema` properties from `Subscription` and `MPNSubscription`, and the `commandSecondLevelFieldSchema` property from `Subscription`. Migrate to explicit lists through the initializers or the `items`, `fields`, and `commandSecondLevelFields` properties. Item and field lists must be configured before subscribing or activating MPN subscriptions; constructing an initially unconfigured subscription remains supported.
+
+**New:** Item and field names may now contain any character, including spaces, numeric-only names, reserved characters, and Unicode. Individual names must still be non-empty. This also applies to MPN subscriptions, COMMAND second-level field names, and item names derived from COMMAND keys.
+
+**New:** Added Data Adapter and Metadata Adapter health notifications through `ClientDelegate.client(_:didChangeDataAdapterState:forDataAdapter:)` and `ClientDelegate.client(_:didChangeMetadataAdapterState:)`. Each received notification reports one of `started`, `disabled`, `resumed`, `restarted`, or `terminated`; pre-v9 Adapters may report only `started` and `terminated`. Update delegate implementations to handle the new callbacks.
+
+**New:** Added support for `STALE` and `RESUME` item notifications through `SubscriptionDelegate.subscription(_:didBecomeStaleForItemName:itemPos:)` and `SubscriptionDelegate.subscription(_:didResumeForItemName:itemPos:)`.
+
+**Changed (breaking):** Replaced the previous loss callback with `SubscriptionDelegate.subscription(_:didLoseUpdates:forItemName:itemPos:isOverflow:)`. `isOverflow` is true for Server buffer overflow (`OV`) and false for Data Adapter loss (`LOST`); `lostUpdates` is -1 when the count is unavailable.
+
+Second-level COMMAND stale, resume, and Data Adapter loss notifications are ignored. Second-level Server overflow continues through the unchanged `SubscriptionDelegate.subscription(_:didLoseUpdates:forCommandSecondLevelItemWithKey:)` callback.
+
+**New:** Added support for session creation error `12`, reported through `ClientDelegate.client(_:didReceiveServerError:withMessage:)` when the Metadata Adapter uses the pre-v9 Java In-Process Adapter SDK and does not support explicit-list subscriptions. The `support_LiteralBased_subscriptions` setting can restore compatibility subject to its documented conditions; this setting applies to the individual Adapter.
+
+**New:** Documented subscription errors reported through `SubscriptionDelegate.subscription(_:didFailWithErrorCode:message:)` with v9+ Data Adapters:
+
+- `6`: The subscription request cannot be evaluated because the Data Adapter is disabled.
+- `63`: The Data Adapter refused the subscription.
+- `64`: The Data Adapter threw an unchecked exception while managing the subscription request.
+
+
 ## 6.5.0
 *Compatible with Lightstreamer Server since 7.4.0.*<br>
 *Compatible with iOS 13+.*<br>
