@@ -1952,6 +1952,13 @@ final class Update2LevelTests: BaseTestCase {
         sub.commandSecondLevelFields = ["f5", "f6"]
         sub.commandSecondLevelDataAdapter = "adapter2"
         sub.requestedSnapshot = .no
+        subDelegate.onItemLostUpdates = { subscription, name, pos, count, isOverflow in
+            XCTAssertTrue(subscription === sub)
+            XCTAssertEqual("i1", name)
+            XCTAssertEqual(1, pos)
+            XCTAssertEqual(5, count)
+            XCTAssertTrue(isOverflow)
+        }
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         
@@ -1992,6 +1999,11 @@ final class Update2LevelTests: BaseTestCase {
         sub.commandSecondLevelFields = ["f5", "f6"]
         sub.commandSecondLevelDataAdapter = "adapter2"
         sub.requestedSnapshot = .no
+        subDelegate.onCommandSecondLevelItemLostUpdates = { subscription, count, key in
+            XCTAssertTrue(subscription === sub)
+            XCTAssertEqual(5, count)
+            XCTAssertEqual("item1", key)
+        }
         sub.addDelegate(subDelegate)
         client.subscribe(sub)
         
@@ -2034,6 +2046,107 @@ final class Update2LevelTests: BaseTestCase {
                 """, self.subDelegate.trace)
             
             XCTAssertEqual(2, self.subDelegate.updates.count)
+        }
+    }
+
+    func testCOMMAND2Level_LOST1Level() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        let sub = Subscription(subscriptionMode: .COMMAND, items: ["i1", "i2"], fields: ["f1", "f2", "key", "command"])
+        sub.commandSecondLevelFields = ["f5", "f6"]
+        sub.requestedSnapshot = .no
+        subDelegate.onItemLostUpdates = { subscription, name, pos, count, isOverflow in
+            XCTAssertTrue(subscription === sub)
+            XCTAssertEqual("i1", name)
+            XCTAssertEqual(1, pos)
+            XCTAssertEqual(5, count)
+            XCTAssertFalse(isOverflow)
+        }
+        subDelegate.onCommandSecondLevelItemLostUpdates = { _, _, _ in
+            XCTFail("Unexpected second-level loss callback")
+        }
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        client.connect()
+
+        ws.onOpen()
+        ws.onText("WSOK")
+        ws.onText("CONOK,sid,70000,5000,*")
+        ws.onText("SUBCMD,1,2,4,3,4")
+        ws.onText("LOST,1,1,5")
+
+        asyncAssert {
+            XCTAssertEqual("""
+                ws.init http://server/lightstreamer
+                wsok
+                create_session\r
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
+                WSOK
+                CONOK,sid,70000,5000,*
+                control\r
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
+                SUBCMD,1,2,4,3,4
+                LOST,1,1,5
+                """, self.io.trace)
+            XCTAssertEqual("""
+                onSUB
+                onOV i1 1 5
+                """, self.subDelegate.trace)
+        }
+    }
+
+    func testCOMMAND2Level_LOST2Level() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        let sub = Subscription(subscriptionMode: .COMMAND, items: ["i1", "i2"], fields: ["f1", "f2", "key", "command"])
+        sub.commandSecondLevelFields = ["f5", "f6"]
+        sub.requestedSnapshot = .no
+        subDelegate.onItemLostUpdates = { _, _, _, _, _ in
+            XCTFail("Unexpected first-level loss callback")
+        }
+        subDelegate.onCommandSecondLevelItemLostUpdates = { _, _, _ in
+            XCTFail("Unexpected second-level loss callback")
+        }
+        let updates = XCTestExpectation(description: "Parent and merged child updates delivered")
+        updates.expectedFulfillmentCount = 2
+        subDelegate.onItemUpdate = { _ in updates.fulfill() }
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        client.connect()
+
+        ws.onOpen()
+        ws.onText("WSOK")
+        ws.onText("CONOK,sid,70000,5000,*")
+        ws.onText("SUBCMD,1,2,4,3,4")
+        ws.onText("U,1,1,a|b|item1|ADD")
+        ws.onText("SUBOK,2,1,2")
+        ws.onText("LOST,2,1,5")
+        ws.onText("U,2,1,c|d")
+        wait(for: [updates], timeout: 1)
+
+        asyncAssert {
+            XCTAssertEqual("""
+                ws.init http://server/lightstreamer
+                wsok
+                create_session\r
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
+                WSOK
+                CONOK,sid,70000,5000,*
+                control\r
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false
+                SUBCMD,1,2,4,3,4
+                U,1,1,a|b|item1|ADD
+                control\r
+                LS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_ack=false
+                SUBOK,2,1,2
+                LOST,2,1,5
+                U,2,1,c|d
+                """, self.io.trace)
+            XCTAssertEqual("""
+                onSUB
+                onU 0
+                onU 1
+                """, self.subDelegate.trace)
         }
     }
     

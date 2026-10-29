@@ -842,6 +842,138 @@ final class SubscriptionWSTests: BaseTestCase {
                 """, self.subDelegate.trace)
         }
     }
+
+    func testSTALE() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "item", fields: ["f1", "f2"])
+        sub.requestedSnapshot = .no
+        subDelegate.onItemStale = { subscription, name, pos in
+            XCTAssertTrue(subscription === sub)
+            XCTAssertEqual("item", name)
+            XCTAssertEqual(1, pos)
+        }
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        client.connect()
+
+        ws.onOpen()
+        ws.onText("WSOK")
+        ws.onText("CONOK,sid,70000,5000,*")
+        ws.onText("SUBOK,1,1,2")
+        ws.onText("STALE,1,1")
+
+        asyncAssert {
+            XCTAssertEqual("""
+                ws.init http://server/lightstreamer
+                wsok
+                create_session\r
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
+                WSOK
+                CONOK,sid,70000,5000,*
+                control\r
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false
+                SUBOK,1,1,2
+                STALE,1,1
+                """, self.io.trace)
+            XCTAssertEqual("""
+                onSUB
+                onSTALE item 1
+                """, self.subDelegate.trace)
+        }
+    }
+
+    func testRESUME() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "item", fields: ["f1", "f2"])
+        sub.requestedSnapshot = .no
+        subDelegate.onItemResume = { subscription, name, pos in
+            XCTAssertTrue(subscription === sub)
+            XCTAssertEqual("item", name)
+            XCTAssertEqual(1, pos)
+        }
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        client.connect()
+
+        ws.onOpen()
+        ws.onText("WSOK")
+        ws.onText("CONOK,sid,70000,5000,*")
+        ws.onText("SUBOK,1,1,2")
+        ws.onText("STALE,1,1")
+        ws.onText("RESUME,1,1")
+
+        asyncAssert {
+            XCTAssertEqual("""
+                ws.init http://server/lightstreamer
+                wsok
+                create_session\r
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
+                WSOK
+                CONOK,sid,70000,5000,*
+                control\r
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false
+                SUBOK,1,1,2
+                STALE,1,1
+                RESUME,1,1
+                """, self.io.trace)
+            XCTAssertEqual("""
+                onSUB
+                onSTALE item 1
+                onRESUME item 1
+                """, self.subDelegate.trace)
+        }
+    }
+
+    func testLOST() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "item", fields: ["f1", "f2"])
+        sub.requestedSnapshot = .no
+        let firstLoss = XCTestExpectation(description: "Known loss count delivered")
+        subDelegate.onItemLostUpdates = { subscription, name, pos, count, isOverflow in
+            XCTAssertTrue(subscription === sub)
+            XCTAssertEqual("item", name)
+            XCTAssertEqual(1, pos)
+            XCTAssertFalse(isOverflow)
+            if count == 33 {
+                firstLoss.fulfill()
+            }
+        }
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        client.connect()
+
+        ws.onOpen()
+        ws.onText("WSOK")
+        ws.onText("CONOK,sid,70000,5000,*")
+        ws.onText("SUBOK,1,1,2")
+        ws.onText("LOST,1,1,33")
+        wait(for: [firstLoss], timeout: 1)
+        ws.onText("LOST,1,1,?")
+
+        asyncAssert {
+            XCTAssertEqual("""
+                ws.init http://server/lightstreamer
+                wsok
+                create_session\r
+                LS_cid=\(LS_TEST_CID)&LS_send_sync=false&LS_cause=api
+                WSOK
+                CONOK,sid,70000,5000,*
+                control\r
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false
+                SUBOK,1,1,2
+                LOST,1,1,33
+                LOST,1,1,?
+                """, self.io.trace)
+            XCTAssertEqual("""
+                onSUB
+                onOV item 1 33
+                onOV item 1 -1
+                """, self.subDelegate.trace)
+        }
+    }
     
     func testSUBOK_Abort() {
         client = newClient("http://server")

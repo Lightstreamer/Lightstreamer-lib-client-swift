@@ -354,6 +354,28 @@ class ClientTestsBase: XCTestCase {
         client.connect()
         wait(for: [expectation], timeout: 3)
     }
+
+    func testOverflow() {
+        let sub = Subscription(subscriptionMode: .MERGE, item: "overflow", fields: ["value"])
+        sub.requestedSnapshot = .yes
+        sub.dataAdapter = "OVERFLOW"
+        sub.requestedMaxFrequency = .unfiltered
+        subDelegate.onItemLostUpdates = { name, pos, _, isOverflow in
+            XCTAssertEqual("overflow", name)
+            XCTAssertEqual(1, pos)
+            XCTAssertTrue(isOverflow)
+            self.client.unsubscribe(sub)
+        }
+        subDelegate.onUnsubscription = {
+            self.expectation.fulfill()
+        }
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        client.connectionOptions.requestedMaxBandwidth = .limited(10)
+        client.connect()
+
+        wait(for: [expectation], timeout: 3)
+    }
     
     func testHeaders() {
         client.connectionOptions.HTTPExtraHeaders = ["hello": "header"]
@@ -421,6 +443,7 @@ class CTBSubDelegate: SubscriptionDelegate {
     var onUnsubscription: (() -> Void)!
     var onClearSnapshot: ((String?, UInt) -> Void)!
     var onEndOfSnapshot: ((String?, UInt) -> Void)!
+    var onItemLostUpdates: ((String?, UInt, Int, Bool) -> Void)?
     
     func subscription(_ subscription: Subscription, didClearSnapshotForItemName itemName: String?, itemPos: UInt) {
         onClearSnapshot?(itemName, itemPos)
@@ -438,8 +461,8 @@ class CTBSubDelegate: SubscriptionDelegate {
         onEndOfSnapshot?(itemName, itemPos)
     }
     
-    func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: UInt, forItemName itemName: String?, itemPos: UInt) {
-        
+    func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: Int, forItemName itemName: String?, itemPos: UInt, isOverflow: Bool) {
+        onItemLostUpdates?(itemName, itemPos, lostUpdates, isOverflow)
     }
     
     func subscription(_ subscription: Subscription, didUpdateItem itemUpdate: any ItemUpdate) {

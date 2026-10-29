@@ -511,6 +511,156 @@ class SubscriptionHTTPPollingTests: BaseTestCase {
                 """, self.subDelegate.trace)
         }
     }
+
+    func testSTALE() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "item", fields: ["f1", "f2"])
+        sub.requestedSnapshot = .no
+        subDelegate.onItemStale = { subscription, name, pos in
+            XCTAssertTrue(subscription === sub)
+            XCTAssertEqual("item", name)
+            XCTAssertEqual(1, pos)
+        }
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        client.connect()
+
+        http.onText("CONOK,sid,70000,5000,*")
+        http.onText("LOOP,0")
+        ctrl.onText("REQOK,1")
+        ctrl.onDone()
+        http.onText("CONOK,sid,70000,5000,*")
+        http.onText("SUBOK,1,1,2")
+        http.onText("STALE,1,1")
+
+        asyncAssert {
+            XCTAssertEqual("""
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_cause=api
+                CONOK,sid,70000,5000,*
+                LOOP,0
+                http.dispose
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
+                LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false
+                REQOK,1
+                ctrl.dispose
+                CONOK,sid,70000,5000,*
+                SUBOK,1,1,2
+                STALE,1,1
+                """, self.io.trace)
+            XCTAssertEqual("""
+                onSUB
+                onSTALE item 1
+                """, self.subDelegate.trace)
+        }
+    }
+
+    func testRESUME() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "item", fields: ["f1", "f2"])
+        sub.requestedSnapshot = .no
+        subDelegate.onItemResume = { subscription, name, pos in
+            XCTAssertTrue(subscription === sub)
+            XCTAssertEqual("item", name)
+            XCTAssertEqual(1, pos)
+        }
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        client.connect()
+
+        http.onText("CONOK,sid,70000,5000,*")
+        http.onText("LOOP,0")
+        ctrl.onText("REQOK,1")
+        ctrl.onDone()
+        http.onText("CONOK,sid,70000,5000,*")
+        http.onText("SUBOK,1,1,2")
+        http.onText("STALE,1,1")
+        http.onText("RESUME,1,1")
+
+        asyncAssert {
+            XCTAssertEqual("""
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_cause=api
+                CONOK,sid,70000,5000,*
+                LOOP,0
+                http.dispose
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
+                LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false
+                REQOK,1
+                ctrl.dispose
+                CONOK,sid,70000,5000,*
+                SUBOK,1,1,2
+                STALE,1,1
+                RESUME,1,1
+                """, self.io.trace)
+            XCTAssertEqual("""
+                onSUB
+                onSTALE item 1
+                onRESUME item 1
+                """, self.subDelegate.trace)
+        }
+    }
+
+    func testLOST() {
+        client = newClient("http://server")
+        client.addDelegate(delegate)
+        let sub = Subscription(subscriptionMode: .DISTINCT, item: "item", fields: ["f1", "f2"])
+        sub.requestedSnapshot = .no
+        let firstLoss = XCTestExpectation(description: "Known loss count delivered")
+        subDelegate.onItemLostUpdates = { subscription, name, pos, count, isOverflow in
+            XCTAssertTrue(subscription === sub)
+            XCTAssertEqual("item", name)
+            XCTAssertEqual(1, pos)
+            XCTAssertFalse(isOverflow)
+            if count == 33 {
+                firstLoss.fulfill()
+            }
+        }
+        sub.addDelegate(subDelegate)
+        client.subscribe(sub)
+        client.connect()
+
+        http.onText("CONOK,sid,70000,5000,*")
+        http.onText("LOOP,0")
+        ctrl.onText("REQOK,1")
+        ctrl.onDone()
+        http.onText("CONOK,sid,70000,5000,*")
+        http.onText("SUBOK,1,1,2")
+        http.onText("LOST,1,1,33")
+        wait(for: [firstLoss], timeout: 1)
+        http.onText("LOST,1,1,?")
+
+        asyncAssert {
+            XCTAssertEqual("""
+                http.send http://server/lightstreamer/create_session.txt?LS_protocol=\(TLCP_VERSION)
+                LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cid=\(LS_TEST_CID)&LS_cause=api
+                CONOK,sid,70000,5000,*
+                LOOP,0
+                http.dispose
+                http.send http://server/lightstreamer/bind_session.txt?LS_protocol=\(TLCP_VERSION)
+                LS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop
+                ctrl.send http://server/lightstreamer/control.txt?LS_protocol=\(TLCP_VERSION)&LS_session=sid
+                LS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false
+                REQOK,1
+                ctrl.dispose
+                CONOK,sid,70000,5000,*
+                SUBOK,1,1,2
+                LOST,1,1,33
+                LOST,1,1,?
+                """, self.io.trace)
+            XCTAssertEqual("""
+                onSUB
+                onOV item 1 33
+                onOV item 1 -1
+                """, self.subDelegate.trace)
+        }
+    }
    
     func testSUBOK_Abort() {
         client = newClient("http://server")

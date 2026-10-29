@@ -21,6 +21,10 @@ class TestSubDelegate: SubscriptionDelegate {
     var trace = ""
     var updates = [ItemUpdate]()
     var onItemUpdate: ((ItemUpdate) -> Void)?
+    var onItemStale: ((Subscription, String?, UInt) -> Void)?
+    var onItemResume: ((Subscription, String?, UInt) -> Void)?
+    var onItemLostUpdates: ((Subscription, String?, UInt, Int, Bool) -> Void)?
+    var onCommandSecondLevelItemLostUpdates: ((Subscription, UInt, String) -> Void)?
     
     func addTrace(_ s: String) {
         trace += trace.isEmpty ? s : "\n\(s)"
@@ -32,6 +36,7 @@ class TestSubDelegate: SubscriptionDelegate {
     
     func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: UInt, forCommandSecondLevelItemWithKey key: String) {
         addTrace("onOV2Level \(key) \(lostUpdates)")
+        onCommandSecondLevelItemLostUpdates?(subscription, lostUpdates, key)
     }
     
     func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String?, forCommandSecondLevelItemWithKey key: String) {
@@ -42,8 +47,19 @@ class TestSubDelegate: SubscriptionDelegate {
         addTrace("onEOS \(itemName ?? "nil") \(itemPos)")
     }
     
-    func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: UInt, forItemName itemName: String?, itemPos: UInt) {
+    func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: Int, forItemName itemName: String?, itemPos: UInt, isOverflow: Bool) {
         addTrace("onOV \(itemName ?? "nil") \(itemPos) \(lostUpdates)")
+        onItemLostUpdates?(subscription, itemName, itemPos, lostUpdates, isOverflow)
+    }
+
+    func subscription(_ subscription: Subscription, didBecomeStaleForItemName itemName: String?, itemPos: UInt) {
+        addTrace("onSTALE \(itemName ?? "nil") \(itemPos)")
+        onItemStale?(subscription, itemName, itemPos)
+    }
+
+    func subscription(_ subscription: Subscription, didResumeForItemName itemName: String?, itemPos: UInt) {
+        addTrace("onRESUME \(itemName ?? "nil") \(itemPos)")
+        onItemResume?(subscription, itemName, itemPos)
     }
     
     func subscription(_ subscription: Subscription, didUpdateItem itemUpdate: ItemUpdate) {

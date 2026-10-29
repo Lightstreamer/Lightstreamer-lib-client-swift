@@ -429,7 +429,7 @@ class CTBSubDelegate: SubscriptionDelegate {
         onEndOfSnapshot?(itemName, itemPos)
     }
     
-    func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: UInt, forItemName itemName: String?, itemPos: UInt) {
+    func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: Int, forItemName itemName: String?, itemPos: UInt, isOverflow: Bool) {
         
     }
     
