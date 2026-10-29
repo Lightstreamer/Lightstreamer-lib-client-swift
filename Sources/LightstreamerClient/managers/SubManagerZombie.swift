@@ -145,6 +145,33 @@ class SubscriptionManagerZombie: SubscriptionManager {
         }
     }
     
+    func evtSTALE(_ itemIdx: Int) {
+        let evt = "STALE"
+        if s_m == .s1 {
+            trace(evt, State_m.s1, State_m.s2)
+            s_m = .s2
+            genSendControl()
+        }
+    }
+
+    func evtRESUME(_ itemIdx: Int) {
+        let evt = "RESUME"
+        if s_m == .s1 {
+            trace(evt, State_m.s1, State_m.s2)
+            s_m = .s2
+            genSendControl()
+        }
+    }
+
+    func evtLOST(_ itemIdx: Int, _ lostUpdates: Int) {
+        let evt = "LOST"
+        if s_m == .s1 {
+            trace(evt, State_m.s1, State_m.s2)
+            s_m = .s2
+            genSendControl()
+        }
+    }
+
     func evtCONF(_ freq: RealMaxFrequency) {
         let evt = "CONF"
         if s_m == .s1 {

@@ -2360,6 +2360,25 @@ public class LightstreamerClient {
                 let itemIdx = Int(args[2])!
                 let lostUpdates = Int(args[3])!
                 evtOV(subId, itemIdx, lostUpdates)
+            } else if line.starts(with: "STALE,") {
+                // STALE,<subscription id>,<item index>
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
+                let subId = Int(args[1])!
+                let itemIdx = Int(args[2])!
+                evtSTALE(subId, itemIdx)
+            } else if line.starts(with: "RESUME,") {
+                // RESUME,<subscription id>,<item index>
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
+                let subId = Int(args[1])!
+                let itemIdx = Int(args[2])!
+                evtRESUME(subId, itemIdx)
+            } else if line.starts(with: "LOST,") {
+                // LOST,<subscription id>,<item index>,<lost count or ?>
+                let args = line.split(separator: ",", omittingEmptySubsequences: false)
+                let subId = Int(args[1])!
+                let itemIdx = Int(args[2])!
+                let lostUpdates = args[3] == "?" ? -1 : Int(args[3])!
+                evtLOST(subId, itemIdx, lostUpdates)
             } else if line.starts(with: "NOOP") {
                 evtNOOP()
             } else if line.starts(with: "CONERR") {
@@ -4726,6 +4745,78 @@ public class LightstreamerClient {
         }
     }
     
+    func evtSTALE(_ subId: Int, _ itemIdx: Pos) {
+        synchronized {
+            let evt = "STALE"
+            if protocolLogger.isDebugEnabled {
+                protocolLogger.debug("\(evt) \(subId) \(itemIdx)")
+            }
+            if inPushing() {
+                if isFreshData() {
+                    trace(evt)
+                    doSTALE(subId, itemIdx)
+                    if inStreaming() {
+                        evtRestartKeepalive()
+                    }
+                } else {
+                    trace(evt, cond: "stale")
+                    onStaleData()
+                    if inStreaming() {
+                        evtRestartKeepalive()
+                    }
+                }
+            }
+        }
+    }
+
+    func evtRESUME(_ subId: Int, _ itemIdx: Pos) {
+        synchronized {
+            let evt = "RESUME"
+            if protocolLogger.isDebugEnabled {
+                protocolLogger.debug("\(evt) \(subId) \(itemIdx)")
+            }
+            if inPushing() {
+                if isFreshData() {
+                    trace(evt)
+                    doRESUME(subId, itemIdx)
+                    if inStreaming() {
+                        evtRestartKeepalive()
+                    }
+                } else {
+                    trace(evt, cond: "stale")
+                    onStaleData()
+                    if inStreaming() {
+                        evtRestartKeepalive()
+                    }
+                }
+            }
+        }
+    }
+
+    func evtLOST(_ subId: Int, _ itemIdx: Pos, _ lostUpdates: Int) {
+        synchronized {
+            let evt = "LOST"
+            if protocolLogger.isDebugEnabled {
+                protocolLogger.debug("\(evt) \(subId) \(itemIdx) \(lostUpdates)")
+            }
+            if inPushing() {
+                if isFreshData() {
+                    trace(evt)
+                    doLOST(subId, itemIdx, lostUpdates)
+                    if inStreaming() {
+                        evtRestartKeepalive()
+                    }
+                } else {
+                    trace(evt, cond: "stale")
+                    onStaleData()
+                    if inStreaming() {
+                        evtRestartKeepalive()
+                    }
+                }
+            }
+        }
+    }
+
     func evtCONF(_ subId: Int, _ freq: RealMaxFrequency) {
         synchronized {
             let evt = "CONF"
@@ -6334,7 +6425,7 @@ public class LightstreamerClient {
         func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: UInt, forCommandSecondLevelItemWithKey key: String) {}
         func subscription(_ subscription: Subscription, didFailWithErrorCode code: Int, message: String?, forCommandSecondLevelItemWithKey key: String) {}
         func subscription(_ subscription: Subscription, didEndSnapshotForItemName itemName: String?, itemPos: UInt) {}
-        func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: UInt, forItemName itemName: String?, itemPos: UInt) {}
+        func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: Int, forItemName itemName: String?, itemPos: UInt, isOverflow: Bool) {}
         func subscription(_ subscription: Subscription, didUpdateItem itemUpdate: ItemUpdate) {}
         func subscriptionDidRemoveDelegate(_ subscription: Subscription) {}
         func subscriptionDidAddDelegate(_ subscription: Subscription) {}
@@ -7419,6 +7510,36 @@ public class LightstreamerClient {
         }
     }
     
+    private func doSTALE(_ subId: Int, _ itemIdx: Pos) {
+        onFreshData()
+        if let sub = subscriptionManagers[subId] {
+            sub.evtSTALE(itemIdx)
+        } else {
+            let sub = SubscriptionManagerZombie(subId, self)
+            sub.evtSTALE(itemIdx)
+        }
+    }
+
+    private func doRESUME(_ subId: Int, _ itemIdx: Pos) {
+        onFreshData()
+        if let sub = subscriptionManagers[subId] {
+            sub.evtRESUME(itemIdx)
+        } else {
+            let sub = SubscriptionManagerZombie(subId, self)
+            sub.evtRESUME(itemIdx)
+        }
+    }
+
+    private func doLOST(_ subId: Int, _ itemIdx: Pos, _ lostUpdates: Int) {
+        onFreshData()
+        if let sub = subscriptionManagers[subId] {
+            sub.evtLOST(itemIdx, lostUpdates)
+        } else {
+            let sub = SubscriptionManagerZombie(subId, self)
+            sub.evtLOST(itemIdx, lostUpdates)
+        }
+    }
+
     private func doCONF(_ subId: Int, _ freq: RealMaxFrequency) {
         onFreshData()
         if let sub = subscriptionManagers[subId] {

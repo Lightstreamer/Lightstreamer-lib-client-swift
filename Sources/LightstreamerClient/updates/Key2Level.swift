@@ -517,9 +517,11 @@ class Key2Level: ItemKey {
             }
         }
         
-        func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: UInt, forItemName itemName: String?, itemPos: UInt) {
+        func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: Int, forItemName itemName: String?, itemPos: UInt, isOverflow: Bool) {
             synchronized {
-                key?.evtOnItemLostUpdates2Level(Int(lostUpdates))
+                if isOverflow {
+                    key?.evtOnItemLostUpdates2Level(lostUpdates)
+                }
             }
         }
         

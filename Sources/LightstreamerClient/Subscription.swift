@@ -73,6 +73,9 @@ public protocol SubscriptionDelegate: AnyObject {
      
      Such notifications are sent only if the `Subscription` was configured in unfiltered mode (second-level items are always in `MERGE` mode and inherit
      the frequency configuration from the first-level Subscription).
+
+     The first-level COMMAND delivery conditions do not apply to these second-level MERGE items. Data Adapter loss notifications (`LOST`) for
+     internal second-level items are not propagated through this callback; it reports only Server buffer overflow (`OV`).
      
      By implementing this method it is possible to perform recovery actions.
      
@@ -152,32 +155,63 @@ public protocol SubscriptionDelegate: AnyObject {
      */
     func subscription(_ subscription: Subscription, didEndSnapshotForItemName itemName: String?, itemPos: UInt)
     /**
-     Event handler that is called by Lightstreamer to notify that, due to internal resource limitations, Lightstreamer Server dropped one or more updates
-     for an item in the Subscription.
-     
-     Such notifications are sent only if the items are delivered in an unfiltered mode; this occurs if the subscription mode is:
-     
-     - `RAW`
-     
-     - `MERGE` or `DISTINCT`, with unfiltered dispatching specified
-     
-     - `COMMAND`, with unfiltered dispatching specified
-     
-     - `COMMAND`, without unfiltered dispatching specified (in this case, notifications apply to ADD and DELETE events only)
-     
-     By implementing this method it is possible to perform recovery actions.
-     
+     Event handler that is called when problems obtaining updates block an item's update event flow.
+
+     For two-level COMMAND Subscriptions, this callback refers only to
+     first-level items; stale notifications for internal second-level items are not propagated to the parent Subscription's delegates.
+
+     Notifications are delivered asynchronously on the client's callback queue.
+     The default implementation does nothing.
+
      - Parameter subscription: The `Subscription` involved.
-     
-     - Parameter lostUpdates: The number of consecutive updates dropped for the item.
-     
-     - Parameter itemName: The name of the involved item in the configured item list.
-     
-     - Parameter itemPos: The 1-based position of the item within the "Item List".
-     
+     - Parameter itemName: The name of the item in the configured item list, or nil if unavailable.
+     - Parameter itemPos: The 1-based position of the item within the item list.
+     */
+    func subscription(_ subscription: Subscription, didBecomeStaleForItemName itemName: String?, itemPos: UInt)
+    /**
+     Event handler that is called when an item's update event flow, previously reported as blocked, is no longer blocked.
+
+     For two-level COMMAND Subscriptions, this callback refers
+     only to first-level items; resume notifications for internal second-level items are not propagated to the parent Subscription's delegates.
+
+     Notifications are delivered asynchronously on the client's callback queue.
+     The default implementation does nothing.
+
+     - Parameter subscription: The `Subscription` involved.
+     - Parameter itemName: The name of the item in the configured item list, or nil if unavailable.
+     - Parameter itemPos: The 1-based position of the item within the item list.
+     */
+    func subscription(_ subscription: Subscription, didResumeForItemName itemName: String?, itemPos: UInt)
+    /**
+     Event handler that is called to report lost updates for an item in the `Subscription`. Implementing this method makes it possible to perform
+     recovery actions. The loss can originate from Server buffer overflow (`OV`) or problems obtaining updates in the Data Adapter (`LOST`).
+
+     When `isOverflow` is true, the Server can deliver notifications:
+
+     - In `RAW` mode, regardless of whether unfiltered dispatching was requested.
+     - In `MERGE` or `DISTINCT` mode, only when unfiltered dispatching was requested.
+     - In `COMMAND` mode, for ADD and DELETE events, or for all update event types when unfiltered dispatching was requested.
+
+     When `isOverflow` is false, the Server can deliver notifications:
+
+     - In `RAW` or `COMMAND` mode, regardless of whether unfiltered dispatching was requested.
+     - In `MERGE` or `DISTINCT` mode, only when unfiltered dispatching was requested.
+
+     A Data Adapter loss notification can arrive without a preceding stale notification. For two-level COMMAND Subscriptions, this callback refers
+     only to first-level items. Internal second-level `LOST` notifications are not propagated to the parent Subscription's delegates; second-level
+     `OV` notifications continue through `subscription(_:didLoseUpdates:forCommandSecondLevelItemWithKey:)`, whose signature and behavior are unchanged.
+
+     Notifications are delivered asynchronously on the client's callback queue.
+
+     - Parameter subscription: The `Subscription` involved.
+     - Parameter lostUpdates: The integer number of lost updates, or -1 when the count is unavailable.
+     - Parameter itemName: The name of the item in the configured item list, or nil if unavailable.
+     - Parameter itemPos: The 1-based position of the item within the item list.
+     - Parameter isOverflow: True for updates dropped by Server buffer overflow; false for Data Adapter loss notifications.
+
      - SeeAlso: `Subscription.requestedMaxFrequency`
      */
-    func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: UInt, forItemName itemName: String?, itemPos: UInt)
+    func subscription(_ subscription: Subscription, didLoseUpdates lostUpdates: Int, forItemName itemName: String?, itemPos: UInt, isOverflow: Bool)
     /**
      Event handler that is called by Lightstreamer each time an update pertaining to an item in the `Subscription` has been received from the Server.
      
@@ -297,6 +331,14 @@ public protocol SubscriptionDelegate: AnyObject {
      - Parameter frequency: A decimal number, representing the maximum frequency applied by the Server (expressed in updates per second), or the value `unlimited`. A nil value is possible in rare cases, when the frequency can no longer be determined.
      */
     func subscription(_ subscription: Subscription, didReceiveRealFrequency frequency: RealMaxFrequency?)
+}
+
+public extension SubscriptionDelegate {
+    /// Default no-op implementation for item stale notifications.
+    func subscription(_ subscription: Subscription, didBecomeStaleForItemName itemName: String?, itemPos: UInt) {}
+
+    /// Default no-op implementation for item resume notifications.
+    func subscription(_ subscription: Subscription, didResumeForItemName itemName: String?, itemPos: UInt) {}
 }
 
 /**
@@ -1683,14 +1725,40 @@ public class Subscription: CustomStringConvertible {
         }
     }
     
-    func fireOnLostUpdates(_ itemIdx: Int, _ lostUpdates: Int, subId: Int) {
+    func fireOnItemStale(_ itemIdx: Int, subId: Int) {
         synchronized {
             if subscriptionLogger.isDebugEnabled {
-                subscriptionLogger.debug("Subscription \(subId):\(getItemNameOrPos(itemIdx)): lost \(lostUpdates) updates")
+                subscriptionLogger.debug("Subscription \(subId):\(getItemNameOrPos(itemIdx)): item stale")
             }
             multicastDelegate.invokeDelegates { delegate in
                 callbackQueue.async {
-                    delegate.subscription(self, didLoseUpdates: UInt(lostUpdates), forItemName: self.getItemName(itemIdx), itemPos: UInt(itemIdx))
+                    delegate.subscription(self, didBecomeStaleForItemName: self.getItemName(itemIdx), itemPos: UInt(itemIdx))
+                }
+            }
+        }
+    }
+
+    func fireOnItemResume(_ itemIdx: Int, subId: Int) {
+        synchronized {
+            if subscriptionLogger.isDebugEnabled {
+                subscriptionLogger.debug("Subscription \(subId):\(getItemNameOrPos(itemIdx)): item resumed")
+            }
+            multicastDelegate.invokeDelegates { delegate in
+                callbackQueue.async {
+                    delegate.subscription(self, didResumeForItemName: self.getItemName(itemIdx), itemPos: UInt(itemIdx))
+                }
+            }
+        }
+    }
+
+    func fireOnLostUpdates(_ itemIdx: Int, _ lostUpdates: Int, isOverflow: Bool, subId: Int) {
+        synchronized {
+            if subscriptionLogger.isDebugEnabled {
+                subscriptionLogger.debug("Subscription \(subId):\(getItemNameOrPos(itemIdx)): lost \(lostUpdates) updates, overflow: \(isOverflow)")
+            }
+            multicastDelegate.invokeDelegates { delegate in
+                callbackQueue.async {
+                    delegate.subscription(self, didLoseUpdates: lostUpdates, forItemName: self.getItemName(itemIdx), itemPos: UInt(itemIdx), isOverflow: isOverflow)
                 }
             }
         }

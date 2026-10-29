@@ -27,6 +27,9 @@ protocol SubscriptionManager: AnyObject, Encodable {
     func evtEOS(_ itemIdx: Int)
     func evtCS(_ itemIdx: Int)
     func evtOV(_ itemIdx: Int, _ lostUpdates: Int)
+    func evtSTALE(_ itemIdx: Int)
+    func evtRESUME(_ itemIdx: Int)
+    func evtLOST(_ itemIdx: Int, _ lostUpdates: Int)
     func evtCONF(_ freq: RealMaxFrequency)
 }
 
@@ -369,6 +372,39 @@ class SubscriptionManagerLiving: SubscriptionManager {
         }
     }
     
+    func evtSTALE(_ itemIdx: Int) {
+        synchronized {
+            let evt = "STALE"
+            if s_s == .s10 {
+                trace(evt, State_s.s10, State_s.s10)
+                doSTALE(itemIdx)
+                s_s = .s10
+            }
+        }
+    }
+
+    func evtRESUME(_ itemIdx: Int) {
+        synchronized {
+            let evt = "RESUME"
+            if s_s == .s10 {
+                trace(evt, State_s.s10, State_s.s10)
+                doRESUME(itemIdx)
+                s_s = .s10
+            }
+        }
+    }
+
+    func evtLOST(_ itemIdx: Int, _ lostUpdates: Int) {
+        synchronized {
+            let evt = "LOST"
+            if s_s == .s10 {
+                trace(evt, State_s.s10, State_s.s10)
+                doLOST(itemIdx, lostUpdates)
+                s_s = .s10
+            }
+        }
+    }
+
     func evtCONF(_ freq: RealMaxFrequency) {
         synchronized {
             let evt = "CONF"
@@ -630,7 +666,19 @@ class SubscriptionManagerLiving: SubscriptionManager {
     }
     
     private func doOV(_ itemIdx: Int, _ lostUpdates: Int) {
-        m_subscription.fireOnLostUpdates(itemIdx, lostUpdates, subId: m_subId)
+        m_subscription.fireOnLostUpdates(itemIdx, lostUpdates, isOverflow: true, subId: m_subId)
+    }
+
+    private func doSTALE(_ itemIdx: Int) {
+        m_subscription.fireOnItemStale(itemIdx, subId: m_subId)
+    }
+
+    private func doRESUME(_ itemIdx: Int) {
+        m_subscription.fireOnItemResume(itemIdx, subId: m_subId)
+    }
+
+    private func doLOST(_ itemIdx: Int, _ lostUpdates: Int) {
+        m_subscription.fireOnLostUpdates(itemIdx, lostUpdates, isOverflow: false, subId: m_subId)
     }
     
     private func doCONF(_ freq: RealMaxFrequency) {
