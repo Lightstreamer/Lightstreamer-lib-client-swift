@@ -602,7 +602,7 @@ class MpnSubscriptionManager: Encodable {
 
     func evtMPNCONF() {
         synchronized {
-            let evt = "MPNOK"
+            let evt = "MPNCONF"
             if let s_st {
                 trace(evt, s_st, s_st)
                 // Activated superstate is active
