@@ -263,6 +263,16 @@ public protocol MPNSubscriptionDelegate {
      - SeeAlso: `MPNSubscription.notificationFormat`
      */
     func mpnSubscription(_ subscription: MPNSubscription, didFailModificationWithErrorCode code: Int, message: String?, property: String)
+    /**
+     Event handler called when the server confirms the modification of the trigger expression or notification format of an `MPNSubscription`.
+
+     - Parameter subscription: The `MPNSubscription` involved.
+     */
+    func mpnSubscriptionDidModify(_ subscription: MPNSubscription)
+}
+
+public extension MPNSubscriptionDelegate {
+    func mpnSubscriptionDidModify(_ subscription: MPNSubscription) {}
 }
 
 /**
@@ -1370,6 +1380,19 @@ public class MPNSubscription: CustomStringConvertible {
             multicastDelegate.invokeDelegates { delegate in
                 callbackQueue.async {
                     delegate.mpnSubscription(self, didFailModificationWithErrorCode: code, message: message, property: property)
+                }
+            }
+        }
+    }
+    
+    func fireOnModification() {
+        synchronized {
+            if mpnSubscriptionLogger.isInfoEnabled {
+                mpnSubscriptionLogger.info("\(m_madeByServer ? "Server " : "")MPNSubscription modified pnSubId: \(m_mpnSubId ?? "n.a.")")
+            }
+            multicastDelegate.invokeDelegates { delegate in
+                callbackQueue.async {
+                    delegate.mpnSubscriptionDidModify(self)
                 }
             }
         }

@@ -3757,6 +3757,7 @@ public class LightstreamerClient {
             } else if s_mpn.ft == .s432 && reqId == mpn_filter_lastDeactivateReqId {
                 trace(evt, State_mpn_ft.s432, State_mpn_ft.s430)
                 doREQMpnUnsubscribeFilter()
+                notifyOnMultipleUnsubscriptions()
                 s_mpn.ft = .s430
                 forward = evtREQOK_TransportRegion(reqId)
                 evtMpnCheckFilter()
@@ -3834,6 +3835,7 @@ public class LightstreamerClient {
             } else if s_mpn.ft == .s432 && reqId == mpn_filter_lastDeactivateReqId {
                 trace(evt, State_mpn_ft.s432, State_mpn_ft.s430)
                 doREQMpnUnsubscribeFilter()
+                notifyOnMultipleUnsubscriptionsError(code, msg)
                 s_mpn.ft = .s430
                 forward = evtREQERR_TransportRegion(reqId, code, msg)
                 evtMpnCheckFilter()
@@ -5815,6 +5817,7 @@ public class LightstreamerClient {
             if deviceId == mpn_deviceId && adapterName == mpn_adapterName {
                 trace(evt, s, State_mpn_tk.s450)
                 doMPNREG_RefreshToken(deviceId, adapterName)
+                notifyDeviceRegistered(0)
                 s_mpn.tk = .s450
                 evtMpnCheckPending()
             } else {
@@ -5930,15 +5933,11 @@ public class LightstreamerClient {
             if s_mpn.st == .s410 {
                 if status == "ACTIVE" {
                     trace(evt, State_mpn_st.s410, State_mpn_st.s410)
-                    if !mpn_device.isRegistered {
-                        notifyDeviceRegistered(timestamp)
-                    }
+                    // No need to call notifyDeviceRegistered: the device is already registered.
                     s_mpn.st = .s410
                 } else if status == "SUSPENDED" {
                     trace(evt, State_mpn_st.s410, State_mpn_st.s411)
-                    if !mpn_device.isSuspended {
-                        notifyDeviceSuspended(timestamp)
-                    }
+                    notifyDeviceSuspended(timestamp)
                     s_mpn.st = .s411
                 }
             } else if s_mpn.st == .s411 {
@@ -6420,6 +6419,14 @@ public class LightstreamerClient {
     private func doREQMpnUnsubscribeFilter() {
         mpn_filter_pendings.removeFirst()
     }
+
+    private func notifyOnMultipleUnsubscriptions() {
+        mpn_device.fireOnMultipleUnsubscriptions()
+    }
+
+    private func notifyOnMultipleUnsubscriptionsError(_ code: Int, _ msg: String) {
+        mpn_device.fireOnMultipleUnsubscriptionsError(code, msg)
+    }
     
     private func doREQOKMpnResetBadge() {
         mpn_badge_reset_requested = false
@@ -6453,6 +6460,11 @@ public class LightstreamerClient {
     
     private func doMPNCONF(_ mpnSubId: String) {
         onFreshData()
+        for sm in mpnSubscriptionManagers {
+            if sm.mpnSubId == mpnSubId {
+                sm.evtMPNCONF()
+            }
+        }
     }
     
     fileprivate func encodeMpnRegister() -> String {

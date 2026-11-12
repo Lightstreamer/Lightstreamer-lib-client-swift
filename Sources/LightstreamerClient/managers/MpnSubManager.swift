@@ -599,6 +599,17 @@ class MpnSubscriptionManager: Encodable {
             }
         }
     }
+
+    func evtMPNCONF() {
+        synchronized {
+            let evt = "MPNOK"
+            if let s_st {
+                trace(evt, s_st, s_st)
+                // Activated superstate is active
+                notifyOnModification()
+            }
+        }
+    }
     
     func evtMpnUpdate(_ update: ItemUpdate) {
         synchronized {
@@ -774,9 +785,12 @@ class MpnSubscriptionManager: Encodable {
         if let trigger = m_initTrigger {
             req.PN_trigger(trigger)
         }
-        if m_coalescing {
-            req.PN_coalescing(true)
-        }
+        // TODO Remove support for non-coalescing subscriptions.
+//        if m_coalescing {
+//            req.PN_coalescing(true)
+//        }
+        // Temporarily, the parameter is forced to true.
+        req.PN_coalescing(true)
         if protocolLogger.isInfoEnabled {
             protocolLogger.info("Sending MPNSubscription activate: \(req)")
         }
@@ -903,6 +917,10 @@ class MpnSubscriptionManager: Encodable {
     
     private func doSetCurrentTrigger() {
         m_currentTrigger = m_subscription.requestedTrigger
+    }
+
+    private func notifyOnModification() {
+        m_subscription.fireOnModification()
     }
     
     private func notifyOnModificationError_Format(_ code: Int, _ msg: String) {

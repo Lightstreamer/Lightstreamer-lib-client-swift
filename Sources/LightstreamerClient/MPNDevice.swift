@@ -125,6 +125,20 @@ public protocol MPNDeviceDelegate {
      */
     func mpnDeviceDidUpdateSubscriptions(_ device: MPNDevice)
     /**
+     Event handler called when multiple MPN subscriptions have been successfully unsubscribed.
+
+     - Parameter device: The `MPNDevice` involved.
+     */
+    func mpnDeviceDidUnsubscribeMultiple(_ device: MPNDevice)
+    /**
+     Event handler called when the server notifies an error while unsubscribing multiple MPN subscriptions.
+
+     - Parameter device: The `MPNDevice` involved.
+     - Parameter code: The error code sent by the Server.
+     - Parameter message: The description of the error sent by the Server; it can be nil.
+     */
+    func mpnDevice(_ device: MPNDevice, didFailMultipleUnsubscriptionsWithErrorCode code: Int, message: String?)
+    /**
      Event handler called when the server notifies that the badge of an `MPNDevice` has been reset.
      
      - Parameter device: The `MPNDevice` instance involved.
@@ -162,6 +176,11 @@ public protocol MPNDeviceDelegate {
      - Parameter message: The description of the error sent by the Server; it can be nil.
      */
     func mpnDevice(_ device: MPNDevice, didFailBadgeResetWithErrorCode code: Int, message: String?)
+}
+
+public extension MPNDeviceDelegate {
+    func mpnDeviceDidUnsubscribeMultiple(_ device: MPNDevice) {}
+    func mpnDevice(_ device: MPNDevice, didFailMultipleUnsubscriptionsWithErrorCode code: Int, message: String?) {}
 }
 
 /**
@@ -461,13 +480,16 @@ public class MPNDevice: CustomStringConvertible {
             if mpnDeviceLogger.isInfoEnabled {
                 mpnDeviceLogger.info("MPN device suspended: \(m_deviceId ?? "n.a.")")
             }
+            let oldStatus = m_status
             m_status = .SUSPENDED
             m_statusTs = timestamp
             
-            multicastDelegate.invokeDelegates { delegate in
-                callbackQueue.async {
-                    delegate.mpnDevice(self, didChangeStatus: .SUSPENDED, timestamp: timestamp)
-                    delegate.mpnDeviceDidSuspend(self)
+            if oldStatus != .SUSPENDED {
+                multicastDelegate.invokeDelegates { delegate in
+                    callbackQueue.async {
+                        delegate.mpnDevice(self, didChangeStatus: .SUSPENDED, timestamp: timestamp)
+                        delegate.mpnDeviceDidSuspend(self)
+                    }
                 }
             }
         }
@@ -478,13 +500,16 @@ public class MPNDevice: CustomStringConvertible {
             if mpnDeviceLogger.isInfoEnabled {
                 mpnDeviceLogger.info("MPN device resumed: \(m_deviceId ?? "n.a.")")
             }
+            let oldStatus = m_status
             m_status = .REGISTERED
             m_statusTs = timestamp
             
-            multicastDelegate.invokeDelegates { delegate in
-                callbackQueue.async {
-                    delegate.mpnDevice(self, didChangeStatus: .REGISTERED, timestamp: timestamp)
-                    delegate.mpnDeviceDidResume(self)
+            if oldStatus != .REGISTERED {
+                multicastDelegate.invokeDelegates { delegate in
+                    callbackQueue.async {
+                        delegate.mpnDevice(self, didChangeStatus: .REGISTERED, timestamp: timestamp)
+                        delegate.mpnDeviceDidResume(self)
+                    }
                 }
             }
         }
@@ -538,6 +563,32 @@ public class MPNDevice: CustomStringConvertible {
             multicastDelegate.invokeDelegates { delegate in
                 callbackQueue.async {
                     delegate.mpnDeviceDidUpdateSubscriptions(self)
+                }
+            }
+        }
+    }
+    
+    func fireOnMultipleUnsubscriptionsError(_ code: Int, _ msg: String) {
+        synchronized {
+            if mpnDeviceLogger.isWarnEnabled {
+                mpnDeviceLogger.warn("MPN multiple unsubscriptions failed: \(code) - \(msg) \(m_deviceId ?? "n.a.")")
+            }
+            multicastDelegate.invokeDelegates { delegate in
+                callbackQueue.async {
+                    delegate.mpnDevice(self, didFailMultipleUnsubscriptionsWithErrorCode: code, message: msg)
+                }
+            }
+        }
+    }
+
+    func fireOnMultipleUnsubscriptions() {
+        synchronized {
+            if mpnDeviceLogger.isInfoEnabled {
+                mpnDeviceLogger.info("MPN multiple unsubscriptions successfully completed: \(m_deviceId ?? "n.a.")")
+            }
+            multicastDelegate.invokeDelegates { delegate in
+                callbackQueue.async {
+                    delegate.mpnDeviceDidUnsubscribeMultiple(self)
                 }
             }
         }
