@@ -12,23 +12,45 @@ final class SubscriptionListTests: XCTestCase {
         for name in names {
             let single = Subscription(subscriptionMode: .MERGE, item: name, fields: [name])
             XCTAssertEqual(Array(name.utf8), Array(single.items![0].utf8))
-            let mpnSingle = MPNSubscription(subscriptionMode: .MERGE, item: name, fields: [name])
-            XCTAssertEqual(Array(name.utf8), Array(mpnSingle.items![0].utf8))
         }
         let command = Subscription(subscriptionMode: .COMMAND, item: "123", fields: ["key", "command"])
         command.commandSecondLevelFields = names
         XCTAssertEqual(names.map { Array($0.utf8) }, command.commandSecondLevelFields!.map { Array($0.utf8) })
+    }
+
+    func testMPNAcceptsNamesWithoutLiteralSpacesWithoutChangingBytes() {
+        let names = ["123", "\t", "\u{00A0}", "a\u{2003}b", "&=%+?#/", "\t\r\n\0", "東京😀", "é", "e\u{301}"]
+        let original = names.map { Array($0.utf8) }
+        let reversed = Array(names.reversed())
+        let reordered = Array(original.reversed())
+        for name in names {
+            let single = MPNSubscription(subscriptionMode: .MERGE, item: name, fields: [name])
+            XCTAssertEqual([Array(name.utf8)], single.items?.map { Array($0.utf8) })
+            XCTAssertEqual([Array(name.utf8)], single.fields?.map { Array($0.utf8) })
+        }
         for mode: MPNSubscription.Mode in [.MERGE, .DISTINCT] {
             let mpn = MPNSubscription(subscriptionMode: mode, items: names, fields: names)
-            mpn.items = names.reversed()
-            mpn.fields = names.reversed()
+            XCTAssertEqual(original, mpn.items?.map { Array($0.utf8) })
+            XCTAssertEqual(original, mpn.fields?.map { Array($0.utf8) })
+            mpn.items = reversed
+            mpn.fields = reversed
+            XCTAssertEqual(reordered, mpn.items?.map { Array($0.utf8) })
+            XCTAssertEqual(reordered, mpn.fields?.map { Array($0.utf8) })
             let copy = MPNSubscription(MPNSubscription: mpn)
-            XCTAssertEqual(names.reversed().map { Array($0.utf8) }, copy.items!.map { Array($0.utf8) })
-            XCTAssertEqual(names.reversed().map { Array($0.utf8) }, copy.fields!.map { Array($0.utf8) })
+            XCTAssertEqual(reordered, copy.items?.map { Array($0.utf8) })
+            XCTAssertEqual(reordered, copy.fields?.map { Array($0.utf8) })
         }
+        let sub = Subscription(subscriptionMode: .MERGE, items: names, fields: reversed)
         let converted = MPNSubscription(subscription: sub)
-        XCTAssertEqual(sub.items!.map { Array($0.utf8) }, converted.items!.map { Array($0.utf8) })
-        XCTAssertEqual(sub.fields!.map { Array($0.utf8) }, converted.fields!.map { Array($0.utf8) })
+        XCTAssertEqual(original, converted.items?.map { Array($0.utf8) })
+        XCTAssertEqual(reordered, converted.fields?.map { Array($0.utf8) })
+    }
+
+    func testMPNRejectsEmptyNamesAndLiteralSpaces() {
+        for name in ["", " ", " leading", "trailing ", "em bedded", "a \u{301}b"] {
+            XCTAssertFalse(MPNSubscription.allValidNames(["valid", name]), "Unexpectedly accepted \(name.debugDescription)")
+        }
+        XCTAssertTrue(MPNSubscription.allValidNames(nil))
     }
 
     func testEmptyNamesAreStillInvalid() {

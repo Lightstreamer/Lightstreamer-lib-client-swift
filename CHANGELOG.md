@@ -11,7 +11,7 @@
 
 **Changed (breaking):** Removed Item Group and Field Schema support, including the `itemGroup` and `fieldSchema` properties from `Subscription` and `MPNSubscription`, and the `commandSecondLevelFieldSchema` property from `Subscription`. Migrate to explicit lists through the initializers or the `items`, `fields`, and `commandSecondLevelFields` properties. Item and field lists must be configured before subscribing or activating MPN subscriptions; constructing an initially unconfigured subscription remains supported.
 
-**New:** Item and field names may now contain any character, including spaces, numeric-only names, reserved characters, and Unicode. Individual names must still be non-empty. This also applies to MPN subscriptions, COMMAND second-level field names, and item names derived from COMMAND keys.
+**New:** Ordinary subscriptions accept any non-empty item or field name, including COMMAND second-level fields and item names derived from COMMAND keys. MPN item and field names must be non-empty and cannot contain a literal space (U+0020); other whitespace, numeric-only names, reserved characters, and Unicode remain allowed.
 
 **New:** Added Data Adapter and Metadata Adapter health notifications through `ClientDelegate.client(_:didChangeDataAdapterState:forDataAdapter:)` and `ClientDelegate.client(_:didChangeMetadataAdapterState:)`. Each received notification reports one of `started`, `disabled`, `resumed`, `restarted`, or `terminated`; pre-v9 Adapters may report only `started` and `terminated`. Update delegate implementations to handle the new callbacks.
 

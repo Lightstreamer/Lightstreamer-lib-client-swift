@@ -2,7 +2,7 @@ import XCTest
 @testable import LightstreamerClient
 
 final class SubscriptionNameEncodingTests: XCTestCase {
-    func testNamesPreserveBytesAcrossConfigurationAndCopies() {
+    func testSubscriptionAcceptsAnyNonEmptyNameAndPreservesBytes() {
         let names = ["123", " ", " leading and trailing ", "&=%+?#/", "\t\r\n\0", "東京😀", "é", "e\u{301}"]
         let sub = Subscription(subscriptionMode: .MERGE, items: names, fields: names)
         sub.items = names.reversed()
@@ -13,23 +13,44 @@ final class SubscriptionNameEncodingTests: XCTestCase {
         let command = Subscription(subscriptionMode: .COMMAND, item: "123", fields: ["key", "command"])
         command.commandSecondLevelFields = names
         XCTAssertEqual(names.map { Array($0.utf8) }, command.commandSecondLevelFields!.map { Array($0.utf8) })
-        let mpn = MPNSubscription(subscription: sub)
-        mpn.items = names
-        mpn.fields = names
-        let copy = MPNSubscription(MPNSubscription: mpn)
-        XCTAssertEqual(names.map { Array($0.utf8) }, copy.items!.map { Array($0.utf8) })
-        XCTAssertEqual(names.map { Array($0.utf8) }, copy.fields!.map { Array($0.utf8) })
         for name in names {
             XCTAssertTrue(isValidItem(name))
             XCTAssertTrue(isValidField(name))
-            XCTAssertEqual(Array(name.utf8), Array(Subscription(subscriptionMode: .RAW, item: name, fields: [name]).items![0].utf8))
-            XCTAssertEqual(Array(name.utf8), Array(MPNSubscription(subscriptionMode: .MERGE, item: name, fields: [name]).items![0].utf8))
+            let single = Subscription(subscriptionMode: .RAW, item: name, fields: [name])
+            XCTAssertEqual([Array(name.utf8)], single.items?.map { Array($0.utf8) })
+            XCTAssertEqual([Array(name.utf8)], single.fields?.map { Array($0.utf8) })
         }
         XCTAssertFalse(allValidItems(["valid", ""]))
         XCTAssertFalse(allValidFields(["", "valid"]))
         XCTAssertFalse(notEmpty([String]()))
         XCTAssertTrue(allValidItems(nil))
         XCTAssertTrue(allValidFields(nil))
+    }
+
+    func testMPNSubscriptionRejectsLiteralSpacesAndPreservesAcceptedBytes() {
+        let names = ["123", "\t", "\u{00A0}", "&=%+?#/", "\t\r\n\0", "東京😀", "é", "e\u{301}"]
+        let bytes = names.map { Array($0.utf8) }
+        let reversed = Array(names.reversed())
+        let reversedBytes = Array(bytes.reversed())
+        let sub = Subscription(subscriptionMode: .MERGE, items: reversed, fields: reversed)
+        let mpn = MPNSubscription(subscription: sub)
+        XCTAssertEqual(reversedBytes, mpn.items?.map { Array($0.utf8) })
+        XCTAssertEqual(reversedBytes, mpn.fields?.map { Array($0.utf8) })
+
+        mpn.items = names
+        mpn.fields = names
+        let copy = MPNSubscription(MPNSubscription: mpn)
+        XCTAssertEqual(bytes, copy.items?.map { Array($0.utf8) })
+        XCTAssertEqual(bytes, copy.fields?.map { Array($0.utf8) })
+
+        for name in names {
+            let single = MPNSubscription(subscriptionMode: .MERGE, item: name, fields: [name])
+            XCTAssertEqual([Array(name.utf8)], single.items?.map { Array($0.utf8) })
+            XCTAssertEqual([Array(name.utf8)], single.fields?.map { Array($0.utf8) })
+        }
+        for name in ["", " ", " leading", "trailing ", "em bedded", "a \u{301}b"] {
+            XCTAssertFalse(MPNSubscription.allValidNames(["valid", name]), "Unexpectedly accepted \(name.debugDescription)")
+        }
     }
 
     func testCompactedListsAndScalarEscaping() {

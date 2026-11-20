@@ -3336,7 +3336,11 @@ final class MpnSubscriptionTests: BaseTestCase {
         ws.onText("SUBCMD,2,1,2,1,2")
         ws.onText("U,2,1,SUB-restored|ADD")
         ws.onText("SUBOK,3,1,10")
-        ws.onText("U,3,1,ACTIVE|100|fmt|trg|i2 i1|f2 f1|adt|MERGE|unlimited|unlimited")
+        // The second item starts with a combining mark immediately after the metadata separator.
+        ws.onText("U,3,1,ACTIVE|100|fmt|trg|i%092 %CC%811|f%C2%A02 f%2B1|adt|MERGE|unlimited|unlimited")
+        let items = ["i\t2", "\u{301}1"]
+        let fields = ["f\u{00A0}2", "f+1"]
+        let encodedLists = "LS_item=i%092&%CC%811&LS_field=f%C2%A02&f%2B1"
 
         async(after: 0.2) {
             self.ws.onText("EOS,2,1")
@@ -3347,24 +3351,24 @@ final class MpnSubscriptionTests: BaseTestCase {
                 XCTFail("Expected a restored MPN subscription")
                 return
             }
-            XCTAssertEqual(["i2", "i1"], restored.items)
-            XCTAssertEqual(["f2", "f1"], restored.fields)
+            XCTAssertEqual(items, restored.items)
+            XCTAssertEqual(fields, restored.fields)
             let copy = MPNSubscription(MPNSubscription: restored)
             XCTAssertEqual(restored.items, copy.items)
             XCTAssertEqual(restored.fields, copy.fields)
             XCTAssertEqual("adt", copy.dataAdapter)
             copy.items = ["copyItem"]
-            XCTAssertEqual(["i2", "i1"], restored.items)
+            XCTAssertEqual(items, restored.items)
             copy.items = restored.items
 
             restored.notificationFormat = "new format"
-            XCTAssertTrue(self.io.trace.contains("LS_op=pn_reconf&LS_mode=MERGE&LS_item=i2&i1&LS_field=f2&f1&LS_data_adapter=adt"))
+            XCTAssertTrue(self.io.trace.contains("LS_op=pn_reconf&LS_mode=MERGE&\(encodedLists)&LS_data_adapter=adt"))
 
             copy.notificationFormat = "copy format"
             self.client.subscribeMPN(copy, coalescing: true)
             XCTAssertTrue(self.io.trace.components(separatedBy: "\n").contains {
                 $0.contains("LS_op=activate") &&
-                $0.contains("LS_item=i2&i1&LS_field=f2&f1&LS_data_adapter=adt") &&
+                $0.contains("\(encodedLists)&LS_data_adapter=adt") &&
                 $0.contains("PN_notificationFormat=copy%20format") &&
                 $0.contains("PN_coalescing=true")
             })

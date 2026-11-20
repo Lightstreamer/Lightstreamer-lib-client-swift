@@ -284,8 +284,8 @@ public protocol MPNSubscriptionDelegate {
  MPN subscription on subsequent sessions.
 
  An MPNSubscription specifies explicit item and field lists through its constructor or the `items` and `fields` properties. Each entry is an
- individual name, not an identifier to be expanded by the server. Both lists must be configured before submission. The same name validation rules
- that apply to `Subscription` apply to MPNSubscription.
+ individual name, not an identifier to be expanded by the server. Both lists must be configured before submission. Each name must be non-empty and must not
+ contain a literal space (U+0020). All other characters are allowed.
  
  An MPNSubscription object can also be provided by the client to represent a pre-existing MPN subscription on the server. In fact, differently than real-time
  subscriptions, MPN subscriptions are persisted on the server's MPN Module database and survive the session they were created on.
@@ -372,6 +372,10 @@ public class MPNSubscription: CustomStringConvertible {
     static let INVALID_FIELD_LIST = "Field List is invalid"
     static let IS_ACTIVE = "Cannot modify an active MPNSubscription. Please unsubscribe before applying any change"
     static let IS_EMPTY = "The value is empty"
+    static func allValidNames(_ names: [String]?) -> Bool {
+        names?.allSatisfy { !$0.isEmpty && !$0.unicodeScalars.contains(" ") } ?? true
+    }
+
     let lock = NSRecursiveLock()
     let multicastDelegate = MulticastDelegate<MPNSubscriptionDelegate>()
     let callbackQueue = defaultQueue
@@ -460,8 +464,8 @@ public class MPNSubscription: CustomStringConvertible {
     public convenience init(subscriptionMode: Mode, items: [String], fields: [String]) {
         precondition(!items.isEmpty, Self.EMPTY_ITEM_LIST)
         precondition(!fields.isEmpty, Self.EMPTY_FIELD_LIST)
-        precondition(items.allSatisfy({ isValidItem($0) }), Self.INVALID_ITEM_LIST)
-        precondition(fields.allSatisfy({ isValidField($0) }), Self.INVALID_FIELD_LIST)
+        precondition(Self.allValidNames(items), Self.INVALID_ITEM_LIST)
+        precondition(Self.allValidNames(fields), Self.INVALID_FIELD_LIST)
         self.init(subscriptionMode: subscriptionMode)
         m_items = items
         m_fields = fields
@@ -475,6 +479,7 @@ public class MPNSubscription: CustomStringConvertible {
      Note that all of the methods used to describe the subscription to the server, except `triggerExpression` and `notificationFormat`, can only be called while the instance is in the "inactive" state.
 
      - Parameter subscription: The `Subscription` object to copy properties from.
+     - Precondition: each copied item and field name must be non-empty and must not contain a literal space (U+0020).
      */
     public init(subscription: Subscription) {
         switch subscription.mode {
@@ -487,6 +492,8 @@ public class MPNSubscription: CustomStringConvertible {
         }
         m_items = subscription.items
         m_fields = subscription.fields
+        precondition(Self.allValidNames(m_items), Self.INVALID_ITEM_LIST)
+        precondition(Self.allValidNames(m_fields), Self.INVALID_FIELD_LIST)
         m_dataAdapter = subscription.dataAdapter
         switch subscription.requestedBufferSize {
         case .limited(let size):
@@ -517,11 +524,14 @@ public class MPNSubscription: CustomStringConvertible {
      Note that all of the methods used to describe the subscription to the server, except `triggerExpression` and `notificationFormat`, can only be called while the instance is in the "inactive" state.
      
      - Parameter mpnSubscription: The MPNSubscription object to copy properties from.
+     - Precondition: each copied item and field name must be non-empty and must not contain a literal space (U+0020).
      */
     public init(MPNSubscription mpnSubscription: MPNSubscription) {
         m_mode = mpnSubscription.mode
         m_items = mpnSubscription.items
         m_fields = mpnSubscription.fields
+        precondition(Self.allValidNames(m_items), Self.INVALID_ITEM_LIST)
+        precondition(Self.allValidNames(m_fields), Self.INVALID_FIELD_LIST)
         m_dataAdapter = mpnSubscription.dataAdapter
         m_bufferSize = mpnSubscription.requestedBufferSize
         m_requestedMaxFrequency = mpnSubscription.requestedMaxFrequency
@@ -737,7 +747,7 @@ public class MPNSubscription: CustomStringConvertible {
      
      **Related notifications:** a server-reported change to this list is notified through `MPNSubscriptionDelegate.mpnSubscription(_:didChangeProperty:)` with argument `schema`.
 
-     - Precondition: each field name must be non-empty. Names may contain any character.
+     - Precondition: a non-nil list must be non-empty. Each field name must be non-empty and must not contain a literal space (U+0020). All other characters are allowed.
      
      - Precondition: the MPNSubscription must be currently "inactive".
      */
@@ -752,7 +762,7 @@ public class MPNSubscription: CustomStringConvertible {
             synchronized {
                 precondition(!isActive, Self.IS_ACTIVE)
                 precondition(notEmpty(newValue), Self.EMPTY_FIELD_LIST)
-                precondition(allValidFields(newValue), Self.INVALID_FIELD_LIST)
+                precondition(Self.allValidNames(newValue), Self.INVALID_FIELD_LIST)
                 m_fields = newValue
             }
         }
@@ -768,7 +778,7 @@ public class MPNSubscription: CustomStringConvertible {
      
      **Related notifications:** a server-reported change to this list is notified through `MPNSubscriptionDelegate.mpnSubscription(_:didChangeProperty:)` with argument `group`.
 
-     - Precondition: each item name must be non-empty. Names may contain any character.
+     - Precondition: a non-nil list must be non-empty. Each item name must be non-empty and must not contain a literal space (U+0020). All other characters are allowed.
      
      - Precondition: the MPNSubscription must be currently "inactive".
      */
@@ -783,7 +793,7 @@ public class MPNSubscription: CustomStringConvertible {
             synchronized {
                 precondition(!isActive, Self.IS_ACTIVE)
                 precondition(notEmpty(newValue), Self.EMPTY_ITEM_LIST)
-                precondition(allValidItems(newValue), Self.INVALID_ITEM_LIST)
+                precondition(Self.allValidNames(newValue), Self.INVALID_ITEM_LIST)
                 m_items = newValue
             }
         }
@@ -1104,15 +1114,16 @@ public class MPNSubscription: CustomStringConvertible {
         }
     }
     
-    // Legacy MPN metadata uses space-separated lists, independently of request encoding.
-    // It cannot describe names containing spaces unambiguously. Keep such configured
-    // lists intact until a lossless server metadata contract is available.
+    private static func splitMetadataNames(_ value: String) -> [String] {
+        value.unicodeScalars.split(separator: " ").map { String($0) }
+    }
+
     func changeItems(_ rawItems: String?) {
         synchronized {
             guard let rawItems = rawItems else {
                 return
             }
-            let items = rawItems.split(separator: " ").map(String.init)
+            let items = Self.splitMetadataNames(rawItems)
             guard !items.isEmpty else {
                 return
             }
@@ -1128,7 +1139,7 @@ public class MPNSubscription: CustomStringConvertible {
             guard let rawFields = rawFields else {
                 return
             }
-            let fields = rawFields.split(separator: " ").map(String.init)
+            let fields = Self.splitMetadataNames(rawFields)
             guard !fields.isEmpty else {
                 return
             }
